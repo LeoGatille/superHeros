@@ -33,10 +33,32 @@
 </template>
 
 <script>
+import axios from 'axios';
+import MD5 from 'crypto-js/md5';
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  created() {
+    const ts = new Date().getTime();
+    const privateKey = 'dbea4b5914306d6faa41b8fb0c517c6b5e4e10ef';
+    const publicKey = '58e5188184747926b42b515ea9097abf';
+    const message = ts + privateKey + publicKey;
+    const crypted = MD5(message).toString();
+    console.log('crypted => ', crypted )
+    axios.get('http://gateway.marvel.com/v1/public/characters?apikey=58e5188184747926b42b515ea9097abf&ts='+ ts + '&hash=' + crypted  )
+    .then(res => {
+      console.log('MARVEL request => ', res.data);
+    })
+    .catch(err => {
+      console.log('ERRRRR => ', err)
+    })
+  },
+  methods: {
+    setApiAuth() {
+
+    }
   }
 }
 </script>
