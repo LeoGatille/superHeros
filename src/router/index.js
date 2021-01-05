@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import HerosList from "@/views/HeroesList/HerosList";
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/:listType',
-    name: 'home',
-    component: Home,
+    path: '/',
+    name: 'heroes-list',
+    component: HerosList,
     props: true,
   },
   {

@@ -37,8 +37,12 @@
 
     <template v-slot:extension>
       <v-tabs>
-        <v-tab>{{ $t('tabs.dashboard')}}</v-tab>
-        <v-tab>{{ $t('tabs.heroes')}}</v-tab>
+        <router-link :to="{ name: 'heroes-list', query: { listType: 'dashboard' } }">
+          <v-tab>{{ $t('tabs.dashboard')}}</v-tab>
+        </router-link>
+        <router-link :to="{ name: 'heroes-list', query: { listType: 'allHeroes' } }">
+          <v-tab>{{ $t('tabs.heroes')}}</v-tab>
+        </router-link>
       </v-tabs>
     </template>
   </v-app-bar>
