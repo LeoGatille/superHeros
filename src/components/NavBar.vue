@@ -1,62 +1,47 @@
 <template>
 <div>
-    <v-app-bar
-        absolute
-        color="#f50000"
-        dark
-        shrink-on-scroll
-        prominent
-        src="../../public/all_heroes.png"
-        fade-img-on-scroll
-        scroll-target="#scrolling-techniques-3"
-    >
-      <template v-slot:img="{ props }">
-        <v-img
-            v-bind="props"
-            gradient="to top right, rgba(245, 00, 00, 0.7), rgba(245, 00, 00, 0.3)"
-        ></v-img>
-      </template>
+  <v-app-bar
+      app
+      fixed
+      prominent
+      short
+      color="#fc2803"
+      dark
+      shrink-on-scroll
+      fade-img-on-scroll
+      src="../../public/all_heroes.png"
+  >
+    <template v-slot:img="{ props }">
+      <v-img
+          v-bind="props"
+          gradient="to top right, rgba(245, 00, 00, 0.7), rgba(252, 165, 3, 0.3)"
+      ></v-img>
+    </template>
 
-<!--      <v-app-bar-nav-icon></v-app-bar-nav-icon>-->
 
-      <v-app-bar-title>
-        You are my hero
-      </v-app-bar-title>
+    <v-app-bar-title>I need a hero</v-app-bar-title>
 
-      <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+    <v-btn icon>
+      <v-icon>mdi-magnify</v-icon>
+    </v-btn>
 
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
+    <v-btn icon>
+      <font-awesome-icon :icon="['fas', 'user-secret']" />
+    </v-btn>
 
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
-
-      <template v-slot:extension>
-        <v-tabs align-with-title>
-          <v-tab>Tab 1</v-tab>
-          <v-tab>Tab 2</v-tab>
-          <v-tab>Tab 3</v-tab>
-        </v-tabs>
-      </template>
-    </v-app-bar>
-    <v-sheet
-        id="scrolling-techniques-3"
-        class="overflow-y-auto"
-        max-height="600"
-    >
-      <v-container style="height: 1000px;"></v-container>
-    </v-sheet>
+    <v-btn icon>
+      <font-awesome-icon :icon="['fas', 'search']" />
+    </v-btn>
+    <template v-slot:extension>
+      <v-tabs>
+        <v-tab>Dashboard</v-tab>
+        <v-tab>Héros</v-tab>
+      </v-tabs>
+    </template>
+  </v-app-bar>
 </div>
-
-<!--  <main>-->
-<!--    <img height="50" src="../../public/logo.jpg" alt="le logo des vrai héros">-->
-<!--  </main>-->
 </template>
 
 <script>
