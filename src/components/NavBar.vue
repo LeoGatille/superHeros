@@ -24,20 +24,21 @@
     <v-spacer></v-spacer>
 
     <v-btn icon>
-      <v-icon>mdi-magnify</v-icon>
-    </v-btn>
-
-    <v-btn icon>
       <font-awesome-icon :icon="['fas', 'user-secret']" />
     </v-btn>
 
     <v-btn icon>
       <font-awesome-icon :icon="['fas', 'search']" />
     </v-btn>
+
+    <v-btn icon >
+      <font-awesome-icon :icon="['fas', 'language']" />
+    </v-btn>
+
     <template v-slot:extension>
       <v-tabs>
-        <v-tab>Dashboard</v-tab>
-        <v-tab>Héros</v-tab>
+        <v-tab>{{ $t('tabs.dashboard')}}</v-tab>
+        <v-tab>{{ $t('tabs.heroes')}}</v-tab>
       </v-tabs>
     </template>
   </v-app-bar>
@@ -46,9 +47,15 @@
 
 <script>
 export default {
-name: "NavBar"
+name: "NavBar",
+data() {
+  return {
+
+  }
+}
 }
 </script>
+
 
 <style scoped>
 main {
