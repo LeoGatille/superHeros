@@ -1,6 +1,11 @@
 <template>
   <div>
     <template v-if="!loadingList">
+    <!--Might create a pagination component-->
+      <span v-for="index in maxPage" :key="index">
+        <span >{{index}}</span>
+      </span>
+
       <div v-for="hero in heroesList" :key="hero.name">
       <h2>
         {{hero.name}}
@@ -21,7 +26,10 @@ import { mapState} from 'vuex';
 export default {
   name: "HerosList",
   computed: {
-    ...mapState(['loadingList', 'heroesList']),
+    ...mapState(['loadingList', 'heroesList', 'currentPage', 'maxPage']),
+    // paginationBeforeCurrentPage() {
+    //   index <= (currentPage - 1) && index <= (currentPage - 1)
+    // }
     // ...mapGetters(['getHeroesListByName'])
   },
   created() {

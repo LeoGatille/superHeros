@@ -6,7 +6,7 @@ const apiClient = axios.create({
     baseURL: 'http://gateway.marvel.com/v1/public/',
     withCredentials: false,
 });
-function setQueryParams() {
+function setUserAuth() {
     const ts = new Date().getTime();
     const privateKey = 'dbea4b5914306d6faa41b8fb0c517c6b5e4e10ef';
     const publicKey = '58e5188184747926b42b515ea9097abf';
@@ -15,8 +15,8 @@ function setQueryParams() {
     return `?ts=${ts}&apikey=${publicKey}&hash=${hash}`;
 }
 export default {
-    getAllHeroes(limit) {
-        return apiClient.get(`characters${setQueryParams()}${limit ? '&limit=' + limit : ''}`)
+    getAllHeroes(limit, offset) {
+        return apiClient.get(`characters${setUserAuth()}${limit ? '&limit=' + limit : ''}&offset=${offset}`)
     },
     getOneHero(id) {
         return apiClient.get(`characters/${id}`)

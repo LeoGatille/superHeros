@@ -23,14 +23,10 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn icon>
-      <font-awesome-icon :icon="['fas', 'user-secret']" />
-    </v-btn>
-
-    <v-btn icon>
-      <font-awesome-icon :icon="['fas', 'search']" />
-    </v-btn>
-
+<!--    <v-btn icon>-->
+<!--      <font-awesome-icon :icon="['fas', 'search']" />-->
+<!--    </v-btn>-->
+    <SearchBar/>
     <v-btn icon >
       <font-awesome-icon :icon="['fas', 'language']" />
     </v-btn>
@@ -50,12 +46,12 @@
 </template>
 
 <script>
+import SearchBar from '@/components/SearchBar'
+
 export default {
 name: "NavBar",
-data() {
-  return {
-
-  }
+components: {
+  SearchBar
 }
 }
 </script>
