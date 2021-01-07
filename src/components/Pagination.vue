@@ -1,18 +1,22 @@
 <template>
-  <div>
-    <span v-if="currentPage > 3">...</span>
-    <span v-for="index in maxPage" :key="'beforeCurrentPage' + index">
-          <span  @click="changePage(index)" v-if="index < currentPage && index > currentPage - 4">{{index + 1}}</span>
+  <div class="pagination-container">
+    <v-btn icon v-if="currentPage > 3">...</v-btn>
+    <span  v-for="index in pagesBeforeCurrentPage" :key="'beforeCurrentPage' + index">
+          <v-btn icon  @click="changePage(index)">{{index + 1}}</v-btn>
     </span>
 
-    <span @click="changePage(currentPage - 1)">&lt;</span>
-    <span class="current-page">{{currentPage + 1 }}</span>
-    <span @click="changePage(currentPage + 1 )">&gt;</span>
+    <v-btn v-if="currentPage < 0 " icon @click="changePage(currentPage - 1)">
+      <font-awesome-icon :icon="['fas', 'arrow-left']" />
+    </v-btn>
+    <v-btn icon color="black" class="current-page">{{currentPage + 1 }}</v-btn>
+    <v-btn v-if="currentPage > maxPage" icon @click="changePage(currentPage + 1 )">
+      <font-awesome-icon :icon="['fas', 'arrow-right']" />
+    </v-btn>
 
-    <span v-for="index in maxPage" :key="'afterCurrentPage' + index">
-          <span  @click="changePage(index )"  v-if="index > currentPage && index < currentPage + 4">{{index + 1 }}</span>
+    <span  v-for="index in pagesAfterCurrentPage" :key="'afterCurrentPage' + index">
+          <v-btn icon  @click="changePage(index )" >{{index + 1 }}</v-btn>
     </span>
-    <span v-if="maxPage > currentPage + 3">...</span>
+    <v-btn icon v-if="maxPage > currentPage + 3">...</v-btn>
   </div>
 </template>
 
@@ -26,13 +30,37 @@ export default {
   },
   computed: {
     ...mapState(['maxPage']),
+    pagesBeforeCurrentPage() {
+      const indexBeforeCurrentPage = [];
+      let i = this.currentPage - 4;
+      console.log('currentPage => ', this.currentPage)
+      while((this.currentPage > 0 ) && (i < this.currentPage - 1 )) {
+        i++;
+        if(i > -1) {
+          indexBeforeCurrentPage.push(i);
+        }
+      }
+        console.log('before => ', indexBeforeCurrentPage);
+      return indexBeforeCurrentPage
+    },
+    pagesAfterCurrentPage() {
+      const indexAfterCurrentPage = [];
+      let i = this.currentPage;
+      while((this.maxPage > 1) && (i >= this.currentPage) &&( i < this.currentPage + 3) && (this.maxPage > i)) {
+        i++;
+        indexAfterCurrentPage.push(i);
+      }
+
+      // console.log('after => ', indexAfterCurrentPage);
+      return indexAfterCurrentPage
+    },
     currentPage() {
       return this.$store.state[`${this.$route.query.listType}Page`]
     }
   },
   methods: {
     changePage(index) {
-      console.log('where is my brain ? => ', index)
+      console.log('index => ', index)
       this.$emit('changePage', index )
     }
   }
@@ -40,5 +68,12 @@ export default {
 </script>
 
 <style scoped>
+.pagination-container {
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+  margin: 0 auto;
+
+}
 
 </style>

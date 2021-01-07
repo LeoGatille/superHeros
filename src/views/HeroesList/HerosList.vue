@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    <LangSelector/>
     <template v-if="!loadingList">
       <div v-for="hero in heroesList" :key="hero.name">
       <h2>
@@ -12,17 +12,18 @@
     <template v-else>
       <div>LOADING</div>
     </template>
-    <Pagination :current-page="setCurrentPage" @changePage="shiftPage"/>
+    <Pagination :current-page="setCurrentPage" @changePage="changePage"/>
   </div>
 </template>
 
 <script>
 import { mapState} from 'vuex';
 import Pagination from "@/components/Pagination";
+import LangSelector from '@/components/LangSelector';
 
 export default {
   name: "HerosList",
-  components: {Pagination},
+  components: {Pagination, LangSelector},
   computed: {
     ...mapState(['loadingList', 'heroesList']),
     setCurrentPage() {
@@ -43,7 +44,7 @@ export default {
     addHero(hero) {
       this.$store.dispatch('addOneDashboardHero', hero);
     },
-    shiftPage(shiftValue) {
+    changePage(shiftValue) {
       //! Redundancy
       if(this.$route.query.listType === 'allHeroes') {
         this.$store.dispatch('shiftPage', {shiftValue, page:'allHeroesPage'} );
