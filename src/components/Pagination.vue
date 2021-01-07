@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     previousPage() {
-      this.$store.dispatch('goToPreviousPage');
+      this.$store.dispatch('goToPreviousPage',);
     },
     nextPage() {
       this.$store.dispatch('goToNextPage');

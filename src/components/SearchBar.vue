@@ -1,6 +1,6 @@
 <template>
-  <div class="search-bar">
-      <font-awesome-icon @click="search()" class="std-icon" :icon="['fas', 'search']" />
+  <div class="search-bar" @keyup="onKeuUp()" @keyup.enter="onKeyEnterUp()">
+      <font-awesome-icon class="std-icon" :icon="['fas', 'search']" />
     <v-text-field
         v-model="inputValue"
     color="grey"
@@ -18,8 +18,11 @@ export default {
     }
   },
   methods: {
-    search() {
-      console.log('value => ', this.inputValue);
+    onKeyEnterUp() { //! Must be migrated to parent
+      this.$emit('validation');
+    },
+    onKeuUp() {
+      this.$emit('keyUp', this.inputValue);
     }
   }
 }

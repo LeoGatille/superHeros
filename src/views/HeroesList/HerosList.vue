@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Pagination/>
+
     <template v-if="!loadingList">
       <div v-for="hero in heroesList" :key="hero.name">
       <h2>
@@ -12,7 +12,7 @@
     <template v-else>
       <div>LOADING</div>
     </template>
-
+    <Pagination/>
   </div>
 </template>
 
@@ -25,16 +25,12 @@ export default {
   components: {Pagination},
   computed: {
     ...mapState(['loadingList', 'heroesList']),
-    paginationBeforeCurrentPage() {
-      return index => (index <= (this.$store.currentPage - 1) && index <= (this.$store.currentPage.currentPage - 1))
-    }
-    // ...mapGetters(['getHeroesListByName'])
   },
   created() {
     if(this.$route.query.listType === 'allHeroes') {
-      this.$store.dispatch('fetchAllHeroes')
+      this.$store.dispatch('fetchAllHeroes');
     } else if (this.$route.query.listType === 'dashboard') {
-      this.$store.dispatch('fetchFavoritesHeroes')
+      this.$store.dispatch('fetchFavoritesHeroes');
     }
   },
   methods: {

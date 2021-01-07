@@ -26,9 +26,12 @@
 <!--    <v-btn icon>-->
 <!--      <font-awesome-icon :icon="['fas', 'search']" />-->
 <!--    </v-btn>-->
-    <SearchBar/>
+<!--    <SearchBar/>-->
     <v-btn icon >
       <font-awesome-icon :icon="['fas', 'language']" />
+    </v-btn>
+    <v-btn icon @click="setSettingsDisplay">
+      <font-awesome-icon :icon="['fas', 'cog']" />
     </v-btn>
 
     <template v-slot:extension>
@@ -41,18 +44,21 @@
         </router-link>
       </v-tabs>
     </template>
+<!--      <v-row style="position: relative; height: 100%; width: 100%">-->
+<!--      </v-row>-->
   </v-app-bar>
 </div>
 </template>
 
 <script>
-import SearchBar from '@/components/SearchBar'
 
 export default {
 name: "NavBar",
-components: {
-  SearchBar
-}
+  methods: {
+    setSettingsDisplay() {
+      this.$store.dispatch('setSettingsDisplay')
+    }
+  }
 }
 </script>
 

@@ -11,8 +11,12 @@ export default new Vuex.Store({
     heroesList: [],
     maxItemsPerPage: 20,
     currentPage: 1,
+    allHeroesPage:1,
+    dashboardPage:1,
     totalItems: 0,
+    requestedName: '',
     maxPage: 0,
+    showSettings: false,
   },
   getters: {
     getHeroesListByName: state => name => {
@@ -50,6 +54,12 @@ export default new Vuex.Store({
     },
     SET_CURRENT_PAGE(state, shiftValue) {
       state.currentPage += shiftValue;
+    },
+    SET_REQUESTED_NAME(state, name) {
+      state.requestedName = name;
+    },
+    SET_SETTINGS_DISPLAY(state) {
+      state.showSettings = !state.showSettings
     }
     //? I'll see later how to handle notifications
     // SET_NOTIFICATION(state, payload) {
@@ -92,7 +102,8 @@ export default new Vuex.Store({
       commit('SET_LOADING_LIST', true);
       const savedHeroes = JSON.parse(localStorage.getItem('savedHeroes'));
       commit('SET_FAVORITES_HEROES', savedHeroes);
-      commit('SET_TOTAL_ITEMS', savedHeroes.length)
+      commit('SET_TOTAL_ITEMS', savedHeroes.length);
+      commit('SET_MAX_PAGE', savedHeroes.length);
       setTimeout(() => {
         //* Simulate request time
         //? Might use a Promise...
@@ -107,6 +118,12 @@ export default new Vuex.Store({
       commit('SET_CURRENT_PAGE', 1);
       dispatch('fetchAllHeroes');
     },
+    setRequestedName({commit}, name) {
+      commit('SET_REQUESTED_NAME', name);
+    },
+    setSettingsDisplay({commit}) {
+      commit('SET_SETTINGS_DISPLAY');
+    }
   },
   modules: {
   }
