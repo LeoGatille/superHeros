@@ -23,10 +23,6 @@
 
     <v-spacer></v-spacer>
 
-<!--    <v-btn icon>-->
-<!--      <font-awesome-icon :icon="['fas', 'search']" />-->
-<!--    </v-btn>-->
-<!--    <SearchBar/>-->
     <v-btn icon >
       <font-awesome-icon :icon="['fas', 'language']" />
     </v-btn>
@@ -44,8 +40,6 @@
         </router-link>
       </v-tabs>
     </template>
-<!--      <v-row style="position: relative; height: 100%; width: 100%">-->
-<!--      </v-row>-->
   </v-app-bar>
 </div>
 </template>

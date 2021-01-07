@@ -12,7 +12,7 @@
     <template v-else>
       <div>LOADING</div>
     </template>
-    <Pagination/>
+    <Pagination :current-page="setCurrentPage" @changePage="shiftPage"/>
   </div>
 </template>
 
@@ -25,21 +25,36 @@ export default {
   components: {Pagination},
   computed: {
     ...mapState(['loadingList', 'heroesList']),
+    setCurrentPage() {
+      return this.$store[this.$route.query.listType + 'page'];
+    }
   },
   created() {
+    //! Redundancy
     if(this.$route.query.listType === 'allHeroes') {
       this.$store.dispatch('fetchAllHeroes');
+      // this.$store.dispatch('setDisplayedList', 'allHeroes')
     } else if (this.$route.query.listType === 'dashboard') {
-      this.$store.dispatch('fetchFavoritesHeroes');
+      this.$store.dispatch('fetchDashboardHeroes');
+      // this.$store.dispatch('setDisplayedList', 'allHeroes')
     }
   },
   methods: {
     addHero(hero) {
-      this.$store.dispatch('addOneFavoriteHero', hero);
-    }
+      this.$store.dispatch('addOneDashboardHero', hero);
+    },
+    shiftPage(shiftValue) {
+      //! Redundancy
+      if(this.$route.query.listType === 'allHeroes') {
+        this.$store.dispatch('shiftPage', {shiftValue, page:'allHeroesPage'} );
+        this.$store.dispatch('fetchAllHeroes');
+      } else if (this.$route.query.listType === 'dashboard') {
+        this.$store.dispatch('shiftPage', {shiftValue, page:'dashboardPage'});
+        this.$store.dispatch('fetchDashboardHeroes');
+      }
+    },
   }
 }
-
 </script>
 
 <style scoped>

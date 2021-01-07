@@ -8,11 +8,12 @@ export default new Vuex.Store({
   state: {
     isLocalStorageReady: false,
     loadingList: false,
+    displayedList: 'dashboard',
     heroesList: [],
     maxItemsPerPage: 20,
-    currentPage: 1,
-    allHeroesPage:1,
-    dashboardPage:1,
+    // currentPage: 0, Must be removed when safe
+    allHeroesPage:0,
+    dashboardPage:0,
     totalItems: 0,
     requestedName: '',
     maxPage: 0,
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    //* Local storage
     CREATE_HEROES_LOCAL_STORAGE(state) {
       localStorage.setItem('savedHeroes', '[]');
       localStorage.setItem('total', '0');
@@ -32,9 +34,11 @@ export default new Vuex.Store({
     SET_LOCAL_STORAGE_STATE(state, localeStorageState) {
       state.isLocalStorageReady = localeStorageState;
     },
+    //*Loading
     SET_LOADING_LIST(state, isLoading) {
       state.loadingList = isLoading;
     },
+    //*State items
     SET_HEROES_LIST(state, heroesList) {
       state.heroesList = heroesList;
     },
@@ -44,22 +48,29 @@ export default new Vuex.Store({
     SET_MAX_PAGE(state, nbItems) {
       state.maxPage = Math.round(nbItems / state.maxItemsPerPage);
     },
-    ADD_ONE_FAVORITE_HERO(state, hero) {
+    //* Favorites Heroes
+    ADD_ONE_DASHBOARD_HERO(state, hero) {
       const savedHeroesList = JSON.parse(localStorage.getItem("savedHeroes"));
       savedHeroesList.push(hero);
       localStorage.setItem("savedHeroes", JSON.stringify(savedHeroesList));
     },
-    SET_FAVORITES_HEROES(state, heroes) {
+    SET_DASHBOARD_HEROES(state, heroes) {
       state.heroesList = heroes;
     },
-    SET_CURRENT_PAGE(state, shiftValue) {
-      state.currentPage += shiftValue;
+    SET_CURRENT_PAGE(state, {shiftValue, targetPage}) {
+      console.log('targetpage => ', targetPage);
+      console.log('state.targetpage => ', state[targetPage]);
+
+      state[targetPage] += shiftValue;
     },
     SET_REQUESTED_NAME(state, name) {
       state.requestedName = name;
     },
     SET_SETTINGS_DISPLAY(state) {
       state.showSettings = !state.showSettings
+    },
+    SHIFT_PAGE(state, {shiftValue, page}) {
+      state[page] = shiftValue
     }
     //? I'll see later how to handle notifications
     // SET_NOTIFICATION(state, payload) {
@@ -79,7 +90,7 @@ export default new Vuex.Store({
       commit('SET_LOADING_LIST', true);
       marvelService.getAllHeroes(
           this.state.limit,
-          (this.state.maxItemsPerPage * this.state.currentPage)
+          (this.state.maxItemsPerPage * this.state.allHeroesPage)
           )
           .then(response => {
             commit('SET_TOTAL_ITEMS', response.data.data.total); //? Might do the dot notation in the 'commit'...
@@ -92,16 +103,16 @@ export default new Vuex.Store({
             console.log('ERROR OBJ => ', err);
           })
     },
-    addOneFavoriteHero({commit}, hero) {
+    addOneDashboardHero({commit}, hero) {
       //? Might create a class Hero & CustomHero...
       hero.savedDate = new Date();
       hero.edited = false;
-      commit('ADD_ONE_FAVORITE_HERO', hero);
+      commit('ADD_ONE_DASHBOARD_HERO', hero);
     },
-    fetchFavoritesHeroes({commit}) {
+    fetchDashboardHeroes({commit}) {
       commit('SET_LOADING_LIST', true);
       const savedHeroes = JSON.parse(localStorage.getItem('savedHeroes'));
-      commit('SET_FAVORITES_HEROES', savedHeroes);
+      commit('SET_DASHBOARD_HEROES', savedHeroes);
       commit('SET_TOTAL_ITEMS', savedHeroes.length);
       commit('SET_MAX_PAGE', savedHeroes.length);
       setTimeout(() => {
@@ -110,13 +121,8 @@ export default new Vuex.Store({
         commit('SET_LOADING_LIST', false);
       }, 500);
     },
-    goToPreviousPage({commit, dispatch}) {
-      commit('SET_CURRENT_PAGE', -1)
-      dispatch('fetchAllHeroes');
-    },
-    goToNextPage({commit, dispatch}) {
-      commit('SET_CURRENT_PAGE', 1);
-      dispatch('fetchAllHeroes');
+    shiftPage({commit}, {shiftValue, page}) {
+      commit('SHIFT_PAGE', {shiftValue, page});
     },
     setRequestedName({commit}, name) {
       commit('SET_REQUESTED_NAME', name);
