@@ -10,7 +10,7 @@ export default new Vuex.Store({
     loadingList: false,
     heroesList: [],
     maxItemsPerPage: 20,
-    currentPage: 3,
+    currentPage: 1,
     totalItems: 0,
     maxPage: 0,
   },
@@ -92,6 +92,7 @@ export default new Vuex.Store({
       commit('SET_LOADING_LIST', true);
       const savedHeroes = JSON.parse(localStorage.getItem('savedHeroes'));
       commit('SET_FAVORITES_HEROES', savedHeroes);
+      commit('SET_TOTAL_ITEMS', savedHeroes.length)
       setTimeout(() => {
         //* Simulate request time
         //? Might use a Promise...
