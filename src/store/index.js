@@ -9,7 +9,7 @@ export default new Vuex.Store({
     isLocalStorageReady: false,
     loadingList: false,
     heroesList: [],
-    maxItemsPerPage: 10,
+    maxItemsPerPage: 20,
     currentPage: 3,
     totalItems: 0,
     maxPage: 0,
@@ -47,10 +47,13 @@ export default new Vuex.Store({
     },
     SET_FAVORITES_HEROES(state, heroes) {
       state.heroesList = heroes;
+    },
+    SET_CURRENT_PAGE(state, shiftValue) {
+      state.currentPage += shiftValue;
     }
     //? I'll see later how to handle notifications
     // SET_NOTIFICATION(state, payload) {
-    //   state.notfication
+    //   state.notification
     // }
   },
   actions: {
@@ -94,7 +97,15 @@ export default new Vuex.Store({
         //? Might use a Promise...
         commit('SET_LOADING_LIST', false);
       }, 500);
-    }
+    },
+    goToPreviousPage({commit, dispatch}) {
+      commit('SET_CURRENT_PAGE', -1)
+      dispatch('fetchAllHeroes');
+    },
+    goToNextPage({commit, dispatch}) {
+      commit('SET_CURRENT_PAGE', 1);
+      dispatch('fetchAllHeroes');
+    },
   },
   modules: {
   }
