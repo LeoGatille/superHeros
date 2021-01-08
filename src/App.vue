@@ -7,7 +7,7 @@
           class="overflow-y-auto"
       >
         <v-container fluid style="position: relative">
-          <ToolBar v-if="showSettings" style="position: fixed; "/>
+          <ToolBar v-if="showSettings" style="position: fixed; z-index: 100;"/>
           <router-view :key="$route.fullPath"></router-view>
         </v-container>
       </v-sheet>

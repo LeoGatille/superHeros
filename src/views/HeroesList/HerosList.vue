@@ -1,11 +1,11 @@
 <template>
   <div>
-    <LangSelector/>
     <template v-if="!loadingList">
-      <div v-for="hero in heroesList" :key="hero.name">
+      <div class="card-list" >
+        <HeroCard v-for="hero in heroesList" :key="hero.name" :hero="hero"/>
       <h2>
-        {{hero.name}}
-        <v-btn @click="addHero(hero)">ADD</v-btn>
+<!--        {{hero.name}}-->
+<!--        <v-btn @click="addHero(hero)">ADD</v-btn>-->
       </h2>
       </div>
     </template>
@@ -19,11 +19,14 @@
 <script>
 import { mapState} from 'vuex';
 import Pagination from "@/components/Pagination";
-import LangSelector from '@/components/LangSelector';
+import HeroCard from "@/components/HeroCard";
 
 export default {
   name: "HerosList",
-  components: {Pagination, LangSelector},
+  components: {
+    Pagination,
+    HeroCard
+  },
   computed: {
     ...mapState(['loadingList', 'heroesList']),
     setCurrentPage() {
@@ -59,6 +62,11 @@ export default {
 </script>
 
 <style scoped>
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
 .pagination {
   color: grey;
 }

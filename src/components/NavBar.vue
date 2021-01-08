@@ -23,9 +23,7 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn icon >
-      <font-awesome-icon :icon="['fas', 'language']" />
-    </v-btn>
+    <LangSelector/>
     <v-btn icon @click="setSettingsDisplay">
       <font-awesome-icon :icon="['fas', 'cog']" />
     </v-btn>
@@ -45,9 +43,13 @@
 </template>
 
 <script>
+import LangSelector from '@/components/LangSelector'
 
 export default {
 name: "NavBar",
+  components: {
+    LangSelector
+  },
   methods: {
     setSettingsDisplay() {
       this.$store.dispatch('setSettingsDisplay')

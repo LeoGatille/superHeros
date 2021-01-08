@@ -26,21 +26,18 @@ import {mapState} from 'vuex'
 export default {
   name: "Pagination",
   created() {
-    console.log('props CurrentPage => ', this.currentPage)
   },
   computed: {
     ...mapState(['maxPage']),
     pagesBeforeCurrentPage() {
       const indexBeforeCurrentPage = [];
       let i = this.currentPage - 4;
-      console.log('currentPage => ', this.currentPage)
       while((this.currentPage > 0 ) && (i < this.currentPage - 1 )) {
         i++;
         if(i > -1) {
           indexBeforeCurrentPage.push(i);
         }
       }
-        console.log('before => ', indexBeforeCurrentPage);
       return indexBeforeCurrentPage
     },
     pagesAfterCurrentPage() {
@@ -50,8 +47,6 @@ export default {
         i++;
         indexAfterCurrentPage.push(i);
       }
-
-      // console.log('after => ', indexAfterCurrentPage);
       return indexAfterCurrentPage
     },
     currentPage() {
@@ -60,7 +55,6 @@ export default {
   },
   methods: {
     changePage(index) {
-      console.log('index => ', index)
       this.$emit('changePage', index )
     }
   }
