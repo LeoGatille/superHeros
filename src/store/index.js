@@ -13,16 +13,15 @@ export default new Vuex.Store({
     maxItemsPerPage: 20,
     // currentPage: 0, Must be removed when safe
     allHeroesPage:0,
+    pages: {
+      dashboard:0,
+      allHeroes:0,
+    },
     dashboardPage:0,
     totalItems: 0,
     requestedName: '',
     maxPage: 0,
     showSettings: false,
-  },
-  getters: {
-    getHeroesListByName: state => name => {
-      return state[name];
-    }
   },
   mutations: {
     //* Local storage
@@ -131,6 +130,9 @@ export default new Vuex.Store({
       commit('SET_SETTINGS_DISPLAY');
     }
   },
-  modules: {
-  }
+  getters: {
+    getHeroesListByName: state => name => {
+      return state[name];
+    }
+  },
 })

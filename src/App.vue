@@ -17,19 +17,22 @@
 <script>
 import NavBar from "@/components/NavBar";
 import ToolBar from "@/components/ToolBar";
-import {mapState} from "vuex";
+import {mapState, mapActions} from "vuex";
 
 export default {
   name: 'App',
-  computed: {
-    ...mapState(['showSettings']),
-  },
   components: {
     NavBar,
     ToolBar,
   },
+  computed: {
+    ...mapState(['showSettings']),
+  },
   beforeCreate() {
-    this.$store.dispatch('createHeroesLocalStorage');
-  }
+    this.createHeroesLocalStorage();
+  },
+  methods: {
+    ...mapActions(['createHeroesLocalStorage'])
+  },
 };
 </script>
