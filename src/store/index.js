@@ -65,8 +65,8 @@ export default new Vuex.Store({
     SET_SETTINGS_DISPLAY(state) {
       state.showSettings = !state.showSettings
     },
-    SHIFT_PAGE(state, {shiftValue, page}) {
-      state[page] = shiftValue
+    CHANGE_PAGE(state, {pageIndex, pageName}) {
+      state.pages[pageName] = pageIndex;
     }
     //? I'll see later how to handle notifications
     // SET_NOTIFICATION(state, payload) {
@@ -86,7 +86,7 @@ export default new Vuex.Store({
       commit('SET_LOADING_LIST', true);
       marvelService.getAllHeroes(
           this.state.limit,
-          (this.state.maxItemsPerPage * this.state.allHeroesPage)
+          (this.state.maxItemsPerPage * this.state.pages.allHeroes)
           )
           .then(response => {
             commit('SET_TOTAL_ITEMS', response.data.data.total); //? Might do the dot notation in the 'commit'...
@@ -117,8 +117,8 @@ export default new Vuex.Store({
         commit('SET_LOADING_LIST', false);
       }, 500);
     },
-    shiftPage({commit}, {shiftValue, page}) {
-      commit('SHIFT_PAGE', {shiftValue, page});
+    changePageIndex({commit}, {pageIndex, pageName}) {
+      commit('CHANGE_PAGE', {pageIndex, pageName});
     },
     setRequestedName({commit}, name) {
       commit('SET_REQUESTED_NAME', name);

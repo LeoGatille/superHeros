@@ -28,7 +28,7 @@ export default {
   computed: {
     ...mapState(['showSettings']),
   },
-  beforeCreate() {
+  created() {
     this.createHeroesLocalStorage();
   },
   methods: {

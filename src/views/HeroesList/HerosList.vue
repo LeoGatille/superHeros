@@ -8,11 +8,11 @@
 <!--        <v-btn @click="addHero(hero)">ADD</v-btn>-->
       </h2>
       </div>
+    <Pagination :current-page="currentPage" @changePage="dispatchChangePage"/>
     </template>
     <template v-else>
       <div>LOADING</div>
     </template>
-    <Pagination :current-page="currentPage" @changePage="changePage"/>
   </div>
 </template>
 
@@ -29,34 +29,31 @@ export default {
     HeroCard
   },
   computed: {
-    ...mapState(['loadingList', 'heroesList']),
+    ...mapState(['loadingList', 'heroesList','pages']),
     currentPage() {
-      return this.$store[this.$route.query.listType];
+      //? A getter might be nice
+      return this.pages[this.typeList];
+    },
+    setFetchAction(){
+      const actionArray = this.typeList.split('');
+      actionArray[0] = actionArray[0].toUpperCase();
+      return 'fetch' + actionArray.join('');
     }
   },
   created() {
     this.fetchHeroes();
   },
   methods: {
-    ...mapActions(['changePage']),
+    ...mapActions(['changePageIndex']),
     fetchHeroes() {
-      this.$store.dispatch(`fetch${this.typeList}`);
+      this.$store.dispatch(this.setFetchAction);
     },
     addHero(hero) {
       this.$store.dispatch('addOneDashboardHero', hero);
     },
-    changePage(shiftValue) {
-      //! Redundancy
-      this.changePage(shiftValue, this.typeList);
+    dispatchChangePage(pageIndex) {
+      this.changePageIndex({pageIndex, pageName: this.typeList});
       this.fetchHeroes();
-
-      // if(this.$route.query.listType === 'allHeroes') {
-      //   this.$store.dispatch('shiftPage', {shiftValue, page:'allHeroesPage'} );
-      //   this.$store.dispatch('fetchAllHeroes');
-      // } else if (this.$route.query.listType === 'dashboard') {
-      //   this.$store.dispatch('shiftPage', {shiftValue, page:'dashboardPage'});
-      //   this.$store.dispatch('fetchDashboardHeroes');
-      // }
     },
   }
 }

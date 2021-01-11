@@ -1,6 +1,6 @@
 <template>
   <div class="pagination-container">
-    <v-btn icon v-if="currentPage > 3">...</v-btn>
+    <v-btn disabled icon v-if="currentPage > 3">...</v-btn>
     <span  v-for="index in pagesBeforeCurrentPage" :key="'beforeCurrentPage' + index">
           <v-btn icon  @click="changePage(index)">{{index + 1}}</v-btn>
     </span>
@@ -16,7 +16,7 @@
     <span  v-for="index in pagesAfterCurrentPage" :key="'afterCurrentPage' + index">
           <v-btn icon  @click="changePage(index )" >{{index + 1 }}</v-btn>
     </span>
-    <v-btn icon v-if="maxPage > currentPage + 3">...</v-btn>
+    <v-btn disabled icon v-if="maxPage > currentPage + 3">...</v-btn>
   </div>
 </template>
 
@@ -25,7 +25,11 @@ import {mapState} from 'vuex'
 
 export default {
   name: "Pagination",
-  created() {
+  props: {
+    currentPage: {
+      type: Number,
+      required: true,
+    },
   },
   computed: {
     ...mapState(['maxPage']),
@@ -49,9 +53,6 @@ export default {
       }
       return indexAfterCurrentPage
     },
-    currentPage() {
-      return this.$store.state[`${this.$route.query.listType}Page`]
-    }
   },
   methods: {
     changePage(index) {
