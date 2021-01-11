@@ -4,11 +4,17 @@
           height="400"
 
   >
-
-    <v-img
+  <div class="img-relative-container" style="position: relative; display: grid; place-items: center;">
+    <v-img class="blur-none transition" :class="{'blur-full': isLinkHovered}"
       height="150"
       :src="setImgURL"
-    ></v-img>
+      @mouseenter="setLinkHovered(true)"
+      @mouseleave="setLinkHovered(false)"
+    >
+    </v-img>
+    <font-awesome-icon class="opacity-none transition" :class="{'opacity-full': isLinkHovered}" :icon="['fas', 'eye']" style="color: white; font-size: 2em; position: absolute"></font-awesome-icon>
+
+  </div>
     <v-card-title>{{hero.name}}</v-card-title>
     <v-card-text class="card-text-min-height">
       <!-- need a new component -->
@@ -32,6 +38,15 @@
             </v-chip>
         </v-chip-group>
       </v-card-text>
+
+    <div class="card-action-btn-container">
+      <v-btn icon>
+        <font-awesome-icon :icon="['fas', 'star']"></font-awesome-icon>
+      </v-btn>
+      <v-btn icon>
+        <font-awesome-icon :icon="['fas', 'eye']"></font-awesome-icon>
+      </v-btn>
+    </div>
   </v-card>
 </template>
 
@@ -42,6 +57,11 @@ export default {
     hero: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      hoveringLink: false,
     }
   },
   created() {
@@ -86,10 +106,16 @@ export default {
         }
         return shrinkedDescription.join('');
       }
+    },
+    isLinkHovered() {
+      return this.hoveringLink
     }
   },
   methods: {
-
+    setLinkHovered(hovered){
+      console.log('Hover evetn')
+      this.hoveringLink = hovered;
+    }
   }
 }
 </script>
@@ -97,6 +123,7 @@ export default {
 <style lang="scss" scoped>
   .card {
     margin: 10px;
+    overflow: hidden;
   }
   .shrink-text {
     overflow: hidden;
@@ -122,4 +149,29 @@ export default {
   .card-text-min-height {
     height: 70px;
   }
+  .card-action-btn-container {
+    position: absolute;
+    right: -50px;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Dynamic styles
+  .transition {
+    transition: all ease-in-out 0.2s;
+  }
+  .blur-none {
+    filter: blur(0);
+  }
+  .blur-full {
+    filter: blur(2px);
+  }
+  .opacity-none {
+    opacity: 0;
+  }
+  .opacity-full {
+    opacity: 1;
+  }
+
 </style>

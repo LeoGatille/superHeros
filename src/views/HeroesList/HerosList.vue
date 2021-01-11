@@ -30,12 +30,15 @@ export default {
   },
   computed: {
     ...mapState(['loadingList', 'heroesList','pages']),
+    getTypeList() {
+      return this.typeList ? this.typeList : 'dashboard';
+    },
     currentPage() {
       //? A getter might be nice
-      return this.pages[this.typeList];
+      return this.pages[this.getTypeList];
     },
     setFetchAction(){
-      const actionArray = this.typeList.split('');
+      const actionArray = this.getTypeList.split('');
       actionArray[0] = actionArray[0].toUpperCase();
       return 'fetch' + actionArray.join('');
     }
@@ -52,7 +55,7 @@ export default {
       this.$store.dispatch('addOneDashboardHero', hero);
     },
     dispatchChangePage(pageIndex) {
-      this.changePageIndex({pageIndex, pageName: this.typeList});
+      this.changePageIndex({pageIndex, pageName: this.getTypeList});
       this.fetchHeroes();
     },
   }
