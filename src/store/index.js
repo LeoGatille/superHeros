@@ -58,9 +58,6 @@ export default new Vuex.Store({
       state.heroesList = heroes;
     },
     SET_CURRENT_PAGE(state, {shiftValue, targetPage}) {
-      console.log('targetpage => ', targetPage);
-      console.log('state.targetpage => ', state[targetPage]);
-
       state[targetPage] += shiftValue;
     },
     SET_REQUESTED_NAME(state, name) {

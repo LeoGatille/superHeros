@@ -17,12 +17,13 @@
 </template>
 
 <script>
-import { mapState} from 'vuex';
+import { mapState, mapActions} from 'vuex';
 import Pagination from "@/components/Pagination";
 import HeroCard from "@/components/HeroCard";
 
 export default {
   name: "HerosList",
+  props: ['typeList'],
   components: {
     Pagination,
     HeroCard
@@ -34,28 +35,28 @@ export default {
     }
   },
   created() {
-    //! Redundancy
-    if(this.$route.query.listType === 'allHeroes') {
-      this.$store.dispatch('fetchAllHeroes');
-      // this.$store.dispatch('setDisplayedList', 'allHeroes')
-    } else if (this.$route.query.listType === 'dashboard') {
-      this.$store.dispatch('fetchDashboardHeroes');
-      // this.$store.dispatch('setDisplayedList', 'allHeroes')
-    }
+    this.fetchHeroes();
   },
   methods: {
+    ...mapActions(['changePage']),
+    fetchHeroes() {
+      this.$store.dispatch(`fetch${this.typeList}`);
+    },
     addHero(hero) {
       this.$store.dispatch('addOneDashboardHero', hero);
     },
     changePage(shiftValue) {
       //! Redundancy
-      if(this.$route.query.listType === 'allHeroes') {
-        this.$store.dispatch('shiftPage', {shiftValue, page:'allHeroesPage'} );
-        this.$store.dispatch('fetchAllHeroes');
-      } else if (this.$route.query.listType === 'dashboard') {
-        this.$store.dispatch('shiftPage', {shiftValue, page:'dashboardPage'});
-        this.$store.dispatch('fetchDashboardHeroes');
-      }
+      this.changePage(shiftValue, this.typeList);
+      this.fetchHeroes();
+
+      // if(this.$route.query.listType === 'allHeroes') {
+      //   this.$store.dispatch('shiftPage', {shiftValue, page:'allHeroesPage'} );
+      //   this.$store.dispatch('fetchAllHeroes');
+      // } else if (this.$route.query.listType === 'dashboard') {
+      //   this.$store.dispatch('shiftPage', {shiftValue, page:'dashboardPage'});
+      //   this.$store.dispatch('fetchDashboardHeroes');
+      // }
     },
   }
 }

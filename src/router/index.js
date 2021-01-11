@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/:typeList',
     name: 'heroes-list',
     component: HerosList,
     props: true,
