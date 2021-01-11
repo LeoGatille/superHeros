@@ -10,24 +10,26 @@
       :src="setImgURL"
     ></v-img>
     <v-card-title>{{hero.name}}</v-card-title>
-    <v-card-text>
+    <v-card-text class="card-text-min-height">
       <!-- need a new component -->
       <div>{{shrinkText(hero.description, 100)}}</div>
-      <div v-if="hero.description.length" class="separation-card-body-text">
-        <div class="separation-btn">
+<!--      <div v-if="hero.description.length" class="separation-card-body-text">-->
+<!--        <div class="separation-btn">-->
 <!-- <font-awesome-icon :icon="['fas', 'bars']" ></font-awesome-icon> -->
-        </div>
-      </div>
+<!--        </div>-->
+<!--      </div>-->
     </v-card-text>
       <v-card-text>
-        <v-chip-group>
-          <v-chip
-              disabled
-              class="shrink-text card-chip"
-              v-for="serie in hero.series.items"
-              :key="serie.resourceURI">
-              {{shrinkText(serie.name, 7)}}
-          </v-chip>
+        <v-chip-group column>
+
+            <v-chip
+                disabled
+                class="shrink-text card-chip"
+                v-for="chip in setHeroChips"
+                :key="chip.name"
+            >
+                {{$t('heroItems.' + chip.name) + ' : ' + chip.length}}
+            </v-chip>
         </v-chip-group>
       </v-card-text>
   </v-card>
@@ -47,6 +49,26 @@ export default {
   computed: {
     setImgURL() {
       return this.hero.thumbnail.path + '.' + this.hero.thumbnail.extension
+    },
+    setHeroChips(){
+      return [
+        {
+          name: 'series',
+          length: this.hero.series.available,
+        },
+        {
+          name: 'comics',
+          length: this.hero.comics.available,
+        },
+        {
+          name: 'stories',
+          length: this.hero.stories.available,
+        },
+        {
+          name: 'events',
+          length: this.hero.events.available,
+        }
+      ]
     },
     shrinkText() {
       return (text, nbCharacters) => {
@@ -96,5 +118,8 @@ export default {
       display: grid;
       place-items: center;
     }
+  }
+  .card-text-min-height {
+    height: 70px;
   }
 </style>

@@ -2,5 +2,11 @@
   "tabs": {
   "dashboard": "dashboard",
   "heroes": "heroes"
+  },
+  "heroItems": {
+    "series": "series",
+    "comics": "comics",
+    "stories": "stories",
+    "events": "events"
   }
 }

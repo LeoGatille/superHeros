@@ -1,6 +1,12 @@
 {
   "tabs": {
-    "dashboard": "favoris",
+    "dashboard": "tableau de bord",
     "heroes": "héros"
+  },
+  "heroItems": {
+    "series": "series",
+    "comics": "comics",
+    "stories": "histoires",
+    "events": "évenements"
   }
 }
