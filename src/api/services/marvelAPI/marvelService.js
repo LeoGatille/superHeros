@@ -5,6 +5,7 @@ import MD5 from 'crypto-js/md5';
 const apiClient = axios.create({
     baseURL: 'http://gateway.marvel.com/v1/public/',
     withCredentials: false,
+
 });
 function setUserAuth() {
     const ts = new Date().getTime();

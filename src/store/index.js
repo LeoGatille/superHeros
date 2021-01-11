@@ -1,6 +1,7 @@
-import marvelService from '@/api/services/marvelAPI/marvelService'
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import marvelService from '@/api/services/marvelAPI/marvelService';
+import LocalService from "@/api/services/LocalService";
 
 Vue.use(Vuex)
 
@@ -14,7 +15,7 @@ export default new Vuex.Store({
     // currentPage: 0, Must be removed when safe
     allHeroesPage:0,
     pages: {
-      dashboard:0,
+      dashboardHeroes:0,
       allHeroes:0,
     },
     dashboardPage:0,
@@ -39,7 +40,11 @@ export default new Vuex.Store({
     },
     //*State items
     SET_HEROES_LIST(state, heroesList) {
-      state.heroesList = heroesList;
+      state.heroesList = [];
+      heroesList.forEach(hero => {
+        state.heroesList.push(Object.assign({},hero))
+      });
+      // state.heroesList = heroesList;
     },
     SET_TOTAL_ITEMS(state, nbItems) {
       state.totalItems = nbItems;
@@ -48,11 +53,11 @@ export default new Vuex.Store({
       state.maxPage = Math.round(nbItems / state.maxItemsPerPage);
     },
     //* Favorites Heroes
-    ADD_ONE_DASHBOARD_HERO(state, hero) {
-      const savedHeroesList = JSON.parse(localStorage.getItem("savedHeroes"));
-      savedHeroesList.push(hero);
-      localStorage.setItem("savedHeroes", JSON.stringify(savedHeroesList));
-    },
+    // ADD_ONE_HERO(state, hero) {
+    //   const savedHeroesList = JSON.parse(localStorage.getItem("savedHeroes"));
+    //   savedHeroesList.push(hero);
+    //   localStorage.setItem("savedHeroes", JSON.stringify(savedHeroesList));
+    // },
     SET_DASHBOARD_HEROES(state, heroes) {
       state.heroesList = heroes;
     },
@@ -67,11 +72,14 @@ export default new Vuex.Store({
     },
     CHANGE_PAGE(state, {pageIndex, pageName}) {
       state.pages[pageName] = pageIndex;
-    }
+    },
     //? I'll see later how to handle notifications
     // SET_NOTIFICATION(state, payload) {
     //   state.notification
     // }
+    DO_NOTHING() {
+
+    }
   },
   actions: {
     createHeroesLocalStorage({commit}) {
@@ -95,27 +103,39 @@ export default new Vuex.Store({
             commit('SET_LOADING_LIST', false);
           })
           .catch(err => {
+            console.log('ERROR => ', err)
             // commit('SET_NOTIFICATION', {type: 'error', message: 'Something went wrong ;('});
-            console.log('ERROR OBJ => ', err);
           })
     },
-    addOneDashboardHero({commit}, hero) {
-      //? Might create a class Hero & CustomHero...
-      hero.savedDate = new Date();
-      hero.edited = false;
-      commit('ADD_ONE_DASHBOARD_HERO', hero);
+    addOneHero({commit, getters}, idHero) {
+       const toSend = Object.assign({}, getters.getHeroBydId(idHero));
+      // const savedHeroesList = JSON.parse(localStorage.getItem("savedHeroes"));
+      // savedHeroesList.push(hero);
+      // localStorage.setItem("savedHeroes", JSON.stringify(savedHeroesList));
+      // commit('DO_NOTHING')
+      return LocalService.addHero(toSend)
+          .then(res => {
+            console.log('AddHero res => ', res)
+            commit('DO_NOTHING')
+            return true;
+            // commit('ADD_ONE_HERO', hero);
+          })
+    },
+    removeOneHero(hero) {
+      console.log(hero)
     },
     fetchDashboardHeroes({commit}) {
       commit('SET_LOADING_LIST', true);
-      const savedHeroes = JSON.parse(localStorage.getItem('savedHeroes'));
-      commit('SET_DASHBOARD_HEROES', savedHeroes);
-      commit('SET_TOTAL_ITEMS', savedHeroes.length);
-      commit('SET_MAX_PAGE', savedHeroes.length);
+      LocalService.fetchHeroes().then((localStorageHeroes => {
+      commit('SET_DASHBOARD_HEROES', localStorageHeroes);
+      commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
+      commit('SET_MAX_PAGE', localStorageHeroes.length);
       setTimeout(() => {
         //* Simulate request time
         //? Might use a Promise...
         commit('SET_LOADING_LIST', false);
       }, 500);
+      }) )
     },
     changePageIndex({commit}, {pageIndex, pageName}) {
       commit('CHANGE_PAGE', {pageIndex, pageName});
@@ -130,6 +150,14 @@ export default new Vuex.Store({
   getters: {
     getHeroesListByName: state => name => {
       return state[name];
+    },
+    getHeroBydId: state => id => {
+      return state.heroesList.find(hero => {
+        return hero.id === id;
+      })
+    },
+    getRandomHero: state => {
+      return state.heroesList[1];
     }
   },
 })

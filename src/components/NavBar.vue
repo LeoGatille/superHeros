@@ -36,9 +36,6 @@
         <router-link :to="{ path: '/home/allHeroes', }">
           <v-tab>{{ $t('tabs.heroes')}}</v-tab>
         </router-link>
-        <router-link :to="{path: '/test/toto'}">
-          <v-tab>TEST</v-tab>
-        </router-link>
       </v-tabs>
     </template>
   </v-app-bar>

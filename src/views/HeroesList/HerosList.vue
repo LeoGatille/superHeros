@@ -31,7 +31,7 @@ export default {
   computed: {
     ...mapState(['loadingList', 'heroesList','pages']),
     getTypeList() {
-      return this.typeList ? this.typeList : 'dashboard';
+      return this.typeList ? this.typeList : 'dashboardHeroes';
     },
     currentPage() {
       //? A getter might be nice
@@ -50,9 +50,6 @@ export default {
     ...mapActions(['changePageIndex']),
     fetchHeroes() {
       this.$store.dispatch(this.setFetchAction);
-    },
-    addHero(hero) {
-      this.$store.dispatch('addOneDashboardHero', hero);
     },
     dispatchChangePage(pageIndex) {
       this.changePageIndex({pageIndex, pageName: this.getTypeList});
