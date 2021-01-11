@@ -12,7 +12,7 @@
     <template v-else>
       <div>LOADING</div>
     </template>
-    <Pagination :current-page="setCurrentPage" @changePage="changePage"/>
+    <Pagination :current-page="currentPage" @changePage="changePage"/>
   </div>
 </template>
 
@@ -30,8 +30,8 @@ export default {
   },
   computed: {
     ...mapState(['loadingList', 'heroesList']),
-    setCurrentPage() {
-      return this.$store[this.$route.query.listType + 'page'];
+    currentPage() {
+      return this.$store[this.$route.query.listType];
     }
   },
   created() {
