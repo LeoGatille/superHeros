@@ -54,7 +54,7 @@
 
               <v-dialog
                   transition="dialog-bottom-transition"
-                  max-width="600"
+                  max-width="90%"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -63,9 +63,11 @@
                       v-on="on"
                   >Edition</v-btn>
                 </template>
+
                 <template v-slot:default="dialog">
-                  <HeroEditionForm/>
-                  <v-btn @click="dialog.value = false">close</v-btn>
+                  <Dialog :dialog="dialog">
+                    <HeroEditionForm :hero="hero"/>
+                  </Dialog>
                 </template>
               </v-dialog>
 
@@ -81,11 +83,13 @@
 import LocalService from "@/api/services/LocalService";
 import marvelService from "@/api/services/marvelAPI/marvelService";
 import HeroEditionForm from '@/components/HeroEditionForm';
+import Dialog from '@/components/Dialog';
 
 export default {
   name: "HeroOne",
   components: {
-    HeroEditionForm
+    HeroEditionForm,
+    Dialog,
   },
   props: ['idHero'],
   data() {
