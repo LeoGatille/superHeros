@@ -84,14 +84,15 @@ import LocalService from "@/api/services/LocalService";
 import marvelService from "@/api/services/marvelAPI/marvelService";
 import HeroEditionForm from '@/components/HeroEditionForm';
 import Dialog from '@/components/Dialog';
+import {mapActions, mapGetters} from "vuex";
 
 export default {
-  name: "HeroOne",
+  name: "HeroDetail",
   components: {
     HeroEditionForm,
     Dialog,
   },
-  props: ['idHero'],
+  props: ['heroId'],
   data() {
     return {
       loading: true,
@@ -100,11 +101,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getHeroBydId']),
     parseIntId() {
-      return parseInt(this.idHero)
+      return parseInt(this.heroId)
     },
     setImgURL() {
-      return this.hero.thumbnail.path + '.' + this.hero.thumbnail.extension;
+      return this.hero.thumbnail ?  (this.hero.thumbnail.path + '.' + this.hero.thumbnail.extension) : '';
     },
     editBtnText() {
       return this.$t(`btn.edition.set.text`)
@@ -119,30 +121,30 @@ export default {
             this.hero = hero;
             console.log('local => ', this.hero)
             this.registeredHero = true;
-            this.loading = false;
           })
           .catch(() => {
+            if (this.getHeroBydId(this.parseIntId)) {
+              this.hero = this.getHeroBydId(this.parseIntId);
+            } else {
             marvelService.getHeroById(this.parseIntId)
               .then(res => {
                 this.hero = res.data.data.results[0];
                 console.log('API => ', this.hero)
-                this.loading = false;
               })
+            }
+          })
+          .finally(() => {
+                this.loading = false;
           })
   },
   methods: {
+    ...mapActions(['addOneHero', 'removeOneHero']),
     onStarClick() {
-      if(this.registeredHero) {
-        this.removeOneHero(this.hero.id)
-            .then(() => {
-              this.registeredHero = false;
-            })
-      } else {
-        this.$store.dispatch('addOneHero', this.hero.id)
-            .then(() => {
-              this.registeredHero = true;
-            });
-      }
+      let func =  this.registeredHero ? this.removeOneHero : this.addOneHero;
+      func(this.hero.id)
+      .then(() => {
+        this.registeredHero = !this.registeredHero;
+      });
     },
     editHero() {
 

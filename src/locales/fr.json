@@ -21,6 +21,17 @@
       }
     }
   },
+  "form": {
+    "label": {
+      "name": "nom",
+      "description": "description",
+      "imgURL": "URL de l'image"
+    },
+    "error": {
+      "name": "Le nom doit avoir au moins un caractère",
+      "imgURL": "Vous devez insérer une URL valid"
+    }
+  },
   "tooltip": {
     "btn": {
       "add": "ajouter",

@@ -3,7 +3,6 @@
   <v-card
       @mouseenter="setLinkHovered(true)"
       @mouseleave="setLinkHovered(false)"
-
       class="card"
       style="position: relative"
       max-width="300"
@@ -53,7 +52,7 @@
                   v-for="chip in setHeroChips"
                   :key="chip.name"
               >
-                  {{$t('heroItems.' + chip.name) + ' : ' + chip.length}}
+                  {{$t('heroItems.' + chip.name) + ' : ' + (chip.length ? chip.length : 0 )}}
               </v-chip>
           </v-chip-group>
         </v-card-text>

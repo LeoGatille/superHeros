@@ -10,7 +10,7 @@ export default new Vuex.Store({
     isLocalStorageReady: false,
     loadingList: false,
     displayedList: 'dashboard',
-    heroesList: [],
+    heroList: [],
     maxItemsPerPage: 20,
     // currentPage: 0, Must be removed when safe
     allHeroesPage:0,
@@ -43,12 +43,12 @@ export default new Vuex.Store({
       state.loadingList = isLoading;
     },
     //*State items
-    SET_HEROES_LIST(state, heroesList) {
-      state.heroesList = [];
-      heroesList.forEach(hero => {
-        state.heroesList.push(Object.assign({},hero))
+    SET_HEROES_LIST(state, heroList) {
+      state.heroList = [];
+      heroList.forEach(hero => {
+        state.heroList.push(Object.assign({},hero))
       });
-      // state.heroesList = heroesList;
+      // state.heroList = heroList;
     },
     SET_TOTAL_ITEMS(state, nbItems) {
       state.totalItems = nbItems;
@@ -58,12 +58,12 @@ export default new Vuex.Store({
     },
     //* Favorites Heroes
     // ADD_ONE_HERO(state, hero) {
-    //   const savedHeroesList = JSON.parse(localStorage.getItem("savedHeroes"));
-    //   savedHeroesList.push(hero);
-    //   localStorage.setItem("savedHeroes", JSON.stringify(savedHeroesList));
+    //   const savedheroList = JSON.parse(localStorage.getItem("savedHeroes"));
+    //   savedheroList.push(hero);
+    //   localStorage.setItem("savedHeroes", JSON.stringify(savedheroList));
     // },
     SET_DASHBOARD_HEROES(state, heroes) {
-      state.heroesList = heroes;
+      state.heroList = heroes;
     },
     SET_CURRENT_PAGE(state, {shiftValue, targetPage}) {
       state[targetPage] += shiftValue;
@@ -116,9 +116,9 @@ export default new Vuex.Store({
     },
     addOneHero({commit, getters}, idHero) {
        const toSend = Object.assign({}, getters.getHeroBydId(idHero));
-      // const savedHeroesList = JSON.parse(localStorage.getItem("savedHeroes"));
-      // savedHeroesList.push(hero);
-      // localStorage.setItem("savedHeroes", JSON.stringify(savedHeroesList));
+      // const savedheroList = JSON.parse(localStorage.getItem("savedHeroes"));
+      // savedheroList.push(hero);
+      // localStorage.setItem("savedHeroes", JSON.stringify(savedheroList));
       // commit('DO_NOTHING')
       return LocalService.addHero(toSend)
           .then(res => {
@@ -160,16 +160,16 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    getHeroesListByName: state => name => {
+    getheroListByName: state => name => {
       return state[name];
     },
     getHeroBydId: state => id => {
-      return state.heroesList.find(hero => {
+      return state.heroList.find(hero => {
         return hero.id === id;
       })
     },
     getRandomHero: state => {
-      return state.heroesList[1];
+      return state.heroList[1];
     }
   },
 })

@@ -30,10 +30,10 @@
 
     <template v-slot:extension>
       <v-tabs>
-        <router-link :to="{ path: '/home' }">
+        <router-link :to="{ path: '/' }">
           <v-tab>{{ $t('tabs.dashboard')}}</v-tab>
         </router-link>
-        <router-link :to="{ path: '/home/allHeroes', }">
+        <router-link :to="{ path: '/favorites', }">
           <v-tab>{{ $t('tabs.heroes')}}</v-tab>
         </router-link>
       </v-tabs>

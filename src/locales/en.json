@@ -21,6 +21,17 @@
       }
     }
   },
+  "form": {
+    "label": {
+    "name": "name",
+    "description": "description",
+    "imgURL": "picture's URL"
+    },
+    "error": {
+      "name": "Name must have one character minimum",
+      "imgURL": "you must provide a valid URL"
+    }
+  },
   "tooltip": {
     "btn": {
       "add": "add",

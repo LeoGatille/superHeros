@@ -1,26 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HerosList from "@/views/HeroesList/HerosList";
-import HeroOne from "@/views/HeroOne";
+import HeroList from "@/views/HeroList";
+import HeroDetail from "@/views/HeroDetail";
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'home',
-    component: HerosList,
+    component: HeroList,
   },
   {
-    path: '/home/:typeList',
-    name: 'heroes-list',
-    component: HerosList,
-    props: true,
+    path: '/favorites',
+    name: 'favorites',
+    component: HeroList,
+    props: {isFavorite: true},
   },
   {
-    path: '/hero/:idHero',
-    name: 'one-hero',
-    component: HeroOne,
+    path: '/hero/:heroId',
+    name: 'hero-detail',
+    component: HeroDetail,
     props: true,
   },
 ]
