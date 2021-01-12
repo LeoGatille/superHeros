@@ -45,9 +45,10 @@ export default {
   },
   created() {
     this.fetchHeroes();
+    this.setDisplayedList(this.getTypeList);
   },
   methods: {
-    ...mapActions(['changePageIndex']),
+    ...mapActions(['changePageIndex', 'setDisplayedList']),
     fetchHeroes() {
       this.$store.dispatch(this.setFetchAction);
     },

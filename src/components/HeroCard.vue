@@ -10,9 +10,17 @@
       height="400"
   >
       <div v-if="registeredHero || hoveringLink" class="card-action-btn-container">
-        <v-btn icon color="white" @click="onStarClick()">
-          <font-awesome-icon :icon="['fas', 'star']" :style="{'color': registeredHero ? '#ffbd00': 'grey'}"></font-awesome-icon>
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon color="white" @click="onStarClick()" v-bind="attrs"
+                   v-on="on">
+              <font-awesome-icon :icon="['fas', 'star']" :style="{'color': registeredHero ? '#ffbd00': 'grey'}"></font-awesome-icon>
+            </v-btn>
+
+          </template>
+          <span v-if="!registeredHero">{{$t('tooltip.btn.add')}}</span>
+          <span v-else>{{$t('tooltip.btn.remove')}}</span>
+        </v-tooltip>
       </div>
     <router-link
         :to="'/hero/' + hero.id"

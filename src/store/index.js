@@ -34,6 +34,10 @@ export default new Vuex.Store({
     SET_LOCAL_STORAGE_STATE(state, localeStorageState) {
       state.isLocalStorageReady = localeStorageState;
     },
+    //* Displayed List
+    SET_DISPLAYED_LIST(state, listType) {
+      state.displayedList = listType;
+    },
     //*Loading
     SET_LOADING_LIST(state, isLoading) {
       state.loadingList = isLoading;
@@ -90,6 +94,9 @@ export default new Vuex.Store({
         commit('SET_LOCAL_STORAGE_STATE', true)
       }
     },
+    setDisplayedList({commit}, listType) {
+      commit('SET_DISPLAYED_LIST', listType);
+    },
     fetchAllHeroes({commit}) {
       commit('SET_LOADING_LIST', true);
       marvelService.getAllHeroes(
@@ -121,8 +128,14 @@ export default new Vuex.Store({
             // commit('ADD_ONE_HERO', hero);
           })
     },
-    removeOneHero(hero) {
-      console.log(hero)
+    removeOneHero({commit, state}, idHero) {
+      LocalService.removeHero(idHero)
+          .then(res => {
+            console.log('Remove RES => ', res);
+            if (state.displayedList === 'dashboardHeroes') {
+            commit('SET_DASHBOARD_HEROES', res);
+            }
+          });
     },
     fetchDashboardHeroes({commit}) {
       commit('SET_LOADING_LIST', true);
@@ -132,7 +145,6 @@ export default new Vuex.Store({
       commit('SET_MAX_PAGE', localStorageHeroes.length);
       setTimeout(() => {
         //* Simulate request time
-        //? Might use a Promise...
         commit('SET_LOADING_LIST', false);
       }, 500);
       }) )

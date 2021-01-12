@@ -8,5 +8,11 @@
     "comics": "comics",
     "stories": "stories",
     "events": "events"
+  },
+  "tooltip": {
+    "btn": {
+      "add": "add",
+      "remove": "remove"
+    }
   }
 }
