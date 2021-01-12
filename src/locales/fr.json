@@ -9,6 +9,18 @@
     "stories": "histoires",
     "events": "évenements"
   },
+  "btn": {
+    "edition": {
+      "reset": {
+        "text": "réinitialiser",
+        "tooltip": "annuler les modifications"
+      },
+      "set": {
+        "text": "modifier",
+        "tooltip": "personalisez votre héro"
+      }
+    }
+  },
   "tooltip": {
     "btn": {
       "add": "ajouter",

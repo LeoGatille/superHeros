@@ -7,10 +7,6 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path:'/',
-    redirect: '/home'
-  },
-  {
     path: '/home',
     name: 'home',
     component: HerosList,
@@ -24,7 +20,7 @@ const routes = [
   {
     path: '/hero/:idHero',
     name: 'one-hero',
-    comments: HeroOne,
+    component: HeroOne,
     props: true,
   },
 ]

@@ -33,26 +33,35 @@ export default {
     removeHero(idHero) {
         return new Promise((resolve) => {
           this.findHeroIndexInLocalStorage(idHero)
-              .then(({indexToRemove, localStorageHeroes}) => {
-                  console.log('indexToremove => ', indexToRemove)
-                  localStorageHeroes.splice(indexToRemove, 1);
+              .then(({index, localStorageHeroes}) => {
+                  localStorageHeroes.splice(index, 1);
                   localStorage.setItem('savedHeroes', JSON.stringify(localStorageHeroes));
                   resolve(localStorageHeroes);
               });
         });
     },
+    getOneLocalStorageHero(idHero) {
+        return new Promise((resolve, reject) => {
+            return this.findHeroIndexInLocalStorage(idHero)
+                .then(({index, localStorageHeroes}) => {
+                    if(index > -1) {
+                        resolve(localStorageHeroes[index]);
+                    } else {
+                        reject('hero not found');
+                    }
+            })
+        })
+    },
     findHeroIndexInLocalStorage(idHero) {
         return new Promise((resolve) => {
             return this.fetchHeroes()
                 .then(localStorageHeroes => {
-                    const indexToRemove = localStorageHeroes
+                    const index = localStorageHeroes
                         .map(hero => {
-                            console.log('Hero map => ', hero.id)
                             return hero.id
                         })
                         .indexOf(idHero);
-                    console.log('indexToRemove in findHero => ', indexToRemove)
-                    resolve({indexToRemove, localStorageHeroes});
+                    resolve({index, localStorageHeroes});
                 });
         })
     }

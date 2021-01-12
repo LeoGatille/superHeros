@@ -19,7 +19,7 @@ export default {
     getAllHeroes(limit, offset) {
         return apiClient.get(`characters${setUserAuth()}${limit ? '&limit=' + limit : ''}&offset=${offset}`)
     },
-    getOneHero(id) {
-        return apiClient.get(`characters/${id}`)
+    getHeroById(idHero) {
+        return apiClient.get(`characters/${idHero}${setUserAuth()}`)
     }
 }
