@@ -11,6 +11,7 @@ export default new Vuex.Store({
     loadingList: false,
     displayedList: 'dashboard',
     heroList: [],
+    favoriteHeroList: JSON.parse(localStorage.getItem('savedHeroes')),
     maxItemsPerPage: 20,
     // currentPage: 0, Must be removed when safe
     allHeroesPage:0,
@@ -62,8 +63,8 @@ export default new Vuex.Store({
     //   savedheroList.push(hero);
     //   localStorage.setItem("savedHeroes", JSON.stringify(savedheroList));
     // },
-    SET_DASHBOARD_HEROES(state, heroes) {
-      state.heroList = heroes;
+    SET_FAVORITE_LIST(state, heroes) {
+      state.favoriteHeroList = heroes;
     },
     SET_CURRENT_PAGE(state, {shiftValue, targetPage}) {
       state[targetPage] += shiftValue;
@@ -81,8 +82,12 @@ export default new Vuex.Store({
     // SET_NOTIFICATION(state, payload) {
     //   state.notification
     // }
-    DO_NOTHING() {
-
+    ADD_HERO(state, hero) {
+      state.favoriteHeroList.push(hero);
+    },
+    EDIT_HERO(state, hero) {
+      const heroToUpdate = state.favoriteHeroList.find(favHero => {return favHero.id === hero.id});
+      Object.assign(heroToUpdate, hero);
     }
   },
   actions: {
@@ -114,16 +119,12 @@ export default new Vuex.Store({
             // commit('SET_NOTIFICATION', {type: 'error', message: 'Something went wrong ;('});
           })
     },
-    addOneHero({commit, getters}, idHero) {
-       const toSend = Object.assign({}, getters.getHeroBydId(idHero));
-      // const savedheroList = JSON.parse(localStorage.getItem("savedHeroes"));
-      // savedheroList.push(hero);
-      // localStorage.setItem("savedHeroes", JSON.stringify(savedheroList));
-      // commit('DO_NOTHING')
+    addOneHero({commit}, hero) {
+      const toSend = Object.assign({}, hero);
       return LocalService.addHero(toSend)
           .then(res => {
             console.log('AddHero res => ', res)
-            commit('DO_NOTHING')
+            commit('ADD_HERO')
             return true;
             // commit('ADD_ONE_HERO', hero);
           })
@@ -133,14 +134,14 @@ export default new Vuex.Store({
           .then(res => {
             console.log('Remove RES => ', res);
             if (state.displayedList === 'dashboardHeroes') {
-            commit('SET_DASHBOARD_HEROES', res);
+            commit('SET_FAVORITE_LIST', res);
             }
           });
     },
     fetchDashboardHeroes({commit}) {
       commit('SET_LOADING_LIST', true);
       LocalService.fetchHeroes().then((localStorageHeroes => {
-      commit('SET_DASHBOARD_HEROES', localStorageHeroes);
+      commit('SET_FAVORITE_LIST', localStorageHeroes);
       commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
       commit('SET_MAX_PAGE', localStorageHeroes.length);
       setTimeout(() => {
@@ -148,6 +149,16 @@ export default new Vuex.Store({
         commit('SET_LOADING_LIST', false);
       }, 500);
       }) )
+    },
+    editHero({commit}, hero) {
+      if(hero.savedDate) {
+         commit('EDIT_HERO', hero);
+         LocalService.editHero(hero);
+      } else {
+        hero.savedDate = new Date();
+        LocalService.addHero(hero)
+        commit('ADD_HERO', hero);
+      }
     },
     changePageIndex({commit}, {pageIndex, pageName}) {
       commit('CHANGE_PAGE', {pageIndex, pageName});
@@ -163,9 +174,9 @@ export default new Vuex.Store({
     getheroListByName: state => name => {
       return state[name];
     },
-    getHeroBydId: state => id => {
-      return state.heroList.find(hero => {
-        return hero.id === id;
+    getHeroBydId: state => (id, localStorage = false) => {
+      return state[localStorage ? 'favoriteHeroList' : 'heroList'].find(hero => {
+        return (hero ? hero.id : -1) === id;
       })
     },
     getRandomHero: state => {

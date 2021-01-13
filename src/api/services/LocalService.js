@@ -26,7 +26,7 @@ export default {
                     hero.edited = false;
                     localStorageHeroes.push(hero);
                     localStorage.setItem('savedHeroes', JSON.stringify(localStorageHeroes));
-                    resolve('Successfully Added');
+                    resolve(hero);
                 });
         });
     },
@@ -41,15 +41,17 @@ export default {
         });
     },
     getOneLocalStorageHero(idHero) {
+
         return new Promise((resolve, reject) => {
             return this.findHeroIndexInLocalStorage(idHero)
                 .then(({index, localStorageHeroes}) => {
                     if(index > -1) {
                         resolve(localStorageHeroes[index]);
-                    } else {
-                        reject('hero not found');
                     }
-            })
+                })
+                .catch(() => {
+                    reject()
+                });
         })
     },
     findHeroIndexInLocalStorage(idHero) {
@@ -61,8 +63,22 @@ export default {
                             return hero.id
                         })
                         .indexOf(idHero);
-                    resolve({index, localStorageHeroes});
+                        console.log('why catch ?', index)
+                        resolve({index, localStorageHeroes});
                 });
+        })
+    },
+    editHero(hero) {
+        return new Promise((resolve) => {
+            this.findHeroIndexInLocalStorage(hero.id)
+                .then(({index, localStorageHeroes}) => {
+                    if(index > -1) {
+                        console.log(localStorageHeroes[index])
+                        localStorageHeroes[index] = hero;
+                        localStorage.setItem('savedHeroes', JSON.stringify(localStorageHeroes));
+                        resolve(hero);
+                    }
+                })
         })
     }
 }

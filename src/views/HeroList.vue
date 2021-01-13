@@ -2,7 +2,7 @@
   <div>
     <template v-if="!loadingList">
       <div class="card-list">
-        <HeroCard v-for="hero in heroList" :key="hero.name" :hero="hero"/>
+        <HeroCard v-for="hero in (isFavorite ? favoriteHeroList : heroList)" :key="hero.name" :hero="hero"/>
         <h2>
           <!--        {{hero.name}}-->
           <!--        <v-btn @click="addHero(hero)">ADD</v-btn>-->
@@ -31,7 +31,7 @@ export default {
     HeroCard
   },
   computed: {
-    ...mapState(['loadingList', 'heroList', 'pages']),
+    ...mapState(['loadingList', 'heroList', 'favoriteHeroList', 'pages']),
     currentPage() {
       return this.pages[this.currentList];
     },

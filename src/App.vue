@@ -30,9 +30,10 @@ export default {
   },
   created() {
     this.createHeroesLocalStorage();
+    this.fetchDashboardHeroes();
   },
   methods: {
-    ...mapActions(['createHeroesLocalStorage'])
+    ...mapActions(['createHeroesLocalStorage', "fetchDashboardHeroes"])
   },
 };
 </script>

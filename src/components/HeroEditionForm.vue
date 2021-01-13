@@ -1,5 +1,5 @@
 <template>
-  <v-form>
+  <v-form ref="form">
     <v-row>
       <v-col cols="3">
         <v-img
@@ -7,40 +7,62 @@
         >
         </v-img>
         <v-text-field
-          @input="setNewURL($event)"
+          v-model="imgURL"
+          :rules="urlRules"
           :label="labelImgURL"
-          :error-messages="urlError"
         ></v-text-field>
       </v-col>
+
       <v-col cols="9">
         <v-text-field
             v-model="name"
-            :label="labelName"
-            :error-messages="emptyFieldError"
+            :label="this.$t('form.label.name')"
+            :rules="nameRules"
             required
         ></v-text-field>
         <v-textarea
-            v-model="hero.description"
-            :label="labelDescription"
+            v-model="description"
+            :label="this.$t('form.label.description')"
             required
         ></v-textarea>
       </v-col>
+
     </v-row>
+      <v-row>
+          <v-spacer></v-spacer>
+          <v-col cols="3" style="display: flex">
+            <v-btn>
+              cancel
+            </v-btn>
+          <v-spacer></v-spacer>
+            <v-btn @click="setDefaultValues()">
+              reset
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn @click="submit()">
+              apply
+            </v-btn>
+          </v-col>
+      </v-row>
   </v-form>
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "HeroEditionForm",
   data() {
     return {
       name: '',
       description: '',
-      newImgURL: {
+      imgURL: '',
+      formatedURl: {
         path: '',
         extension: '',
       },
-      urlError: [],
+      nameRules: [name => !!name || this.$t('form.error.name')],
+      urlRules: [url => this.testURl(url) || this.$t('form.error.imgURL')],
     }
   },
   props: {
@@ -60,42 +82,52 @@ export default {
       return this.$t('form.label.imgURL');
     },
     setImgURL() {
-      return this.newImgURL.path ?  this.newImgURL.path + '.' + this.newImgURL.extension : '';
-    },
-    emptyFieldError() {
-      const error = [];
-      if(!this.name.length) {
-        error.push(this.$t('form.error.name'));
-      }
-      return error;
+      return this.formatedURl.path ?  this.formatedURl.path + '.' + this.formatedURl.extension : '';
     },
   },
   created() {
-    this.name = this.hero.name;
-    this.description = this.hero.description;
-    this.newImgURL = this.hero.thumbnail;
+    console.log(this.hero)
+    this.setDefaultValues();
   },
   methods: {
-    setNewURL(url) {
-      this.setUrlError(url);
-      this.newImgURL = !this.urlError.length ? {...this.formatURL(url)} : this.hero.thumbnail;
+    ...mapActions(['editHero']),
+    setDefaultValues() {
+      this.name = this.hero.name;
+      this.description = this.hero.description;
+      this.formatedURl = this.hero.thumbnail;
     },
-    formatURL(url) {
-      const splittedURL = url.split(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/);
-      return {path: splittedURL[0], extension: splittedURL[1] }
+    formatURL() {
+      const splitURL = this.imgURL.split(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/);
+      return {path: splitURL[0], extension: splitURL[1] }
     },
-    setUrlError(url) {
-      const error = [];
-      console.log('URL ERROR')
-      if(!/\.(gif|jpe?g|tiff?|png|webp|bmp)$/.test(url)) {
-        error.push(this.$t('form.error.imgURL'));
-      }
-      this.urlError = error;
+    testURl(url) {
+      return /(https?:\/\/.*\.(?:gif|jpe?g|tiff?|png|webp|bmp))/i.test(url)
     },
+    submit() {
+      this.hero.edited = true;
+      this.hero.name = this.name;
+      this.hero.description = this.description;
+      this.hero.thumbnail = {...this.formatURL()};
+      this.editHero(this.hero)
+        .then(() => {
+          this.endEdition();
+        });
+    },
+    endEdition() {
+      this.$emit('endEdition');
+    }
   }
 }
 </script>
 
 <style scoped>
+.btn-container {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+}
+.justify-right {
+  margin-left: auto;
+}
 
 </style>

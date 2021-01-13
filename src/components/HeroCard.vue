@@ -148,7 +148,7 @@ export default {
             this.registeredHero = false;
           })
       } else {
-        this.$store.dispatch('addOneHero', this.hero.id)
+        this.$store.dispatch('addOneHero', this.hero)
         .then(() => {
           this.registeredHero = true;
         });
