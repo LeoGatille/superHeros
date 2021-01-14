@@ -156,6 +156,7 @@ export default new Vuex.Store({
                 commit('SET_FAVORITE_LIST', localStorageHeroes);
                 commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
                 commit('SET_MAX_PAGE', localStorageHeroes.length);
+                commit('SET_LOADING_LIST', false);
             }))
         },
         editHero({commit}, hero) {
