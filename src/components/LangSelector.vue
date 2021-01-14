@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     setLang(lang) {
-      console.log('CLICK => ', lang);
       this.$i18n.locale = lang;
     },
     isLangSelected(lang) {

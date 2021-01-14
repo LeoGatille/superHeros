@@ -141,7 +141,6 @@ export default {
     ...mapActions(['editHero', 'resetHero']),
 
     setDefaultValues() {
-      console.log('heroName => ', this.hero.name)
       this.name = this.hero.name;
       this.description = this.hero.description;
       this.imgURL = this.setImgURL;

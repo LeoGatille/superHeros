@@ -127,7 +127,7 @@ export default new Vuex.Store({
                     commit('SET_LOADING_LIST', false);
                 })
                 .catch(err => {
-                    console.log('ERROR => ', err)
+                    console.log('fetchAllHeroes ERROR => ', err)
                     // commit('SET_NOTIFICATION', {type: 'error', message: 'Something went wrong ;('});
                 })
         },
@@ -137,7 +137,6 @@ export default new Vuex.Store({
             const toSend = Object.assign({}, hero);
             return LocalService.addHero(toSend)
                 .then(res => {
-                    console.log('AddHero res => ', res)
                     commit('ADD_HERO')
                     return true;
                     // commit('ADD_ONE_HERO', hero);

@@ -61,7 +61,6 @@ export default {
                             return hero.id
                         })
                         .indexOf(idHero);
-                        console.log('why catch ?', index)
                         resolve({index, localStorageHeroes});
                 });
         })
