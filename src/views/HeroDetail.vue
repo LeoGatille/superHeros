@@ -46,7 +46,7 @@
                         outlined
                         small
                     >
-                      {{$t('tags.edited')}}
+                      {{ $t('tags.edited') }}
                     </v-chip>
                   </h1>
                   <p>{{ hero.description }}</p>
@@ -59,14 +59,14 @@
                   </TimelineLinkList>
 
                   <TimelineLinkList :list="hero.series.items" :color="'blue darken-1'">
-                    Comics
+                    Series
                   </TimelineLinkList>
 
                   <TimelineLinkList :list="hero.stories.items" :color="'orange lighten-1'">
-                    Comics
+                    {{ $t('heroDetail.stories') }}
                   </TimelineLinkList>
                   <TimelineLinkList :list="hero.events.items" :color="'teal lighten-2'">
-                    Comics
+                    {{ $t('heroDetail.events') }}
                   </TimelineLinkList>
                 </v-timeline>
                 <div class="items-list">
@@ -93,11 +93,11 @@
                     >
                       <font-awesome-icon
                           :icon="['fas', 'star']"
-                          :style="{'color': hero.savedDate ? '#ffbd00': 'grey'}"></font-awesome-icon>
+                          :style="{'color': registeredHero ? '#ffbd00': 'grey'}"></font-awesome-icon>
                     </v-btn>
 
                   </template>
-                  <span v-if="!hero.savedDate">{{ $t('tooltip.btn.add') }}</span>
+                  <span v-if="!registeredHero">{{ $t('tooltip.btn.add') }}</span>
                   <span v-else>{{ $t('tooltip.btn.remove') }}</span>
                 </v-tooltip>
               </div>
@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import marvelService from "@/api/services/marvelAPI/marvelService";
 import Dialog from '@/components/share/Dialog';
 import HeroEditionForm from '@/components/HeroEditionForm';
@@ -132,6 +132,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['favoriteHeroList']),
     ...mapGetters(['getHeroBydId']),
     parseIntId() {
       return parseInt(this.heroId)
@@ -147,61 +148,17 @@ export default {
     },
   },
   created() {
-
-    this.fetchHero()
-    // this.hero = this.getHeroBydId(this.parseIntId, true)
-    //     ? this.getHeroBydId(this.parseIntId, true)
-    //     : this.getHeroBydId(this.parseIntId)
-    //       ? this.getHeroBydId(this.parseIntId)
-    //       : this.fetchHeroById(this.parseIntId)
-    //
-    // console.log(this.hero.name, this.hero)
-    // this.registeredHero = !!this.hero.savedDate
-    //
-    // this.loading = false;
-    //
-    // this.hero = this.getHeroBydId(this.parseIntId, true)
-    //     ? this.getHeroBydId(this.parseIntId, true)
-    //     ? this.getHeroBydId(this.parseIntId)
-    //     : Promise.resolve(this.fetchHeroById())
-    //     : ''
-
-
-    // if(this.getHeroBydId(this.parseIntId, true)) {
-    //   console.log('firstCase => ', this.getHeroBydId(this.parseIntId, true))
-    //   this.hero = this.getHeroBydId(this.parseIntId, true)
-    // } else if(this.getHeroBydId(this.parseIntId)) {
-    //   console.log('secondCase', this.getHeroBydId(this.parseIntId))
-    //   this.hero = this.getHeroBydId(this.parseIntId)
-    // } else {
-    //    this.fetchHeroById().then(res => {
-    //    this.hero = res.data.data.results[0];
-    //   console.log('thirdCase => ', this.hero);
-    //
-    //    })
-    // }
-
-    // LocalService.getOneLocalStorageHero(this.parseIntId)
-    //     .then(hero => {
-    //       this.hero = hero;
-    //       this.registeredHero = true;
-    //     })
-    //     .catch(() => {
-    //       if (this.getHeroBydId(this.parseIntId)) {
-    //         this.hero = this.getHeroBydId(this.parseIntId);
-    //       } else {
-    //       marvelService.getHeroById(this.parseIntId)
-    //         .then(res => {
-    //           this.hero = res.data.data.results[0];
-    //         })
-    //       }
-    //     })
-    //     .finally(() => {
-    //         this.loading = false;
-    //     })
+    if(!this.favoriteHeroList.length) {
+      this.fetchDashboardHeroes()
+      .then(() => {
+        this.fetchHero();
+      })
+    } else {
+      this.fetchHero();
+    }
   },
   methods: {
-    ...mapActions(['addOneHero', 'removeOneHero']),
+    ...mapActions(['addOneHero', 'removeOneHero', 'fetchDashboardHeroes']),
     fetchHero() {
       if (this.getHeroBydId(this.parseIntId, true) || this.getHeroBydId(this.parseIntId)) {
         this.hero = this.getHeroBydId(this.parseIntId, true) ? this.getHeroBydId(this.parseIntId, true) : this.getHeroBydId(this.parseIntId);
@@ -222,7 +179,9 @@ export default {
           });
     },
     onStarClick() {
-      let func = this.registeredHero ? this.removeOneHero : this.addOneHero;
+      let func = () => {
+        return this.registeredHero ? this.removeOneHero(this.hero.id) : this.addOneHero(this.hero);
+      }
       func(this.hero)
           .then(() => {
             this.registeredHero = !this.registeredHero;

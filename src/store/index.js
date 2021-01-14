@@ -151,14 +151,11 @@ export default new Vuex.Store({
         },
         fetchDashboardHeroes({commit}) {
             commit('SET_LOADING_LIST', true);
-            LocalService.fetchHeroes().then((localStorageHeroes => {
+            return LocalService.fetchHeroes()
+                .then((localStorageHeroes => {
                 commit('SET_FAVORITE_LIST', localStorageHeroes);
                 commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
                 commit('SET_MAX_PAGE', localStorageHeroes.length);
-                setTimeout(() => {
-                    //* Simulate request time
-                    commit('SET_LOADING_LIST', false);
-                }, 500);
             }))
         },
         editHero({commit}, hero) {

@@ -48,6 +48,10 @@
   "tags": {
     "edited": "modifié"
   },
+  "heroDetail": {
+    "stories": "Histoires",
+    "events": "Evenements"
+  },
   "tooltip": {
     "btn": {
       "add": "ajouter",
