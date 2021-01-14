@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="navbar-container">
   <v-app-bar
       app
       fixed
@@ -60,6 +60,9 @@ name: "NavBar",
 
 
 <style scoped>
+.navbar-container {
+  z-index: 99999;
+}
 main {
   width: 100%;
   height: 70px;

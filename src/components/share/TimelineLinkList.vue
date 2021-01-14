@@ -14,7 +14,7 @@
           {{ list.length }}
         </div>
       </div>
-      <div class="body">
+      <div class="body" v-if="list.length">
         <div class="colored-column" :style="{backgroundColor: color}"></div>
         <v-card-text class="white text--primary">
           <v-container>

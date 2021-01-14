@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ToolBar/>
     <template v-if="!loadingList">
       <div class="card-list">
         <HeroCard v-for="hero in (isFavorite ? favoriteHeroList : heroList)" :key="hero.name" :hero="hero"/>
@@ -18,8 +19,9 @@
 
 <script>
 import {mapState, mapActions} from 'vuex';
-import Pagination from "@/components/Pagination";
 import HeroCard from "@/components/HeroCard";
+import Pagination from "@/components/Pagination";
+import ToolBar from "@/components/ToolBar";
 
 export default {
   name: "HeroList",
@@ -28,7 +30,8 @@ export default {
   },
   components: {
     Pagination,
-    HeroCard
+    HeroCard,
+    ToolBar
   },
   computed: {
     ...mapState(['loadingList', 'heroList', 'favoriteHeroList', 'pages']),

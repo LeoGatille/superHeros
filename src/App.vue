@@ -5,9 +5,9 @@
       <v-sheet
           id="scrolling-techniques-2"
           class="overflow-y-auto"
+          style="overflow-x: visible"
       >
         <v-container fluid style="position: relative">
-          <ToolBar v-if="showSettings" style="position: fixed; z-index: 100;"/>
           <router-view style="position: relative; z-index: 1;" :key="$route.fullPath"></router-view>
         </v-container>
       </v-sheet>
@@ -18,14 +18,12 @@
 </template>
 <script>
 import NavBar from "@/components/NavBar";
-import ToolBar from "@/components/ToolBar";
 import {mapState, mapActions} from "vuex";
 
 export default {
   name: 'App',
   components: {
     NavBar,
-    ToolBar,
   },
   computed: {
     ...mapState(['showSettings']),
