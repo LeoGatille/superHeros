@@ -1,18 +1,81 @@
 <template>
   <div>
     <template v-if="!loading">
-      <v-container>
+      <v-container fluid>
         <v-row>
-          <v-col cols="4">
+          <v-col lg="4" sm="12">
             <v-img :src="setImgURL"></v-img>
+            <v-dialog
+                transition="dialog-bottom-transition"
+                max-width="90%"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    width="100%"
+                    color="primary"
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                  Edition
+                </v-btn>
+              </template>
+
+              <template v-slot:default="dialog">
+                <Dialog :dialog="dialog">
+                  <template v-slot:title>
+                    <h2>{{ $t('dialog.edition.title') }}</h2>
+                  </template>
+                  <template v-slot:content>
+                    <HeroEditionForm :hero="hero" @done="dialog.value = false" @refresh="fetchHero()"/>
+                  </template>
+                </Dialog>
+              </template>
+            </v-dialog>
           </v-col>
-          <v-col cols="6">
-            <div>
-              <h1>{{ hero.name }}</h1>
-              <p>{{ hero.description }}</p>
-            </div>
+          <v-col lg="7" sm="12">
+            <v-container fluid>
+              <v-row>
+                <div>
+                  <h1>
+                    {{ hero.name }}
+                    &nbsp;
+                    <v-chip
+                        v-if="hero.edited"
+                        color="teal accent-3"
+                        label
+                        outlined
+                        small
+                    >
+                      {{$t('tags.edited')}}
+                    </v-chip>
+                  </h1>
+                  <p>{{ hero.description }}</p>
+                </div>
+              </v-row>
+              <v-row>
+                <v-timeline dense>
+                  <TimelineLinkList :list="hero.comics.items" :color="'red accent-4'">
+                    Comics
+                  </TimelineLinkList>
+
+                  <TimelineLinkList :list="hero.series.items" :color="'blue darken-1'">
+                    Comics
+                  </TimelineLinkList>
+
+                  <TimelineLinkList :list="hero.stories.items" :color="'orange lighten-1'">
+                    Comics
+                  </TimelineLinkList>
+                  <TimelineLinkList :list="hero.events.items" :color="'teal lighten-2'">
+                    Comics
+                  </TimelineLinkList>
+                </v-timeline>
+                <div class="items-list">
+                </div>
+              </v-row>
+
+            </v-container>
           </v-col>
-          <v-col cols="1"></v-col>
+
           <v-col cols="1">
             <div>
               <div class="action-btn-container">
@@ -38,40 +101,6 @@
                   <span v-else>{{ $t('tooltip.btn.remove') }}</span>
                 </v-tooltip>
               </div>
-              <v-tooltip bottom>
-                <template v-slot:activator="{on, attrs}">
-                  <v-btn
-                      depressed
-                      v-bind="attrs"
-                      v-on="on"
-                      color="green"
-                  >
-                    {{ editBtnText }}
-                  </v-btn>
-                </template>
-                <span>{{ editBtnTooltip }}</span>
-              </v-tooltip>
-
-
-              <v-dialog
-                  transition="dialog-bottom-transition"
-                  max-width="90%"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                      color="primary"
-                      v-bind="attrs"
-                      v-on="on"
-                  >Edition
-                  </v-btn>
-                </template>
-
-                <template v-slot:default="dialog">
-                  <Dialog :dialog="dialog">
-                    <HeroEditionForm :hero="hero" @done="dialog.value = false" @refresh="fetchHero()"/>
-                  </Dialog>
-                </template>
-              </v-dialog>
             </div>
           </v-col>
         </v-row>
@@ -81,16 +110,18 @@
 </template>
 
 <script>
-import marvelService from "@/api/services/marvelAPI/marvelService";
-import HeroEditionForm from '@/components/HeroEditionForm';
-import Dialog from '@/components/Dialog';
 import {mapActions, mapGetters} from "vuex";
+import marvelService from "@/api/services/marvelAPI/marvelService";
+import Dialog from '@/components/share/Dialog';
+import HeroEditionForm from '@/components/HeroEditionForm';
+import TimelineLinkList from "@/components/share/TimelineLinkList";
 
 export default {
   name: "HeroDetail",
   components: {
-    HeroEditionForm,
     Dialog,
+    HeroEditionForm,
+    TimelineLinkList,
   },
   props: ['heroId'],
   data() {

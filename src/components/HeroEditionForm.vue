@@ -31,23 +31,55 @@
     <v-row>
       <v-spacer></v-spacer>
       <v-col cols="3" style="display: flex">
-        <v-btn @click="endEdition()">
-          cancel
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                color="error"
+                @click="endEdition()"
+            >
+              {{ $t('btn.edition.cancel.text') }}
+            </v-btn>
+          </template>
+          <span>{{ $t('btn.edition.cancel.tooltip') }}</span>
+        </v-tooltip>
+
         <v-spacer></v-spacer>
-        <v-btn
-            @click="reset()"
-            :disabled="!hero.edited"
-        >
-          reset
-        </v-btn>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{on, attrs}">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                color="teal white--text"
+                :disabled="!hero.edited"
+                @click="reset()"
+            >
+              {{ $t('btn.edition.reset.text') }}
+            </v-btn>
+          </template>
+          <span>{{ $t('btn.edition.reset.tooltip') }}</span>
+        </v-tooltip>
+
         <v-spacer></v-spacer>
-        <v-btn
-            @click="submit()"
-            :disabled="!isFormValid"
-        >
-          apply
-        </v-btn>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{on, attrs}">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                color="primary"
+                :disabled="!isFormValid"
+                @click="submit()"
+            >
+              {{ $t('btn.edition.apply.text') }}
+            </v-btn>
+
+          </template>
+          <span>{{ $t('btn.edition.apply.tooltip') }}</span>
+        </v-tooltip>
+
       </v-col>
     </v-row>
   </v-form>

@@ -13,11 +13,19 @@
     "edition": {
       "reset": {
         "text": "réinitialiser",
-        "tooltip": "annuler les modifications"
+        "tooltip": "retirer toutes les modifications"
       },
       "set": {
         "text": "modifier",
         "tooltip": "personalisez votre héro"
+      },
+      "apply": {
+        "text":"appliquer",
+        "tooltip": "sauvegarder les modifications"
+      },
+      "cancel": {
+        "text":"annuler",
+        "tooltip": "fermer sans sauvegarder"
       }
     }
   },
@@ -31,6 +39,14 @@
       "name": "Le nom doit avoir au moins un caractère",
       "imgURL": "Vous devez insérer une URL valid"
     }
+  },
+  "dialog": {
+    "edition": {
+      "title": "Modification du héro"
+    }
+  },
+  "tags": {
+    "edited": "modifié"
   },
   "tooltip": {
     "btn": {

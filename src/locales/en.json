@@ -18,6 +18,14 @@
       "set": {
         "text": "edit",
         "tooltip": "customize you hero"
+      },
+      "apply": {
+        "text":"apply",
+        "tooltip": "save edition"
+      },
+      "cancel": {
+        "text":"cancel",
+        "tooltip": "close without saving"
       }
     }
   },
@@ -31,6 +39,14 @@
       "name": "Name must have one character minimum",
       "imgURL": "you must provide a valid URL"
     }
+  },
+  "dialog": {
+    "edition": {
+      "title": "Hero's edition"
+    }
+  },
+  "tags": {
+    "edited": "edited"
   },
   "tooltip": {
     "btn": {
