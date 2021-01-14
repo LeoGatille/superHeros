@@ -5,7 +5,6 @@
     </header>
     <v-container fluid>
       <slot></slot>
-      <v-btn @click="close()">close</v-btn>
     </v-container>
   </div>
 </template>

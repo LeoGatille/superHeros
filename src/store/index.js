@@ -58,11 +58,6 @@ export default new Vuex.Store({
       state.maxPage = Math.round(nbItems / state.maxItemsPerPage);
     },
     //* Favorites Heroes
-    // ADD_ONE_HERO(state, hero) {
-    //   const savedheroList = JSON.parse(localStorage.getItem("savedHeroes"));
-    //   savedheroList.push(hero);
-    //   localStorage.setItem("savedHeroes", JSON.stringify(savedheroList));
-    // },
     SET_FAVORITE_LIST(state, heroes) {
       state.favoriteHeroList = heroes;
     },
@@ -88,6 +83,10 @@ export default new Vuex.Store({
     EDIT_HERO(state, hero) {
       const heroToUpdate = state.favoriteHeroList.find(favHero => {return favHero.id === hero.id});
       Object.assign(heroToUpdate, hero);
+    },
+    RESET_HERO(state, hero) {
+      const heroToReset = state.favoriteHeroList.find(favHero => {return favHero.id === hero.id});
+      Object.assign(heroToReset, hero);
     }
   },
   actions: {
@@ -167,6 +166,19 @@ export default new Vuex.Store({
               return hero;
             })
       }
+    },
+    resetHero({commit}, editedHero) {
+      return marvelService.getHeroById(editedHero.id)
+          .then(response => {
+            const standardHero = response.data.data.results[0];
+              standardHero.savedDate = editedHero.savedDate;
+              standardHero.edited = false;
+              return LocalService.editHero(standardHero)
+                  .then(hero => {
+                      commit('RESET_HERO', hero);
+                      return hero;
+                  })
+          })
     },
     changePageIndex({commit}, {pageIndex, pageName}) {
       commit('CHANGE_PAGE', {pageIndex, pageName});

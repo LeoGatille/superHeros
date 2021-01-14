@@ -35,7 +35,7 @@
               cancel
             </v-btn>
           <v-spacer></v-spacer>
-            <v-btn @click="setDefaultValues()">
+            <v-btn @click="reset()">
               reset
             </v-btn>
             <v-spacer></v-spacer>
@@ -52,6 +52,12 @@ import {mapActions} from "vuex";
 
 export default {
   name: "HeroEditionForm",
+  props: {
+    hero: {
+      required: true,
+      type: Object,
+    },
+  },
   data() {
     return {
       name: '',
@@ -65,12 +71,6 @@ export default {
       urlRules: [url => this.testURl(url) || this.$t('form.error.imgURL')],
     }
   },
-  props: {
-    hero: {
-      required: true,
-      type: Object,
-    }
-  },
   computed: {
     labelName() {
       return this.$t('form.label.name');
@@ -82,16 +82,16 @@ export default {
       return this.$t('form.label.imgURL');
     },
     setImgURL() {
-      return this.formatedURl.path ?  this.formatedURl.path + '.' + this.formatedURl.extension : '';
+      return (this.imgURL.length && this.testURl(this.imgURL)) ? this.imgURL : (this.hero.thumbnail.path + '.' + this.hero.thumbnail.extension);
     },
   },
   created() {
-    console.log(this.hero)
     this.setDefaultValues();
   },
   methods: {
-    ...mapActions(['editHero']),
+    ...mapActions(['editHero', 'resetHero']),
     setDefaultValues() {
+      console.log('heroName => ', this.hero.name)
       this.name = this.hero.name;
       this.description = this.hero.description;
       this.formatedURl = this.hero.thumbnail;
@@ -104,18 +104,35 @@ export default {
       return /(https?:\/\/.*\.(?:gif|jpe?g|tiff?|png|webp|bmp))/i.test(url)
     },
     submit() {
-      this.hero.edited = true;
-      this.hero.name = this.name;
-      this.hero.description = this.description;
-      this.hero.thumbnail = this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail;
+      this.$set(this.hero, 'edited', true);
+      this.$set(this.hero, 'name', this.name);
+      this.$set(this.hero, 'description', this.description);
+      this.$set(this.hero, 'thumbnail', this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail);
+      // this.hero.edited = true;
+      // this.hero.name = this.name;
+      // this.hero.description = this.description;
+      // this.hero.thumbnail = this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail;
       this.editHero(this.hero)
-        .then((hero) => {
-          this.hero = hero;
+        .then(() => {
           this.endEdition();
         });
     },
+    reset() {
+      if(this.hero.edited) {
+        this.resetHero(this.hero)
+        .then((hero) => {
+          // this.setDefaultValues();
+          //! NOT the good way
+          this.name = hero.name;
+          this.description = hero.description;
+          this.imgURL = hero.thumbnail.path + '.' + hero.thumbnail.extension;
+          this.endEdition();
+
+        });
+      }
+    },
     endEdition() {
-      this.$emit('endEdition');
+      this.$emit('done');
     }
   }
 }

@@ -67,7 +67,7 @@
 
                 <template v-slot:default="dialog">
                   <Dialog :dialog="dialog">
-                    <HeroEditionForm :hero="hero" @edited="setHero"/>
+                    <HeroEditionForm :hero="hero" @done="dialog.value = false"/>
                   </Dialog>
                 </template>
               </v-dialog>
