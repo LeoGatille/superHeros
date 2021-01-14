@@ -22,8 +22,6 @@ export default {
         return new Promise((resolve) => {
             this.fetchHeroes()
                 .then(localStorageHeroes => {
-                    hero.savedDate = new Date();
-                    hero.edited = false;
                     localStorageHeroes.push(hero);
                     localStorage.setItem('savedHeroes', JSON.stringify(localStorageHeroes));
                     resolve(hero);

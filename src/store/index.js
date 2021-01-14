@@ -120,6 +120,8 @@ export default new Vuex.Store({
           })
     },
     addOneHero({commit}, hero) {
+      hero.edited = false;
+      hero.savedDate = new Date();
       const toSend = Object.assign({}, hero);
       return LocalService.addHero(toSend)
           .then(res => {
