@@ -107,9 +107,10 @@ export default {
       this.hero.edited = true;
       this.hero.name = this.name;
       this.hero.description = this.description;
-      this.hero.thumbnail = {...this.formatURL()};
+      this.hero.thumbnail = this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail;
       this.editHero(this.hero)
-        .then(() => {
+        .then((hero) => {
+          this.hero = hero;
           this.endEdition();
         });
     },

@@ -152,12 +152,18 @@ export default new Vuex.Store({
     },
     editHero({commit}, hero) {
       if(hero.savedDate) {
-         commit('EDIT_HERO', hero);
-         LocalService.editHero(hero);
+         return LocalService.editHero(hero)
+             .then(hero => {
+                commit('EDIT_HERO', hero);
+                return hero;
+             });
       } else {
         hero.savedDate = new Date();
-        LocalService.addHero(hero)
-        commit('ADD_HERO', hero);
+        return LocalService.addHero(hero)
+            .then(hero => {
+              commit('ADD_HERO', hero);
+              return hero;
+            })
       }
     },
     changePageIndex({commit}, {pageIndex, pageName}) {

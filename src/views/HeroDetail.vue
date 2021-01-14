@@ -29,11 +29,11 @@
                         @click="onStarClick()"
                     >
                       <font-awesome-icon :icon="['fas', 'star']"
-                                         :style="{'color': registeredHero ? '#ffbd00': 'grey'}"></font-awesome-icon>
+                                         :style="{'color': hero.savedDate ? '#ffbd00': 'grey'}"></font-awesome-icon>
                     </v-btn>
 
                   </template>
-                  <span v-if="!registeredHero">{{ $t('tooltip.btn.add') }}</span>
+                  <span v-if="!hero.savedDate">{{ $t('tooltip.btn.add') }}</span>
                   <span v-else>{{ $t('tooltip.btn.remove') }}</span>
                 </v-tooltip>
               </div>
@@ -44,7 +44,6 @@
                       v-bind="attrs"
                       v-on="on"
                       color="green"
-                      @click="editHero()"
                   >
                     {{ editBtnText }}
                   </v-btn>
@@ -68,7 +67,7 @@
 
                 <template v-slot:default="dialog">
                   <Dialog :dialog="dialog">
-                    <HeroEditionForm :hero="hero"/>
+                    <HeroEditionForm :hero="hero" @edited="setHero"/>
                   </Dialog>
                 </template>
               </v-dialog>
@@ -194,9 +193,6 @@ export default {
             this.registeredHero = !this.registeredHero;
           });
     },
-    editHero() {
-
-    }
   }
 }
 </script>
