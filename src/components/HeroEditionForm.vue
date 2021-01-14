@@ -1,15 +1,15 @@
 <template>
-  <v-form ref="form">
+  <v-form ref="form" v-model="formValidity">
     <v-row>
       <v-col cols="3">
         <v-img
-          :src="setImgURL"
+            :src="setImgURL"
         >
         </v-img>
         <v-text-field
-          v-model="imgURL"
-          :rules="urlRules"
-          :label="labelImgURL"
+            v-model="imgURL"
+            :rules="urlRules"
+            :label="labelImgURL"
         ></v-text-field>
       </v-col>
 
@@ -28,22 +28,28 @@
       </v-col>
 
     </v-row>
-      <v-row>
-          <v-spacer></v-spacer>
-          <v-col cols="3" style="display: flex">
-            <v-btn>
-              cancel
-            </v-btn>
-          <v-spacer></v-spacer>
-            <v-btn @click="reset()">
-              reset
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn @click="submit()">
-              apply
-            </v-btn>
-          </v-col>
-      </v-row>
+    <v-row>
+      <v-spacer></v-spacer>
+      <v-col cols="3" style="display: flex">
+        <v-btn @click="endEdition()">
+          cancel
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+            @click="reset()"
+            :disabled="!hero.edited"
+        >
+          reset
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+            @click="submit()"
+            :disabled="!isFormValid"
+        >
+          apply
+        </v-btn>
+      </v-col>
+    </v-row>
   </v-form>
 </template>
 
@@ -60,6 +66,7 @@ export default {
   },
   data() {
     return {
+      formValidity: false,
       name: '',
       description: '',
       imgURL: '',
@@ -72,6 +79,16 @@ export default {
     }
   },
   computed: {
+    isFormValid() {
+      return this.formValidity && this.doesFormValuesChanged;
+    },
+    doesFormValuesChanged() {
+      return (
+          (this.name !== this.hero.name)
+          || (this.description !== this.hero.description)
+          || (this.imgURL !== (this.hero.thumbnail.path + '.' + this.hero.thumbnail.extension))
+      )
+    },
     labelName() {
       return this.$t('form.label.name');
     },
@@ -90,15 +107,17 @@ export default {
   },
   methods: {
     ...mapActions(['editHero', 'resetHero']),
+
     setDefaultValues() {
       console.log('heroName => ', this.hero.name)
       this.name = this.hero.name;
       this.description = this.hero.description;
+      this.imgURL = this.setImgURL;
       this.formatedURl = this.hero.thumbnail;
     },
     formatURL() {
       const splitURL = this.imgURL.split(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/);
-      return {path: splitURL[0], extension: splitURL[1] }
+      return {path: splitURL[0], extension: splitURL[1]}
     },
     testURl(url) {
       return /(https?:\/\/.*\.(?:gif|jpe?g|tiff?|png|webp|bmp))/i.test(url)
@@ -113,22 +132,23 @@ export default {
       // this.hero.description = this.description;
       // this.hero.thumbnail = this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail;
       this.editHero(this.hero)
-        .then(() => {
-          this.endEdition();
-        });
+          .then(() => {
+            this.endEdition();
+          });
     },
     reset() {
-      if(this.hero.edited) {
+      if (this.hero.edited) {
         this.resetHero(this.hero)
-        .then((hero) => {
-          // this.setDefaultValues();
-          //! NOT the good way
-          this.name = hero.name;
-          this.description = hero.description;
-          this.imgURL = hero.thumbnail.path + '.' + hero.thumbnail.extension;
-          this.endEdition();
+            .then((hero) => {
+              // this.setDefaultValues();
+              //! NOT the good way
+              this.name = hero.name;
+              this.description = hero.description;
+              this.imgURL = hero.thumbnail.path + '.' + hero.thumbnail.extension;
+              this.endEdition();
+              this.$emit('refresh');
 
-        });
+            });
       }
     },
     endEdition() {
@@ -144,6 +164,7 @@ export default {
   justify-content: space-between;
   width: 30%;
 }
+
 .justify-right {
   margin-left: auto;
 }

@@ -28,8 +28,9 @@
                         dark
                         @click="onStarClick()"
                     >
-                      <font-awesome-icon :icon="['fas', 'star']"
-                                         :style="{'color': hero.savedDate ? '#ffbd00': 'grey'}"></font-awesome-icon>
+                      <font-awesome-icon
+                          :icon="['fas', 'star']"
+                          :style="{'color': hero.savedDate ? '#ffbd00': 'grey'}"></font-awesome-icon>
                     </v-btn>
 
                   </template>
@@ -67,7 +68,7 @@
 
                 <template v-slot:default="dialog">
                   <Dialog :dialog="dialog">
-                    <HeroEditionForm :hero="hero" @done="dialog.value = false"/>
+                    <HeroEditionForm :hero="hero" @done="dialog.value = false" @refresh="fetchHero()"/>
                   </Dialog>
                 </template>
               </v-dialog>
@@ -115,18 +116,8 @@ export default {
     },
   },
   created() {
-    if(this.getHeroBydId(this.parseIntId, true) || this.getHeroBydId(this.parseIntId)) {
-      this.hero = this.getHeroBydId(this.parseIntId, true) ? this.getHeroBydId(this.parseIntId, true) : this.getHeroBydId(this.parseIntId);
-      this.registeredHero = !!this.hero.savedDate;
-      this.loading = false;
-    } else {
-      this.fetchHeroById()
-        .then(hero => {
-          this.hero = hero;
-          this.loading = false;
-        });
-    }
 
+    this.fetchHero()
     // this.hero = this.getHeroBydId(this.parseIntId, true)
     //     ? this.getHeroBydId(this.parseIntId, true)
     //     : this.getHeroBydId(this.parseIntId)
@@ -180,6 +171,19 @@ export default {
   },
   methods: {
     ...mapActions(['addOneHero', 'removeOneHero']),
+    fetchHero() {
+      if (this.getHeroBydId(this.parseIntId, true) || this.getHeroBydId(this.parseIntId)) {
+        this.hero = this.getHeroBydId(this.parseIntId, true) ? this.getHeroBydId(this.parseIntId, true) : this.getHeroBydId(this.parseIntId);
+        this.registeredHero = !!this.hero.savedDate;
+        this.loading = false;
+      } else {
+        this.fetchHeroById()
+            .then(hero => {
+              this.hero = hero;
+              this.loading = false;
+            });
+      }
+    },
     fetchHeroById() {
       return marvelService.getHeroById(this.parseIntId)
           .then(res => {
