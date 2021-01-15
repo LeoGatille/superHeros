@@ -16,8 +16,8 @@ function setUserAuth() {
     return `?ts=${ts}&apikey=${publicKey}&hash=${hash}`;
 }
 export default {
-    getAllHeroes(limit, offset) {
-        return apiClient.get(`characters${setUserAuth()}${limit ? '&limit=' + limit : ''}&offset=${offset}`)
+    getAllHeroes(limit, offset, nameStartsWith) {
+        return apiClient.get(`characters${setUserAuth()}${limit ? '&limit=' + limit : ''}&offset=${offset}${nameStartsWith ? '&nameStartsWith=' + nameStartsWith: '' }`);
     },
     getHeroById(idHero) {
         return apiClient.get(`characters/${idHero}${setUserAuth()}`)

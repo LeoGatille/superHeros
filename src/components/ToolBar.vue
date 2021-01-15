@@ -1,18 +1,24 @@
 <template>
   <v-toolbar class="toolbar" dense light :style="{top: this.top + 'px'}">
-    <SearchBar @validation="launchSearch"
-               @keyUp="setRequestedName"/>
-
-    <v-btn icon>
-      <v-icon>mdi-heart</v-icon>
-    </v-btn>
-
-    <v-btn icon>
-      <v-icon>mdi-dots-vertical</v-icon>
+    <SearchBar
+        @validation="launchSearch"
+        @keyUp="setRequestedName"
+    />
+    <v-select
+        label="Outlined style"
+        dense
+        outlined
+        :items="limits"
+        v-model="limit"
+    ></v-select>
+    <v-spacer></v-spacer>
+    <v-btn
+        color="primary"
+    >
+      {{ $t('btn.edition.apply.text') }}
     </v-btn>
   </v-toolbar>
 </template>
-
 <script>
 import SearchBar from '@/components/SearchBar';
 
@@ -23,6 +29,8 @@ export default {
       scrollEvent: null,
       top: 208,
       lastPageYOffset: 0,
+      limit: 20,
+      limits: [10, 20, 30, 50, 100],
       // scrollEvent: window.addEventListener('scroll', this.setToolBarTop())
     }
   },
@@ -38,10 +46,10 @@ export default {
       this.$store.dispatch('fetchIn' + this.$route.query.listType)
     },
     handleScroll() {
-      if((window.pageYOffset <= 100)) {
+      if ((window.pageYOffset <= 100)) {
         this.top -= 5;
         // this.top =  this.lastPageYOffset < window.pageYOffset ?  this.top - (this.top - window.pageYOffset) : this.top + (this.top + window.pageYOffset);
-        if(window.pageYOffset === 0) {
+        if (window.pageYOffset === 0) {
           this.top = 208;
         }
       } else {
@@ -54,9 +62,10 @@ export default {
 
 <style lang="scss" scoped>
 .toolbar {
-  height: 48px;
+  padding-top: 20px;
+  height: 60px;
   position: fixed;
-  width: calc(100% + 10px) ;
+  width: calc(100% + 10px);
   z-index: 200;
   left: 3px;
 

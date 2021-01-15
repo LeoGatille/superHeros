@@ -26,7 +26,7 @@
                     <h2>{{ $t('dialog.edition.title') }}</h2>
                   </template>
                   <template v-slot:content>
-                    <HeroEditionForm :hero="hero" @done="dialog.value = false" @refresh="fetchHero()"/>
+                    <HeroEditionForm :hero="hero" @done="closeDialog(dialog)" @refresh="fetchHero()"/>
                   </template>
                 </Dialog>
               </template>
@@ -187,6 +187,10 @@ export default {
             this.registeredHero = !this.registeredHero;
           });
     },
+    closeDialog(dialog) {
+      this.registeredHero = this.hero.savedDate;
+      dialog.value = false;
+    }
   }
 }
 </script>

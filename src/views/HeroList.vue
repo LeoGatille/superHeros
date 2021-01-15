@@ -62,6 +62,7 @@ export default {
 .card-list {
   display: flex;
   flex-wrap: wrap;
+  padding-top: 50px;
   justify-content: space-around;
 }
 

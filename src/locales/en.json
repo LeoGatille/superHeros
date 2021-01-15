@@ -57,5 +57,8 @@
       "add": "add",
       "remove": "remove"
     }
+  },
+  "searchBar": {
+    "placeholder": "search by name or #id"
   }
 }

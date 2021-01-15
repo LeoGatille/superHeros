@@ -24,9 +24,9 @@
     <v-spacer></v-spacer>
 
     <LangSelector/>
-    <v-btn icon @click="setSettingsDisplay">
-      <font-awesome-icon :icon="['fas', 'cog']" />
-    </v-btn>
+<!--    <v-btn icon @click="setSettingsDisplay">-->
+<!--      <font-awesome-icon :icon="['fas', 'cog']" />-->
+<!--    </v-btn>-->
 
     <template v-slot:extension>
       <v-tabs>
