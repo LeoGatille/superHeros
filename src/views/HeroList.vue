@@ -2,11 +2,11 @@
   <div>
     <ToolBar @setQuery="dispatchChangePage(0)" @changeItemDisplay="setItemsDisplay" :itemsDisplay="itemsDisplay"/>
     <template v-if="!loadingList">
-      <div v-if="isItemsDisplay('card')" class="card-list">
+      <div v-if="isItemsDisplay('card')" class="list card-list">
         <HeroCard v-for="hero in (isFavorite ? favoriteHeroList : heroList)" :key="hero.name" :hero="hero"/>
       </div>
-      <div v-if="isItemsDisplay('row')" class="row-list">
-        <h2 v-for="hero in (isFavorite ? favoriteHeroList : heroList)" :key="hero.name">{{hero.name}}</h2>
+      <div v-if="isItemsDisplay('row')" class="list row-list">
+        <HeroRowList :hero-list="this.heroList"/>
       </div>
       <Pagination :current-page="currentPage" @changePage="dispatchChangePage"/>
     </template>
@@ -21,6 +21,7 @@ import {mapState, mapActions} from 'vuex';
 import HeroCard from "@/components/HeroCard";
 import Pagination from "@/components/Pagination";
 import ToolBar from "@/components/ToolBar";
+import HeroRowList from "@/components/HeroRowList";
 
 export default {
   name: "HeroList",
@@ -28,6 +29,7 @@ export default {
     isFavorite: {type: Boolean, default: false}
   },
   components: {
+    HeroRowList,
     Pagination,
     HeroCard,
     ToolBar
@@ -74,8 +76,11 @@ export default {
 .card-list {
   display: flex;
   flex-wrap: wrap;
-  padding-top: 50px;
   justify-content: space-around;
+}
+.list {
+  padding-top: 50px;
+
 }
 
 .pagination {

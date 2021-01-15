@@ -177,7 +177,7 @@ export default {
   padding-top: 5px;
   height: 60px;
   position: fixed;
-  width: 900px;
+  width: 1000px;
   z-index: 200;
   left: 3px;
 
