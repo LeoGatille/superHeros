@@ -19,7 +19,7 @@ function setUserAuth() {
 
 function setQuery(query) {
     query.limit = query.limit ? '&limit=' + query.limit : '';
-    query.offset = query.offset ? '&offset' + query.offset : '';
+    query.offset = query.offset ? '&offset=' + query.offset : '';
     query.nameStartsWith = query.nameStartsWith ? '&nameStartsWith=' + query.nameStartsWith : '';
     query.orderBy = query.orderBy ? '&orderBy=' + query.orderBy : '';
 

@@ -38,6 +38,18 @@
       ></v-select>
 
     </div>
+    <div class="input-container">
+      <v-select
+          v-model="orderBy"
+          :items="orderByOptions"
+          item-text="name"
+          item-value="value"
+          label="Select"
+          persistent-hint
+          return-object
+          single-line
+      ></v-select>
+    </div>
 
     <v-spacer></v-spacer>
     <div>
@@ -81,6 +93,13 @@ export default {
       searchValue: '',
       limit: 20,
       limits: [10, 20, 30, 50, 100],
+      orderBy:  {name: 'A-Z', value: 'name'},
+      orderByOptions: [
+        {name: 'A-Z', value: 'name'},
+        {name: 'Z-A', value: '-name'},
+        {name: 'date increasing', value: 'modified'},
+        {name: 'date decreasing', value: '-modified'},
+      ],
     }
   },
   created() {
@@ -89,7 +108,7 @@ export default {
   methods: {
     ...mapActions(['setQuery']),
     search() {
-      this.setQuery({searchValue: this.searchValue, limit: this.limit});
+      this.setQuery({searchValue: this.searchValue, limit: this.limit, orderBy: this.orderBy.value});
       this.$emit('setQuery')
     },
     setRequestedName() {
@@ -120,7 +139,7 @@ export default {
   padding-top: 5px;
   height: 60px;
   position: fixed;
-  width: 450px;
+  width: 800px;
   z-index: 200;
   left: 3px;
 
@@ -129,12 +148,8 @@ export default {
     padding-top: 25px;
   }
 
-  .search-bar {
-
-  }
-
   .select {
-    width: 50px;
+    width: 60px;
   }
 
 }

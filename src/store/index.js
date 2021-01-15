@@ -26,6 +26,7 @@ export default new Vuex.Store({
         showSettings: false,
         searchValue: '',
         limit: 20,
+        orderBy: 'name',
     },
     mutations: {
         //* Local storage
@@ -108,6 +109,9 @@ export default new Vuex.Store({
         },
         SET_SEARCH_VALUE(state, searchValue) {
             state.searchValue = searchValue;
+        },
+        SET_ORDER_BY(state, orderBy) {
+            state.orderBy = orderBy;
         }
     },
     actions: {
@@ -128,6 +132,7 @@ export default new Vuex.Store({
                 limit: state.limit,
                 offset: (state.limit * state.pages.allHeroes),
                 nameStartsWith: state.searchValue,
+                orderBy: state.orderBy
             })
                 .then(response => {
                     commit('SET_TOTAL_ITEMS', response.data.data.total); //? Might do the dot notation in the 'commit'...
@@ -204,14 +209,11 @@ export default new Vuex.Store({
         setSettingsDisplay({commit}) {
             commit('SET_SETTINGS_DISPLAY');
         },
-        setQuery({commit}, {searchValue, limit, pageName}) {
+        setQuery({commit}, {searchValue, limit, orderBy}) {
             console.log('setLIMIT => ',limit)
             commit('SET_LIMIT', limit);
             commit('SET_SEARCH_VALUE', searchValue);
-            if(searchValue.length) {
-                console.log('changePage')
-                commit('CHANGE_PAGE', {pageIndex:0, pageName});
-            }
+            commit('SET_ORDER_BY', orderBy)
         }
     },
     getters: {
