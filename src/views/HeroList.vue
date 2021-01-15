@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ToolBar/>
+    <ToolBar @setQuery="dispatchChangePage(0)"/>
     <template v-if="!loadingList">
       <div class="card-list">
         <HeroCard v-for="hero in (isFavorite ? favoriteHeroList : heroList)" :key="hero.name" :hero="hero"/>

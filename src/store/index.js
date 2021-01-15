@@ -24,6 +24,8 @@ export default new Vuex.Store({
         requestedName: '',
         maxPage: 0,
         showSettings: false,
+        searchValue: '',
+        limit: 20,
     },
     mutations: {
         //* Local storage
@@ -100,6 +102,12 @@ export default new Vuex.Store({
                 return favHero.id === hero.id
             });
             Object.assign(heroToReset, hero);
+        },
+        SET_LIMIT(state, limit) {
+            state.limit = limit;
+        },
+        SET_SEARCH_VALUE(state, searchValue) {
+            state.searchValue = searchValue;
         }
     },
     actions: {
@@ -114,11 +122,12 @@ export default new Vuex.Store({
         setDisplayedList({commit}, listType) {
             commit('SET_DISPLAYED_LIST', listType);
         },
-        fetchAllHeroes({commit}) {
+        fetchAllHeroes({commit, state}) {
             commit('SET_LOADING_LIST', true);
             marvelService.getAllHeroes(
-                this.state.limit,
-                (this.state.maxItemsPerPage * this.state.pages.allHeroes)
+                state.limit,
+                (state.limit * state.pages.allHeroes),
+                state.searchValue,
             )
                 .then(response => {
                     commit('SET_TOTAL_ITEMS', response.data.data.total); //? Might do the dot notation in the 'commit'...
@@ -194,6 +203,15 @@ export default new Vuex.Store({
         },
         setSettingsDisplay({commit}) {
             commit('SET_SETTINGS_DISPLAY');
+        },
+        setQuery({commit}, {searchValue, limit, pageName}) {
+            console.log('setLIMIT => ',limit)
+            commit('SET_LIMIT', limit);
+            commit('SET_SEARCH_VALUE', searchValue);
+            if(searchValue.length) {
+                console.log('changePage')
+                commit('CHANGE_PAGE', {pageIndex:0, pageName});
+            }
         }
     },
     getters: {

@@ -17,6 +17,7 @@ function setUserAuth() {
 }
 export default {
     getAllHeroes(limit, offset, nameStartsWith) {
+        console.log('the limit => ', limit)
         return apiClient.get(`characters${setUserAuth()}${limit ? '&limit=' + limit : ''}&offset=${offset}${nameStartsWith ? '&nameStartsWith=' + nameStartsWith: '' }`);
     },
     getHeroById(idHero) {

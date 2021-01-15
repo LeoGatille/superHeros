@@ -34,18 +34,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.v-text-field{
-  width: 400px;
-}
-input {
-  padding: 0 20px;
-}
 .search-bar {
   display: flex;
   align-items: center;
-  //padding: 0 20px;
-  //background: white;
-  //border-radius: 30px 30px 30px 30px;
+
   .std-icon {
     color: grey;
   }
