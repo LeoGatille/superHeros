@@ -4,8 +4,9 @@
       :items="this.heroList"
       :hide-default-footer="true"
       disable-pagination
-
+      @click:row="handleClick"
   >
+
     <template v-slot:item.image="{ item }">
       <div class="p-2">
         <v-img width="200px" min-height="200px" :src="item.image" :alt="item.name" height="100px"></v-img>
@@ -72,13 +73,16 @@ export default {
   created() {
     this.heroList.forEach(hero => {
       this.$set(hero, 'image', this.setImgURL(hero));
-      console.log(hero.image)
       // hero.image = this.setImgURL(hero);
     })
   },
   methods: {
     setImgURL(hero) {
       return hero.thumbnail.path + '.' +  hero.thumbnail.extension;
+    },
+    handleClick(event) {
+      this.$router.push({path: `/hero/${event.id}`});
+      console.log('Tab click => ', event)
     }
   }
 }
