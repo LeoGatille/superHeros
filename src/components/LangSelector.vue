@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="z-index: 99999;">
     <div class="text-center">
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
