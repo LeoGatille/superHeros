@@ -1,13 +1,12 @@
 <template>
   <div>
-    <ToolBar @setQuery="dispatchChangePage(0)"/>
+    <ToolBar @setQuery="dispatchChangePage(0)" @changeItemDisplay="setItemsDisplay" :itemsDisplay="itemsDisplay"/>
     <template v-if="!loadingList">
-      <div class="card-list">
+      <div v-if="isItemsDisplay('card')" class="card-list">
         <HeroCard v-for="hero in (isFavorite ? favoriteHeroList : heroList)" :key="hero.name" :hero="hero"/>
-        <h2>
-          <!--        {{hero.name}}-->
-          <!--        <v-btn @click="addHero(hero)">ADD</v-btn>-->
-        </h2>
+      </div>
+      <div v-if="isItemsDisplay('row')" class="row-list">
+        <h2 v-for="hero in (isFavorite ? favoriteHeroList : heroList)" :key="hero.name">{{hero.name}}</h2>
       </div>
       <Pagination :current-page="currentPage" @changePage="dispatchChangePage"/>
     </template>
@@ -33,6 +32,11 @@ export default {
     HeroCard,
     ToolBar
   },
+  data() {
+    return {
+      itemsDisplay: 'card',
+    }
+  },
   computed: {
     ...mapState(['loadingList', 'heroList', 'favoriteHeroList', 'pages']),
     currentPage() {
@@ -54,6 +58,14 @@ export default {
       this.changePageIndex({pageIndex, pageName: this.currentList});
       this.fetchHeroes();
     },
+    setItemsDisplay(display) {
+      this.itemsDisplay = display;
+      console.log('hero list display => ', this.itemsDisplay)
+    },
+    isItemsDisplay(display) {
+      console.log(this.itemsDisplay === display)
+      return this.itemsDisplay === display;
+    }
   }
 }
 </script>

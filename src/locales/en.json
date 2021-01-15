@@ -60,5 +60,12 @@
   },
   "searchBar": {
     "placeholder": "search by name"
+  },
+  "toolbar": {
+    "limit": "limit",
+    "orderBy": {
+      "dateIncreasing": "date increasing",
+      "dateDecreasing": "date decreasing"
+    }
   }
 }

@@ -32,7 +32,7 @@
     </div>
     <div class="select input-container">
       <v-select
-          label="limit"
+          :label="$t('toolbar.limit')"
           :items="limits"
           v-model="limit"
       ></v-select>
@@ -49,6 +49,24 @@
           return-object
           single-line
       ></v-select>
+    </div>
+
+    <div v-if="this.itemsDisplay" class="toggle-container">
+      <div
+          class="toggle"
+          :class="{'active': isListDisplay('card')}"
+          @click="setItemDisplay('card')"
+      >
+        <font-awesome-icon :icon="['fas', 'id-card']"></font-awesome-icon>
+      </div>
+      <div class="separator"></div>
+      <div
+          class="toggle"
+          :class="{'active': isListDisplay('row')}"
+          @click="setItemDisplay('row')"
+      >
+        <font-awesome-icon :icon="['fas', 'th-list']"></font-awesome-icon>
+      </div>
     </div>
 
     <v-spacer></v-spacer>
@@ -73,18 +91,21 @@
         </template>
         <span>{{ $t('btn.edition.apply.text') }}</span>
       </v-tooltip>
-
     </div>
+
   </v-toolbar>
 </template>
 <script>
-// import SearchBar from '@/components/SearchBar';
-
 import {mapActions} from "vuex";
 
 export default {
   name: "ToolBar",
-  // components: {SearchBar},
+  props: {
+    itemsDisplay: {
+      type: String,
+      required: false,
+    }
+  },
   data() {
     return {
       scrollEvent: null,
@@ -93,17 +114,27 @@ export default {
       searchValue: '',
       limit: 20,
       limits: [10, 20, 30, 50, 100],
-      orderBy:  {name: 'A-Z', value: 'name'},
+      orderBy: {name: 'A-Z', value: 'name'},
       orderByOptions: [
         {name: 'A-Z', value: 'name'},
         {name: 'Z-A', value: '-name'},
-        {name: 'date increasing', value: 'modified'},
-        {name: 'date decreasing', value: '-modified'},
       ],
     }
   },
+  computed: {
+    getTranslationDateIncreasing() {
+      return this.$t('toolbar.orderBy.dateIncreasing')
+    },
+    getTranslationDateDecreasing() {
+      return this.$t('toolbar.orderBy.dateDecreasing')
+    },
+  },
   created() {
     this.scrollEvent = window.addEventListener('scroll', this.handleScroll);
+    this.orderByOptions.push(
+        {name: this.getTranslationDateIncreasing, value: 'modified'},
+        {name: this.getTranslationDateDecreasing, value: '-modified'},
+    );
   },
   methods: {
     ...mapActions(['setQuery']),
@@ -124,6 +155,13 @@ export default {
       } else {
         this.top = 104;
       }
+    },
+    isListDisplay(display) {
+      return this.itemsDisplay === display;
+    },
+    setItemDisplay(display) {
+      this.$emit('changeItemDisplay', display);
+      console.log('display => ', this.itemsDisplay)
     }
   }
 }
@@ -139,7 +177,7 @@ export default {
   padding-top: 5px;
   height: 60px;
   position: fixed;
-  width: 800px;
+  width: 900px;
   z-index: 200;
   left: 3px;
 
@@ -151,6 +189,33 @@ export default {
   .select {
     width: 60px;
   }
+}
 
+.toggle-container {
+  display: flex;
+  width: 60px;
+  border: solid lightgrey 1px;
+  border-radius: 5px;
+  overflow: hidden;
+
+  .toggle {
+    width: 50%;
+    cursor: pointer;
+    padding: 5px;
+    background-color: lightgrey;
+    color: grey;
+  }
+
+  .active {
+    background-color: white;
+    color: black;
+    box-shadow: 3px 0 3px grey;
+  }
+
+  .separator {
+    width: 1px;
+    height: 100%;
+    background-color: grey;
+  }
 }
 </style>

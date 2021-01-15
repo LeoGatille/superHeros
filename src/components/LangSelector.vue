@@ -1,5 +1,5 @@
 <template>
-  <div style="z-index: 99999;">
+  <div class="lang-selector-container">
     <div class="text-center">
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
@@ -58,6 +58,9 @@ export default {
 </script>
 
 <style scoped>
+.lang-selector-container {
+  z-index: 99999;
+}
 .active-language {
   color: black;
 }
