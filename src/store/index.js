@@ -124,11 +124,11 @@ export default new Vuex.Store({
         },
         fetchAllHeroes({commit, state}) {
             commit('SET_LOADING_LIST', true);
-            marvelService.getAllHeroes(
-                state.limit,
-                (state.limit * state.pages.allHeroes),
-                state.searchValue,
-            )
+            marvelService.getAllHeroes({
+                limit: state.limit,
+                offset: (state.limit * state.pages.allHeroes),
+                nameStartsWith: state.searchValue,
+            })
                 .then(response => {
                     commit('SET_TOTAL_ITEMS', response.data.data.total); //? Might do the dot notation in the 'commit'...
                     commit('SET_MAX_PAGE', response.data.data.total);

@@ -59,6 +59,6 @@
     }
   },
   "searchBar": {
-    "placeholder": "recherche par nom ou #id"
+    "placeholder": "recherche par nom"
   }
 }

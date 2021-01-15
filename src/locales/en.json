@@ -59,6 +59,6 @@
     }
   },
   "searchBar": {
-    "placeholder": "search by name or #id"
+    "placeholder": "search by name"
   }
 }
