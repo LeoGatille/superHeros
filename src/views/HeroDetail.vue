@@ -188,7 +188,7 @@ export default {
           });
     },
     closeDialog(dialog) {
-      this.registeredHero = this.hero.savedDate;
+      this.registeredHero = !!this.hero.savedDate;
       dialog.value = false;
     }
   }
