@@ -5,7 +5,7 @@
         <v-row>
           <v-col lg="4" sm="12">
             <v-img :src="setImgURL"></v-img>
-            <v-dialog
+            <v-dialog v-model="heroDialog"
                 transition="dialog-bottom-transition"
                 max-width="90%"
             >
@@ -26,7 +26,11 @@
                     <h2>{{ $t('dialog.edition.title') }}</h2>
                   </template>
                   <template v-slot:content>
-                    <HeroEditionForm :hero="hero" @done="closeDialog(dialog)" @refresh="fetchHero()"/>
+                    <HeroEditionForm
+                        v-if="heroDialog"
+                        :hero="hero"
+                        @done="closeDialog(dialog)"
+                        @refresh="fetchHero()"/>
                   </template>
                 </Dialog>
               </template>
@@ -129,6 +133,7 @@ export default {
       loading: true,
       registeredHero: false,
       hero: {},
+      heroDialog: false,
     }
   },
   computed: {
@@ -147,6 +152,7 @@ export default {
       return this.$t(`btn.edition.set.tooltip`)
     },
   },
+
   created() {
     if(!this.favoriteHeroList.length) {
       this.fetchDashboardHeroes()
@@ -159,6 +165,11 @@ export default {
   },
   methods: {
     ...mapActions(['addOneHero', 'removeOneHero', 'fetchDashboardHeroes']),
+    updateDialogData(currentDialogValue) {
+      if(!currentDialogValue) {
+        console.log('Dialog closed')
+      }
+    },
     fetchHero() {
       if (this.getHeroBydId(this.parseIntId, true) || this.getHeroBydId(this.parseIntId)) {
         this.hero = this.getHeroBydId(this.parseIntId, true) ? this.getHeroBydId(this.parseIntId, true) : this.getHeroBydId(this.parseIntId);
@@ -189,7 +200,12 @@ export default {
     },
     closeDialog(dialog) {
       this.registeredHero = !!this.hero.savedDate;
+
       dialog.value = false;
+      this.$nextTick(() => {
+        this.heroDialog = false;
+        console.log('I was closed')
+      });
     }
   }
 }

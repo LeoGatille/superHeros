@@ -115,26 +115,21 @@ export default {
       limit: 20,
       limits: [10, 20, 30, 50, 100],
       orderBy: {name: 'A-Z', value: 'name'},
-      orderByOptions: [
-        {name: 'A-Z', value: 'name'},
-        {name: 'Z-A', value: '-name'},
-      ],
     }
   },
   computed: {
-    getTranslationDateIncreasing() {
-      return this.$t('toolbar.orderBy.dateIncreasing')
-    },
-    getTranslationDateDecreasing() {
-      return this.$t('toolbar.orderBy.dateDecreasing')
-    },
+    orderByOptions() {
+      return [
+        {name: 'A-Z', value: 'name'},
+        {name: 'Z-A', value: '-name'},
+        {name: this.$t('toolbar.orderBy.dateIncreasing'), value: 'modified'},
+        {name: this.$t('toolbar.orderBy.dateDecreasing'), value: '-modified'},
+      ];
+    }
   },
   created() {
     this.scrollEvent = window.addEventListener('scroll', this.handleScroll);
-    this.orderByOptions.push(
-        {name: this.getTranslationDateIncreasing, value: 'modified'},
-        {name: this.getTranslationDateDecreasing, value: '-modified'},
-    );
+
   },
   methods: {
     ...mapActions(['setQuery']),

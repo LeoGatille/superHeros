@@ -52,7 +52,7 @@ export default {
     },
     isLangSelected(lang) {
       return this.$i18n.locale === lang;
-    }
+    },
   }
 }
 </script>

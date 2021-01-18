@@ -5,10 +5,25 @@
       :hide-default-footer="true"
       disable-pagination
       @click:row="handleClick"
+      @mouseenter:row="setHoveredHero(true, id)"
+      @mouseleave:row="setHoveredHero(false,)"
   >
 
     <template v-slot:item.image="{ item }">
       <div class="p-2">
+<!--        <div v-if="item.savedDate || isHeroHovered" class="card-action-btn-container">-->
+<!--          <v-tooltip bottom>-->
+<!--            <template v-slot:activator="{ on, attrs }">-->
+<!--              <v-btn icon color="white" @click="onStarClick()" v-bind="attrs"-->
+<!--                     v-on="on">-->
+<!--                <font-awesome-icon :icon="['fas', 'star']" :style="{'color': item.savedDate ? '#ffbd00': 'grey'}"></font-awesome-icon>-->
+<!--              </v-btn>-->
+
+<!--            </template>-->
+<!--            <span v-if="!item.savedDate">{{$t('tooltip.btn.add')}}</span>-->
+<!--            <span v-else>{{$t('tooltip.btn.remove')}}</span>-->
+<!--          </v-tooltip>-->
+<!--        </div>-->
         <v-img width="200px" min-height="200px" :src="item.image" :alt="item.name" height="100px"></v-img>
       </div>
     </template>
@@ -57,6 +72,11 @@ export default {
       required: true,
     }
   },
+  data() {
+    return {
+      hoveredHero: -1
+    }
+  },
   computed: {
     setHeaders() {
       return [
@@ -83,7 +103,11 @@ export default {
     handleClick(event) {
       this.$router.push({path: `/hero/${event.id}`});
       console.log('Tab click => ', event)
-    }
+    },
+    isHeroHovered(id) {
+      return this.hoveredHero === id;
+    },
+
   }
 }
 </script>
