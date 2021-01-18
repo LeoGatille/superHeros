@@ -2,6 +2,7 @@
   <v-app>
     <NavBar/>
     <v-main>
+      <NotificationContainer/>
       <v-sheet
           id="scrolling-techniques-2"
           class="overflow-y-auto"
@@ -19,10 +20,12 @@
 <script>
 import NavBar from "@/components/NavBar";
 import {mapState, mapActions} from "vuex";
+import NotificationContainer from "@/components/Notifications/NotificationContainer";
 
 export default {
   name: 'App',
   components: {
+    NotificationContainer,
     NavBar,
   },
   computed: {

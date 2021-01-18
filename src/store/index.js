@@ -2,10 +2,16 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import marvelService from '@/api/services/marvelAPI/marvelService';
 import LocalService from "@/api/services/LocalService";
+import * as notifications from '@/store/modules/notifications/notifications'
+
+import i18n from "@/i18n";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+    modules: {
+        notifications,
+    },
     state: {
         isLocalStorageReady: false,
         loadingList: false,
@@ -81,15 +87,23 @@ export default new Vuex.Store({
         //   state.notification
         // }
         ADD_HERO(state, hero) {
+            console.log('ADD hero => ', hero)
+            console.log('before add => ', state.favoriteHeroList)
             state.favoriteHeroList.push(hero);
+            console.log('after add => ', state.favoriteHeroList)
         },
         REMOVE_HERO(state, idHero) {
-            const indexToRemove = state.favoriteHeroList
-                .map(hero => {
-                    return hero.id;
-                })
-                .indexOf(idHero);
-            state.favoriteHeroList.splice(indexToRemove, 1);
+            console.log('FAV => ', state.favoriteHeroList)
+            state.favoriteHeroList = state.favoriteHeroList.filter(hero => {
+                console.log('Hero => ', hero)
+                return hero.id !== idHero
+            })
+            // const indexToRemove = state.favoriteHeroList
+            //     .map(hero => {
+            //         return hero.id;
+            //     })
+            //     .indexOf(idHero);
+            // state.favoriteHeroList.splice(indexToRemove, 1);
 
         },
         EDIT_HERO(state, hero) {
@@ -126,7 +140,7 @@ export default new Vuex.Store({
         setDisplayedList({commit}, listType) {
             commit('SET_DISPLAYED_LIST', listType);
         },
-        fetchAllHeroes({commit, state}) {
+        fetchAllHeroes({commit, dispatch, state}) {
             commit('SET_LOADING_LIST', true);
             marvelService.getAllHeroes({
                 limit: state.limit,
@@ -140,54 +154,89 @@ export default new Vuex.Store({
                     commit('SET_HEROES_LIST', response.data.data.results);
                     commit('SET_LOADING_LIST', false);
                 })
-                .catch(err => {
-                    console.log('fetchAllHeroes ERROR => ', err)
+                .catch(() => {
+                    const notification = {
+                        type: 'error',
+                        message: i18n.t('notifications.fetch.error'),
+                    }
+                    dispatch('notifications/add', notification, {root: true})
+                    console.log('fetchAllHeroes ERROR => ', notification);
                     // commit('SET_NOTIFICATION', {type: 'error', message: 'Something went wrong ;('});
                 })
         },
-        addOneHero({commit}, hero) {
+        addOneHero({commit, dispatch}, hero) {
             hero.edited = false;
             hero.savedDate = new Date();
             const toSend = Object.assign({}, hero);
             return LocalService.addHero(toSend)
                 .then(() => {
-                    commit('ADD_HERO')
+                    const notification = {
+                        type: 'success',
+                        message: i18n.t('notifications.add.success'),
+                    }
+                    dispatch('notifications/add', notification, {root: true})
+                    commit('ADD_HERO', hero);
                     return true;
                 })
         },
-        removeOneHero({commit}, idHero) {
+        removeOneHero({commit, dispatch}, idHero) {
+            //! Change idHero to hero
             LocalService.removeHero(idHero)
                 .then(() => {
+                    const notification = {
+                        type: 'success',
+                        message: i18n.t('notifications.remove.success')
+                    }
                     commit('REMOVE_HERO', idHero);
+                    dispatch('notifications/add', notification, {root: true})
+                })
+                .catch((err) => {
+                    console.log('WHY CATCH => ', err)
+                    const notification = {
+                        type: 'error',
+                        message: i18n.t('notifications.remove.error')
+                    }
+                    dispatch('notifications/add', notification, {root: true})
                 });
         },
         fetchDashboardHeroes({commit}) {
             commit('SET_LOADING_LIST', true);
             return LocalService.fetchHeroes()
                 .then((localStorageHeroes => {
-                commit('SET_FAVORITE_LIST', localStorageHeroes);
-                commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
-                commit('SET_MAX_PAGE', localStorageHeroes.length);
-                commit('SET_LOADING_LIST', false);
-            }))
+                    commit('SET_FAVORITE_LIST', localStorageHeroes);
+                    commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
+                    commit('SET_MAX_PAGE', localStorageHeroes.length);
+                    commit('SET_LOADING_LIST', false);
+                }))
         },
-        editHero({commit}, hero) {
+        editHero({commit, dispatch}, hero) {
             if (hero.savedDate) {
                 return LocalService.editHero(hero)
                     .then(hero => {
+                        const notification = {
+                            type: 'success',
+                            message: hero.name + ' ' + i18n.t('notifications.edit.success')
+                        };
                         commit('EDIT_HERO', hero);
+                        dispatch('notifications/add', notification, {root: true});
                         return hero;
                     });
             } else {
+                //! selection of the mutation should be done in the component
                 hero.savedDate = new Date();
                 return LocalService.addHero(hero)
                     .then(hero => {
+                        const notification = {
+                            type: 'success',
+                            message: hero.name + ' ' + i18n.t('notifications.add.success')
+                        }
                         commit('ADD_HERO', hero);
+                        dispatch('notifications/add', notification, {root: true});
                         return hero;
                     })
             }
         },
-        resetHero({commit}, editedHero) {
+        resetHero({commit, dispatch}, editedHero) {
             return marvelService.getHeroById(editedHero.id)
                 .then(response => {
                     const standardHero = response.data.data.results[0];
@@ -195,7 +244,12 @@ export default new Vuex.Store({
                     standardHero.edited = false;
                     return LocalService.editHero(standardHero)
                         .then(hero => {
+                            const notification = {
+                                type: 'success',
+                                message: hero.name + ' ' + i18n.t('notification.reset.success')
+                            }
                             commit('RESET_HERO', hero);
+                            dispatch('notifications/add', notification, {root: true});
                             return hero;
                         })
                 })
@@ -210,7 +264,7 @@ export default new Vuex.Store({
             commit('SET_SETTINGS_DISPLAY');
         },
         setQuery({commit}, {searchValue, limit, orderBy}) {
-            console.log('setLIMIT => ',limit)
+            console.log('setLIMIT => ', limit)
             commit('SET_LIMIT', limit);
             commit('SET_SEARCH_VALUE', searchValue);
             commit('SET_ORDER_BY', orderBy)

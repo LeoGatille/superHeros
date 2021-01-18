@@ -67,5 +67,26 @@
       "dateIncreasing": "date increasing",
       "dateDecreasing": "date decreasing"
     }
+  },
+  "notifications": {
+    "fetch": {
+      "error": "Une erreur est surevenue lors de la récupération des héros"
+    },
+    "add": {
+      "success": "successfully added to Favorites",
+      "error": "An error occured while adding"
+    },
+    "remove": {
+      "success": "successfully removed of Favorites",
+      "error": "An error occured while removing"
+    },
+    "edit": {
+      "success": "successfully edited",
+      "error": "An error occured while editing"
+    },
+    "reset": {
+      "success": "has been reset",
+      "error": "An error occurred while resetting"
+    }
   }
 }

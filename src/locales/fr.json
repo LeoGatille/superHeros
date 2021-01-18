@@ -67,5 +67,26 @@
       "dateIncreasing": "date croissante",
       "dateDecreasing": "date décroissante"
     }
+  },
+  "notification": {
+    "fetch": {
+        "error": "Une erreur est surevenue lors de la récupération des héros"
+    },
+    "add": {
+      "success": "à été ajouté dans les favoris",
+      "error": "Une erreur est survenue lors de l'ajout"
+    },
+    "remove": {
+      "success": "à été retiré des favoris",
+      "error": "Une erreur est survenue lors de la suppression de"
+    },
+    "edit": {
+      "success": "à été édité",
+      "error": "Une erreur est survenue lors de l'édition de"
+    },
+    "reset": {
+      "success": "à été reinitialisé",
+      "error": "Une erreur est survenue lors de la réinitialisation de"
+    }
   }
 }
