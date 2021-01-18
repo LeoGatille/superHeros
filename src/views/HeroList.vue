@@ -3,10 +3,10 @@
     <ToolBar @setQuery="dispatchChangePage(0)" @changeItemDisplay="setItemsDisplay" :itemsDisplay="itemsDisplay"/>
     <template v-if="!loadingList">
       <div v-if="isItemsDisplay('card')" class="list card-list">
-        <HeroCard v-for="hero in (isFavorite ? favoriteHeroList : heroList)" :key="hero.name" :hero="hero"/>
+        <HeroCard v-for="hero in getList" :key="hero.name" :hero="hero"/>
       </div>
       <div v-if="isItemsDisplay('row')" class="list row-list">
-        <HeroRowList :hero-list="this.heroList"/>
+        <HeroRowList :hero-list="getList"/>
       </div>
       <Pagination :current-page="currentPage" @changePage="dispatchChangePage"/>
     </template>
@@ -41,11 +41,15 @@ export default {
   },
   computed: {
     ...mapState(['loadingList', 'heroList', 'favoriteHeroList', 'pages']),
-    currentPage() {
-      return this.pages[this.currentList];
+    getList() {
+      return this.isFavorite ? this.favoriteHeroList : this.heroList;
     },
-    currentList() {
-      return this.isFavorite ? 'dashboardHeroes' : 'allHeroes';
+    currentPage() {
+      return this.pages[this.paginationKey];
+    },
+    paginationKey() {
+    //! Obsolete must be removed without breaking pagination
+      return this.isFavorite ? 'favorites' : 'allHeroes';
     },
   },
   created() {
@@ -57,7 +61,7 @@ export default {
       this.isFavorite ? this.fetchDashboardHeroes() : this.fetchAllHeroes();
     },
     dispatchChangePage(pageIndex) {
-      this.changePageIndex({pageIndex, pageName: this.currentList});
+      this.changePageIndex({pageIndex, pageName: this.paginationKey});
       this.fetchHeroes();
     },
     setItemsDisplay(display) {

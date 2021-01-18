@@ -8,7 +8,7 @@
     <v-btn v-if="currentPage < 0 " icon @click="changePage(currentPage - 1)">
       <font-awesome-icon :icon="['fas', 'arrow-left']" />
     </v-btn>
-    <v-btn icon color="black" class="current-page">{{currentPage + 1 }}</v-btn>
+    <v-btn icon color="black" class="current-page">{{currentPage + 1  + '   => ' + maxPage}} </v-btn>
     <v-btn v-if="currentPage > maxPage" icon @click="changePage(currentPage + 1 )">
       <font-awesome-icon :icon="['fas', 'arrow-right']" />
     </v-btn>

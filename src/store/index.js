@@ -18,11 +18,9 @@ export default new Vuex.Store({
         displayedList: 'dashboard',
         heroList: [],
         favoriteHeroList: [],
-        maxItemsPerPage: 20,
-        // currentPage: 0, Must be removed when safe
         allHeroesPage: 0,
         pages: {
-            dashboardHeroes: 0,
+            favorites: 0,
             allHeroes: 0,
         },
         dashboardPage: 0,
@@ -64,7 +62,7 @@ export default new Vuex.Store({
             state.totalItems = nbItems;
         },
         SET_MAX_PAGE(state, nbItems) {
-            state.maxPage = Math.round(nbItems / state.maxItemsPerPage);
+            state.maxPage = Math.floor(nbItems / state.limit);
         },
         //* Favorites Heroes
         SET_FAVORITE_LIST(state, heroes) {
