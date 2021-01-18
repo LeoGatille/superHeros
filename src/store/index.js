@@ -232,12 +232,20 @@ export default new Vuex.Store({
                         .then(hero => {
                             const notification = {
                                 type: 'success',
-                                message: hero.name + ' ' + i18n.t('notification.reset.success')
+                                message: hero.name + ' ' + i18n.t('notifications.reset.success')
                             }
                             commit('RESET_HERO', hero);
                             dispatch('notifications/add', notification, {root: true});
                             return hero;
                         })
+                })
+                .catch(() => {
+                    const notification = {
+                        type: 'error',
+                        message: i18n.t('notifications.reset.error') + ' ' + editedHero.name
+                    }
+                    dispatch('notifications/add', notification, {root: true});
+
                 })
         },
         changePageIndex({commit}, {pageIndex, pageName}) {

@@ -15,7 +15,7 @@
       <div class="snackbar-content">
         <div class="icon-container">
           <font-awesome-icon class="icon" :icon="['fas', icon]"
-                             :style="{color: isSuccess() ? 'green darken-1' : 'red'}"></font-awesome-icon>
+                             :style="{color: isSuccess() ? 'green darken-1' : 'grey'}"></font-awesome-icon>
         </div>
         <div>
           {{ notification.message }}
@@ -55,13 +55,13 @@ export default {
   },
   computed: {
     icon() {
-      return this.isSuccess() ? 'check' : 'skull-crossbones';
+      return this.isSuccess() ? 'check' : 'sad-tear';
     }
   },
   mounted() {
     this.timeout = setTimeout(() => {
       this.removeNotification();
-    }, 1500)
+    }, 2000)
   },
   beforeDestroy() {
     clearTimeout(this.timeout);
