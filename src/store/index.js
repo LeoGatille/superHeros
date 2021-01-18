@@ -87,24 +87,12 @@ export default new Vuex.Store({
         //   state.notification
         // }
         ADD_HERO(state, hero) {
-            console.log('ADD hero => ', hero)
-            console.log('before add => ', state.favoriteHeroList)
             state.favoriteHeroList.push(hero);
-            console.log('after add => ', state.favoriteHeroList)
         },
         REMOVE_HERO(state, idHero) {
-            console.log('FAV => ', state.favoriteHeroList)
             state.favoriteHeroList = state.favoriteHeroList.filter(hero => {
-                console.log('Hero => ', hero)
                 return hero.id !== idHero
             })
-            // const indexToRemove = state.favoriteHeroList
-            //     .map(hero => {
-            //         return hero.id;
-            //     })
-            //     .indexOf(idHero);
-            // state.favoriteHeroList.splice(indexToRemove, 1);
-
         },
         EDIT_HERO(state, hero) {
             const heroToUpdate = state.favoriteHeroList.find(favHero => {
@@ -160,8 +148,6 @@ export default new Vuex.Store({
                         message: i18n.t('notifications.fetch.error'),
                     }
                     dispatch('notifications/add', notification, {root: true})
-                    console.log('fetchAllHeroes ERROR => ', notification);
-                    // commit('SET_NOTIFICATION', {type: 'error', message: 'Something went wrong ;('});
                 })
         },
         addOneHero({commit, dispatch}, hero) {
@@ -264,7 +250,6 @@ export default new Vuex.Store({
             commit('SET_SETTINGS_DISPLAY');
         },
         setQuery({commit}, {searchValue, limit, orderBy}) {
-            console.log('setLIMIT => ', limit)
             commit('SET_LIMIT', limit);
             commit('SET_SEARCH_VALUE', searchValue);
             commit('SET_ORDER_BY', orderBy)
