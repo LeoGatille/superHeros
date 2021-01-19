@@ -104,6 +104,9 @@ export default new Vuex.Store({
             });
             Object.assign(heroToReset, hero);
         },
+        SET_ONE_LOCAL_HERO_IN_HERO_LIST(state, hero, index) {
+            state.heroList.splice(index, 1, hero);
+        },
         SET_LIMIT(state, limit) {
             state.limit = limit;
         },
@@ -139,8 +142,8 @@ export default new Vuex.Store({
                     commit('SET_MAX_PAGE', response.data.data.total);
                     const syncListWithLocalStorage = response.data.data.results;
                     syncListWithLocalStorage.forEach((hero, i) => {
-                        if(getters.getHeroById(hero.id, true)) {
-                           syncListWithLocalStorage.splice(i, 1, getters.getHeroById(hero.id, true))
+                        if (getters.getHeroById(hero.id, true)) {
+                            syncListWithLocalStorage.splice(i, 1, getters.getHeroById(hero.id, true))
                         }
                     })
                     commit('SET_HEROES_LIST', syncListWithLocalStorage);
@@ -154,15 +157,21 @@ export default new Vuex.Store({
                     dispatch('notifications/add', notification, {root: true})
                 })
         },
-        addOneHero({commit, dispatch}, hero) {
-            hero.edited = false;
-            hero.savedDate = new Date();
+        addOneHero({commit, dispatch, getters}, hero) {
+            Vue.set(hero, 'edited', false);
+            Vue.set(hero, 'savedDate', new Date());
+            // hero.edited = false;
+            // hero.savedDate = new Date();
             const toSend = Object.assign({}, hero);
             return LocalService.addHero(toSend)
                 .then(() => {
                     const notification = {
                         type: 'success',
                         message: i18n.t('notifications.add.success'),
+                    }
+                    if(getters.getHeroById(hero.id)) {
+
+                        dispatch('setOneLocalHeroInHeroList', hero)
                     }
                     dispatch('notifications/add', notification, {root: true})
                     commit('ADD_HERO', hero);
@@ -251,6 +260,9 @@ export default new Vuex.Store({
                     dispatch('notifications/add', notification, {root: true});
 
                 })
+        },
+        setOneLocalHeroInHeroList({commit, getters}, hero) {
+            commit('SET_ONE_LOCAL_HERO_IN_HERO_LIST', hero, getters.getHeroIndex(hero.id));
         },
         changePageIndex({commit}, {pageIndex, pageName}) {
             commit('CHANGE_PAGE', {pageIndex, pageName});

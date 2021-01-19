@@ -12,7 +12,9 @@
         <div class="action star">
           <font-awesome-icon
               :icon="['fas', 'star']"
-              :style="{'color': hero.savedDate ? '#ffbd00': 'grey'}">
+              :style="{'color': isHeroRegistered ? '#ffbd00': 'grey'}"
+              @click="onStarClick()"
+          >
           </font-awesome-icon>
         </div>
         <div
@@ -88,12 +90,31 @@ export default {
       required: true,
     }
   },
+
   computed: {
     ...mapGetters(['getHeroById', 'getHeroIndex']),
     setImgURL() {
       return this.hero.thumbnail.path + '.' + this.hero.thumbnail.extension;
+    },
+    isHeroRegistered() {
+      return !!this.hero.savedDate;
     }
   },
+  methods: {
+    onStarClick() {
+      if (this.registeredHero) {
+        this.removeOneHero(this.hero.id)
+            .then(() => {
+              // this.registeredHero = false;
+            })
+      } else {
+        this.$store.dispatch('addOneHero', this.hero)
+            .then(() => {
+              // this.registeredHero = true;
+            });
+      }
+    }
+  }
 
 }
 </script>

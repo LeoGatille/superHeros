@@ -136,12 +136,6 @@ export default {
     setImgURL() {
       return this.hero.thumbnail ? (this.hero.thumbnail.path + '.' + this.hero.thumbnail.extension) : '';
     },
-    editBtnText() {
-      return this.$t(`btn.edition.set.text`)
-    },
-    editBtnTooltip() {
-      return this.$t(`btn.edition.set.tooltip`)
-    },
   },
 
   created() {
@@ -189,15 +183,6 @@ export default {
             this.registeredHero = !this.registeredHero;
           });
     },
-    closeDialog(dialog) {
-      this.registeredHero = !!this.hero.savedDate;
-
-      dialog.value = false;
-      this.$nextTick(() => {
-        this.heroDialog = false;
-        console.log('I was closed')
-      });
-    }
   }
 }
 </script>
