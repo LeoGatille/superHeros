@@ -104,7 +104,7 @@ export default new Vuex.Store({
             });
             Object.assign(heroToReset, hero);
         },
-        SET_ONE_LOCAL_HERO_IN_HERO_LIST(state, hero, index) {
+        EDIT_ONE_HERO_REFERENCE(state, {hero, index}) {
             state.heroList.splice(index, 1, hero);
         },
         SET_LIMIT(state, limit) {
@@ -171,7 +171,7 @@ export default new Vuex.Store({
                     }
                     if(getters.getHeroById(hero.id)) {
 
-                        dispatch('setOneLocalHeroInHeroList', hero)
+                        dispatch('editOneHeroReference', hero)
                     }
                     dispatch('notifications/add', notification, {root: true})
                     commit('ADD_HERO', hero);
@@ -188,6 +188,10 @@ export default new Vuex.Store({
                     }
                     commit('REMOVE_HERO', idHero);
                     dispatch('notifications/add', notification, {root: true})
+                    marvelService.getHeroById(idHero)
+                        .then(response => {
+                            dispatch('editOneHeroReference', response.data.data.results[0] )
+                        })
                 })
                 .catch((err) => {
                     console.log('WHY CATCH => ', err)
@@ -261,8 +265,8 @@ export default new Vuex.Store({
 
                 })
         },
-        setOneLocalHeroInHeroList({commit, getters}, hero) {
-            commit('SET_ONE_LOCAL_HERO_IN_HERO_LIST', hero, getters.getHeroIndex(hero.id));
+        editOneHeroReference({commit, getters}, hero) {
+            commit('EDIT_ONE_HERO_REFERENCE', {hero, index: getters.getHeroIndex(hero.id)});
         },
         changePageIndex({commit}, {pageIndex, pageName}) {
             commit('CHANGE_PAGE', {pageIndex, pageName});

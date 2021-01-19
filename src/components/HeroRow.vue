@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "HeroRow",
@@ -101,8 +101,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['removeOneHero', 'addOneHero']),
     onStarClick() {
-      if (this.registeredHero) {
+      if (this.isHeroRegistered) {
         this.removeOneHero(this.hero.id)
             .then(() => {
               // this.registeredHero = false;
