@@ -88,7 +88,7 @@
                     >
                       <font-awesome-icon
                           :icon="['fas', 'star']"
-                          :style="{'color': isHeroRegistered ? '#ffbd00': 'grey'}"></font-awesome-icon>
+                          :style="{'color': registeredHero ? '#ffbd00': 'grey'}"></font-awesome-icon>
                     </v-btn>
 
                   </template>
@@ -128,7 +128,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['favoriteHeroList']),
+    ...mapState(['favoriteHeroList', 'heroList']),
     ...mapGetters(['getHeroById']),
     parseIntId() {
       return parseInt(this.heroId)
@@ -137,37 +137,51 @@ export default {
       return this.hero.thumbnail ? (this.hero.thumbnail.path + '.' + this.hero.thumbnail.extension) : '';
     },
     isHeroRegistered() {
-      return !! this.hero.savedDate;
+      return !!this.hero.savedDate;
     }
   },
   created() {
-    if(!this.favoriteHeroList.length) {
+    if (!this.favoriteHeroList.length) {
       this.fetchDashboardHeroes()
-      .then(() => {
-        this.fetchHero();
-      })
+          .then(() => {
+            this.fetchHero();
+          })
     } else {
       this.fetchHero();
     }
   },
   methods: {
-    ...mapActions(['addOneHero', 'removeOneHero', 'fetchDashboardHeroes']),
+    ...mapActions(['addOneHero', 'removeOneHero', 'fetchDashboardHeroes', 'fetchOneHero']),
     updateDialogData(currentDialogValue) {
-      if(!currentDialogValue) {
+      if (!currentDialogValue) {
         console.log('Dialog closed')
       }
     },
     fetchHero() {
       if (this.getHeroById(this.parseIntId, true) || this.getHeroById(this.parseIntId)) {
         this.hero = this.getHeroById(this.parseIntId, true) ? this.getHeroById(this.parseIntId, true) : this.getHeroById(this.parseIntId);
+        if(this.getHeroById(this.parseIntId, true)) {
+          console.log('local')
+        } else if(this.getHeroById(this.parseIntId)) {
+          console.log('heroList')
+        }
+        console.log('Fetch with  => ', (this.getHeroById(this.parseIntId, true) ? 'local' : 'heroList'), this.hero.name)
         this.registeredHero = !!this.hero.savedDate;
         this.loading = false;
       } else {
-        this.fetchHeroById()
-            .then(hero => {
-              this.hero = hero;
+        this.fetchOneHero(this.parseIntId)
+            .then(() => {
+              console.log('fetch one heroe => ',this.getHeroById(this.parseIntId))
+              this.hero = this.getHeroById(this.parseIntId);
               this.loading = false;
-            });
+            })
+        // this.fetchHeroById()
+        //     .then(hero => {
+        //       console.log('HERO NAME => ', hero.name,)
+        //       console.log('THIS HERO NAME => ', this.hero.name,)
+        //       this.hero = hero;
+        //       this.loading = false;
+        //     });
       }
     },
     fetchHeroById() {
@@ -183,10 +197,13 @@ export default {
       func(this.hero)
           .then(() => {
             this.registeredHero = !this.registeredHero;
+            console.log('Start fetch')
+            this.fetchHero();
           });
     },
     endEdition() {
       this.heroDialog = false;
+      this.fetchHero()
       console.log(this.hero)
     }
   }

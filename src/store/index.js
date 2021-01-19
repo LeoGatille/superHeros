@@ -91,6 +91,7 @@ export default new Vuex.Store({
             state.favoriteHeroList = state.favoriteHeroList.filter(hero => {
                 return hero.id !== idHero
             })
+            console.log('REMOVED')
         },
         EDIT_HERO(state, hero) {
             const heroToUpdate = state.favoriteHeroList.find(favHero => {
@@ -157,6 +158,12 @@ export default new Vuex.Store({
                     dispatch('notifications/add', notification, {root: true})
                 })
         },
+        fetchOneHero({commit}, id) {
+            return marvelService.getHeroById(id)
+                .then(response => {
+                    commit('SET_HEROES_LIST', [response.data.data.results[0]])
+                })
+        },
         addOneHero({commit, dispatch, getters}, hero) {
             Vue.set(hero, 'edited', false);
             Vue.set(hero, 'savedDate', new Date());
@@ -180,7 +187,7 @@ export default new Vuex.Store({
         },
         removeOneHero({commit, dispatch}, idHero) {
             //! Change idHero to hero
-            LocalService.removeHero(idHero)
+            return LocalService.removeHero(idHero)
                 .then(() => {
                     const notification = {
                         type: 'success',
@@ -188,9 +195,10 @@ export default new Vuex.Store({
                     }
                     commit('REMOVE_HERO', idHero);
                     dispatch('notifications/add', notification, {root: true})
-                    marvelService.getHeroById(idHero)
+                    return marvelService.getHeroById(idHero)
                         .then(response => {
                             dispatch('editOneHeroReference', response.data.data.results[0] )
+                            console.log('Reset hero in heroList')
                         })
                 })
                 .catch((err) => {

@@ -26,26 +26,26 @@
           </font-awesome-icon>
         </v-btn>
 
-<!--        <div-->
-<!--            class="action edition"-->
-<!--            :style="{border: 'solid ' + (hero.edited ? '#81C784': 'grey')}"-->
-<!--        >-->
+        <!--        <div-->
+        <!--            class="action edition"-->
+        <!--            :style="{border: 'solid ' + (hero.edited ? '#81C784': 'grey')}"-->
+        <!--        >-->
         <v-btn
-        class="mx-2"
-        fab
-        light
-        small
-        depressed
-        style="cursor: pointer;"
-        :color="hero.edited ? '#81C784': 'lightgrey'"
+            class="mx-2"
+            fab
+            light
+            small
+            depressed
+            style="cursor: pointer;"
+            :color="hero.edited ? '#81C784': 'lightgrey'"
         >
           <font-awesome-icon
               :icon="['fas', 'pen']"
               :style="{'color': hero.edited ? 'white': 'grey'}">
           </font-awesome-icon>
         </v-btn>
-<!--      </div>-->
-        </div>
+        <!--      </div>-->
+      </div>
     </td>
 
     <td>
@@ -128,11 +128,11 @@ export default {
         this.removeOneHero(this.hero.id)
             .then(() => {
               // this.registeredHero = false;
-            })
+            });
       } else {
-        this.$store.dispatch('addOneHero', this.hero)
+        this.addOneHero(this.hero)
             .then(() => {
-              // this.registeredHero = true;
+
             });
       }
     },
@@ -178,6 +178,7 @@ a {
   cursor: pointer;
   color: black;
   text-decoration: none;
+
   &:hover {
     color: black;
     text-decoration: underline;
@@ -188,6 +189,7 @@ h2 {
   cursor: pointer;
   color: black;
   text-decoration: none;
+
   &:hover {
     text-decoration: underline;
   }
