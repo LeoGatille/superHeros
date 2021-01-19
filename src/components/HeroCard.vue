@@ -8,64 +8,162 @@
       max-width="300"
       height="400"
   >
-      <div v-if="registeredHero || hoveringLink" class="card-action-btn-container">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon color="white" @click="onStarClick()" v-bind="attrs"
-                   v-on="on">
-              <font-awesome-icon :icon="['fas', 'star']" :style="{'color': registeredHero ? '#ffbd00': 'grey'}"></font-awesome-icon>
-            </v-btn>
 
-          </template>
-          <span v-if="!registeredHero">{{$t('tooltip.btn.add')}}</span>
-          <span v-else>{{$t('tooltip.btn.remove')}}</span>
-        </v-tooltip>
+    <div class="actions-container">
+      <div class="action-btn">
+<!--!    Tooltip creates a ton of errors...    -->
+<!--        <v-tooltip bottom>-->
+<!--          <template v-slot:activator="{ on, attrs }">-->
+            <v-btn
+                class="mx-2 action"
+                fab
+                light
+                small
+                depressed
+                style="cursor: pointer;"
+
+                @click="onStarClick()"
+            >
+              <font-awesome-icon
+                  :icon="['fas', 'star']"
+                  :style="{'color': isHeroRegistered ? '#ffbd00': 'grey'}"
+              >
+              </font-awesome-icon>
+            </v-btn>
+<!--          </template>-->
+
+<!--          <span v-if="!isHeroRegistered">{{ $t('tooltip.btn.add') }}</span>-->
+<!--          <span v-else>{{ $t('tooltip.btn.remove') }}</span>-->
+<!--        </v-tooltip>-->
       </div>
+
+      <div class="action-btn">
+        <Dialog
+            :btn="{type: 'small', lightUp: hero.edited}"
+            :dialogValue="editionDialog"
+            @open="openDialog()"
+        >
+          <template v-slot:button>
+            <font-awesome-icon
+                :icon="['fas', 'pen']"
+                :style="{'color': hero.edited ? 'white': 'grey'}">
+            </font-awesome-icon>
+          </template>
+
+          <template v-slot:title>
+            <h2>{{ $t('dialog.edition.title') }}</h2>
+          </template>
+          <template v-slot:content>
+            <HeroEditionForm
+                :hero="hero"
+                @done="endEdition()"
+            />
+          </template>
+        </Dialog>
+      </div>
+    </div>
+<!--    <div v-if="registeredHero || hoveringLink" class="card-action-btn-container">-->
+<!--      <v-tooltip bottom>-->
+<!--        <template v-slot:activator="{ on, attrs }">-->
+<!--          <v-btn-->
+<!--              class="mx-2 action"-->
+<!--              fab-->
+<!--              light-->
+<!--              small-->
+<!--              depressed-->
+<!--              style="cursor: pointer;"-->
+<!--              v-bind="attrs"-->
+<!--              v-on="on"-->
+<!--              @click="onStarClick()"-->
+<!--          >-->
+<!--            <font-awesome-icon-->
+<!--                :icon="['fas', 'star']"-->
+<!--                :style="{'color': isHeroRegistered ? '#ffbd00': 'grey'}"-->
+<!--            >-->
+<!--            </font-awesome-icon>-->
+<!--          </v-btn>-->
+
+<!--        </template>-->
+<!--        <span v-if="!registeredHero">{{ $t('tooltip.btn.add') }}</span>-->
+<!--        <span v-else>{{ $t('tooltip.btn.remove') }}</span>-->
+<!--      </v-tooltip>-->
+
+<!--      <div>-->
+<!--      <Dialog-->
+<!--          :btn="{type: 'small', lightUp: hero.edited}"-->
+<!--          :dialogValue="editionDialog">-->
+<!--        <template v-slot:button>-->
+<!--          <font-awesome-icon-->
+<!--              :icon="['fas', 'pen']"-->
+<!--              :style="{'color': hero.edited ? 'white': 'grey'}">-->
+<!--          </font-awesome-icon>-->
+<!--        </template>-->
+
+<!--        <template v-slot:title>-->
+<!--          <h2>{{ $t('dialog.edition.title') }}</h2>-->
+<!--        </template>-->
+<!--        <template v-slot:content>-->
+<!--          <HeroEditionForm-->
+<!--              :hero="hero"-->
+<!--              @done="endEdition()"-->
+<!--          />-->
+<!--        </template>-->
+<!--      </Dialog>-->
+
+<!--      </div>-->
+<!--    </div>-->
+
+
     <router-link
         :to="'/hero/' + hero.id"
 
     >
-        <div class="img-relative-container">
-          <v-img class="blur-none transition link" :class="{'blur-full': isLinkHovered}"
+      <div class="img-relative-container">
+        <v-img
+            class="blur-none transition link"
+            :class="{'blur-full': isLinkHovered}"
             height="150"
             :src="setImgURL"
-          ></v-img>
-<!--          <font-awesome-icon-->
-<!--            class="icon-big opacity-none transition"-->
-<!--            :class="{'opacity-full': isLinkHovered}"-->
-<!--            :icon="['fas', 'eye']"-->
-<!--          ></font-awesome-icon>-->
-        </div>
-        <v-card-title>
-          {{hero.name}}
-        </v-card-title>
+        ></v-img>
+        <!--          <font-awesome-icon-->
+        <!--            class="icon-big opacity-none transition"-->
+        <!--            :class="{'opacity-full': isLinkHovered}"-->
+        <!--            :icon="['fas', 'eye']"-->
+        <!--          ></font-awesome-icon>-->
+      </div>
+      <v-card-title>
+        {{ hero.name }}
+      </v-card-title>
 
       <v-card-text class="card-text-min-height link">
         <!-- need a new component -->
-        <div>{{shrinkText(hero.description, 100)}}</div>
+        <div>{{ shrinkText(hero.description, 100) }}</div>
       </v-card-text>
-        <v-card-text>
-          <v-chip-group column>
-              <v-chip
-                  disabled
-                  class="shrink-text card-chip"
-                  v-for="chip in setHeroChips"
-                  :key="chip.name"
-              >
-                  {{$t('heroItems.' + chip.name) + ' : ' + (chip.length ? chip.length : 0 )}}
-              </v-chip>
-          </v-chip-group>
-        </v-card-text>
+      <v-card-text>
+        <v-chip-group column>
+          <v-chip
+              disabled
+              class="shrink-text card-chip"
+              v-for="chip in setHeroChips"
+              :key="chip.name"
+          >
+            {{ $t('heroItems.' + chip.name) + ' : ' + (chip.length ? chip.length : 0) }}
+          </v-chip>
+        </v-chip-group>
+      </v-card-text>
     </router-link>
   </v-card>
 </template>
 
 <script>
-import LocalService from '@/api/services/LocalService'
+// import LocalService from '@/api/services/LocalService'
 import {mapActions, mapGetters} from "vuex";
+import Dialog from '@/components/share/Dialog'
+import HeroEditionForm from "@/components/HeroEditionForm";
 
 export default {
   name: "HeroCard",
+  components: {HeroEditionForm, Dialog},
   props: {
     hero: {
       required: true
@@ -73,19 +171,22 @@ export default {
   },
   data() {
     return {
+      editionDialog: false,
       hoveringLink: false,
       registeredHero: false,
     }
   },
   created() {
-    this.isHeroRegistered();
   },
   computed: {
     ...mapGetters(['getHeroById']),
     setImgURL() {
       return this.hero.thumbnail.path + '.' + this.hero.thumbnail.extension
     },
-    setHeroChips(){
+    isHeroRegistered() {
+      return !!this.hero.savedDate;
+    },
+    setHeroChips() {
       return [
         {
           name: 'series',
@@ -112,11 +213,11 @@ export default {
         }
         const shrunkDescription = [];
         text.split('').forEach((letter, i) => {
-          if(i <= nbCharacters) {
+          if (i <= nbCharacters) {
             shrunkDescription.push(letter);
           }
         });
-        if(text.length > shrunkDescription.length) {
+        if (text.length > shrunkDescription.length) {
           shrunkDescription.push('...')
         }
         return shrunkDescription.join('');
@@ -131,102 +232,139 @@ export default {
   },
   methods: {
     ...mapActions(['addOneHero', 'removeOneHero']),
-    isHeroRegistered(){
-      LocalService.isHeroInLocalStorage(this.hero.id)
-      .then(isRegistered => {
-
-        this.registeredHero = isRegistered;
-      });
-    },
-    setLinkHovered(hovered){
+    // isHeroRegistered() {
+    //   LocalService.isHeroInLocalStorage(this.hero.id)
+    //       .then(isRegistered => {
+    //
+    //         this.registeredHero = isRegistered;
+    //       });
+    // },
+    setLinkHovered(hovered) {
       this.hoveringLink = hovered;
     },
     onStarClick() {
-      if(this.registeredHero) {
+      if (this.isHeroRegistered) {
         this.removeOneHero(this.hero.id)
-          .then(() => {
-            this.registeredHero = false;
-          })
+            .then(() => {
+              this.registeredHero = false;
+            })
       } else {
         this.$store.dispatch('addOneHero', this.hero)
-        .then(() => {
-          this.registeredHero = true;
-        });
+            .then(() => {
+              this.registeredHero = true;
+            });
       }
+    },
+    endEdition() {
+      this.editionDialog = false;
+    },
+    openDialog() {
+      this.editionDialog = true;
     }
   },
 }
 </script>
 
 <style lang="scss" scoped>
-  .card {
-    margin: 10px;
-    transition: transform ease-in-out 0.2s;
-    &:hover {
-      transform: scale(1.05);
-    }
+.card {
+  margin: 10px;
+  transition: transform ease-in-out 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
   }
-  .shrink-text {
-    overflow: hidden;
-    text-overflow: clip ellipsis;
+}
+
+.shrink-text {
+  overflow: hidden;
+  text-overflow: clip ellipsis;
+}
+
+.card-chip {
+  white-space: nowrap;
+  max-width: 100px;
+}
+
+.card-text-min-height {
+  height: 70px;
+}
+.actions-container {
+  width: 100px;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  z-index: 100;
+  right: 10px;
+  top: 0;
+
+  .action-btn {
+    padding-top: 5%;
+    width: max-content;
+
   }
-  .card-chip {
-    white-space: nowrap;
-    max-width: 100px;
-  }
-  .card-text-min-height {
-    height: 70px;
-  }
-  .card-action-btn-container {
-    position: absolute;
-    z-index: 100;
-    right: 15px;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border-radius: 0 0 100% 100%;
-    box-shadow: 0px 4px 3px 1px rgba(0, 0, 0, 0.5);
-  }
- a {
-   cursor: pointer;
-   color: black;
-   text-decoration: none;
-   &:hover {
-     color: black;
-     text-decoration: none;
-   }
- }
- .img-relative-container {
-   position: relative;
-   display: grid;
-   place-items: center;
-   color: black;
- }
- .icon-big {
-   color: white;
-   font-size: 3em;
-   position: absolute;
- }
-  // Dynamic styles
-  .transition {
-    transition: all ease-in-out 0.2s;
-  }
-  //* too kitch
-  //.blur-none {
-  //  filter: blur(0);
-  //}
-  //.blur-full {
-  //  filter: blur(2px);
-  //}
-  .opacity-none {
-    opacity: 0;
-  }
-  .opacity-full {
-    opacity: 1;
-  }
-  .v-application a {
+
+
+}
+
+.card-action-btn-container {
+  display: flex;
+  justify-content: space-between ;
+  align-items: center;
+  position: absolute;
+  z-index: 100;
+  right: 15px;
+  top: 0;
+  background-color: white;
+  border-radius: 0 0 100% 100%;
+  box-shadow: 0px 4px 3px 1px rgba(0, 0, 0, 0.5);
+}
+
+a {
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+
+  &:hover {
     color: black;
+    text-decoration: none;
   }
+}
+
+.img-relative-container {
+  position: relative;
+  display: grid;
+  place-items: center;
+  color: black;
+}
+
+.icon-big {
+  color: white;
+  font-size: 3em;
+  position: absolute;
+}
+
+// Dynamic styles
+.transition {
+  transition: all ease-in-out 0.2s;
+}
+
+//* too kitch
+//.blur-none {
+//  filter: blur(0);
+//}
+//.blur-full {
+//  filter: blur(2px);
+//}
+.opacity-none {
+  opacity: 0;
+}
+
+.opacity-full {
+  opacity: 1;
+}
+
+.v-application a {
+  color: black;
+}
 
 </style>

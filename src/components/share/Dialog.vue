@@ -26,7 +26,7 @@
         small
         depressed
         style="cursor: pointer;"
-        :color="btn.ligthUp ? '#81C784': 'lightgrey'"
+        :color="btn.lightUp ? '#81C784': 'lightgrey'"
         v-bind="attrs"
         v-on="on"
         @click="openDialog()"

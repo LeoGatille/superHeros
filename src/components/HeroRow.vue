@@ -16,12 +16,6 @@
     <td>
       <div class="p-2">
 
-        <!--        <div-->
-        <!--            class="action edition"-->
-        <!--            :style="{border: 'solid ' + (hero.edited ? '#81C784': 'grey')}"-->
-        <!--        >-->
-
-
         <v-btn
             class="mx-2 action"
             fab
@@ -38,10 +32,11 @@
           </font-awesome-icon>
         </v-btn>
 
-
         <Dialog
-            :btn="{type: 'small', ligthUp: hero.edited}"
-            :dialogValue="editionDialog">
+            :btn="{type: 'small', lightUp: hero.edited}"
+            :dialogValue="editionDialog"
+            @open="openDialog()"
+        >
           <template v-slot:button>
             <font-awesome-icon
                 :icon="['fas', 'pen']"
@@ -60,18 +55,6 @@
           </template>
         </Dialog>
 
-<!--        <v-btn-->
-<!--            class="mx-2 action"-->
-<!--            fab-->
-<!--            light-->
-<!--            small-->
-<!--            depressed-->
-<!--            style="cursor: pointer;"-->
-<!--            :color="hero.edited ? '#81C784': 'lightgrey'"-->
-<!--        >-->
-
-<!--        </v-btn>-->
-        <!--      </div>-->
       </div>
     </td>
 
@@ -169,6 +152,9 @@ export default {
 
             });
       }
+    },
+    openDialog() {
+      this.editionDialog = true
     },
     endEdition() {
       this.editionDialog = false;
