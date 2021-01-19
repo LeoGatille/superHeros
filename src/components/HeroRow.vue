@@ -39,7 +39,9 @@
         </v-btn>
 
 
-        <Dialog :dialogValue="editionDialog">
+        <Dialog
+            :btn="{type: 'small', ligthUp: hero.edited}"
+            :dialogValue="editionDialog">
           <template v-slot:button>
             <font-awesome-icon
                 :icon="['fas', 'pen']"
@@ -179,8 +181,8 @@ export default {
 <style lang="scss" scoped>
 
 .action {
-  width: 30px;
-  height: 30px;
+  //width: 30px;
+  //height: 30px;
   display: grid;
   place-items: center;
   padding: 5px;

@@ -7,8 +7,9 @@
   >
     <template v-slot:activator="{on, attrs}">
       <v-btn
+          v-if="btn.type === 'big'"
           width="100%"
-          :class="{'big-btn' : bigBtn, 'small-btn' : ! bigBtn }"
+          class="bigBtn"
           color="primary"
           v-bind="attrs"
           v-on="on"
@@ -16,6 +17,23 @@
       >
         <slot name="button"></slot>
       </v-btn>
+
+      <v-btn
+        v-else
+        class="mx-2"
+        fab
+        light
+        small
+        depressed
+        style="cursor: pointer;"
+        :color="btn.ligthUp ? '#81C784': 'lightgrey'"
+        v-bind="attrs"
+        v-on="on"
+        @click="openDialog()"
+      >
+        <slot name="button"></slot>
+      </v-btn>
+
     </template>
     <template v-slot:default>
       <div class="dialog-container">
@@ -42,9 +60,8 @@ export default {
       type: Boolean,
       required: true
     },
-    bigBtn: {
-      type: Boolean,
-      default: false,
+    btn: {
+      type: Object,
     }
   },
   methods: {

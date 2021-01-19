@@ -7,8 +7,8 @@
             <v-img :src="setImgURL"></v-img>
 
             <Dialog
+                :btn="{type: 'big'}"
                 :dialogValue="heroDialog"
-                :bigBtn="true"
                 @open="openDialog()"
             >
               <template v-slot:button>
