@@ -21,7 +21,7 @@
               <template v-slot:content>
                 <HeroEditionForm
                     :hero="hero"
-                    @done="heroDialog = false"
+                    @done="endEdition()"
                 />
               </template>
             </Dialog>
@@ -88,7 +88,7 @@
                     >
                       <font-awesome-icon
                           :icon="['fas', 'star']"
-                          :style="{'color': registeredHero ? '#ffbd00': 'grey'}"></font-awesome-icon>
+                          :style="{'color': isHeroRegistered ? '#ffbd00': 'grey'}"></font-awesome-icon>
                     </v-btn>
 
                   </template>
@@ -136,8 +136,10 @@ export default {
     setImgURL() {
       return this.hero.thumbnail ? (this.hero.thumbnail.path + '.' + this.hero.thumbnail.extension) : '';
     },
+    isHeroRegistered() {
+      return !! this.hero.savedDate;
+    }
   },
-
   created() {
     if(!this.favoriteHeroList.length) {
       this.fetchDashboardHeroes()
@@ -183,6 +185,10 @@ export default {
             this.registeredHero = !this.registeredHero;
           });
     },
+    endEdition() {
+      this.heroDialog = false;
+      console.log(this.hero)
+    }
   }
 }
 </script>

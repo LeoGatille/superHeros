@@ -4,12 +4,11 @@
       :items="this.heroList"
       :hide-default-footer="true"
       disable-pagination
-      @click:row="handleClick"
       @mouseenter:row="setHoveredHero(true, id)"
       @mouseleave:row="setHoveredHero(false,)"
   >
     <template #item="{item}">
-      <HeroRow :hero="item"/>
+        <HeroRow :hero="item" />
     </template>
   </v-data-table>
 </template>
@@ -49,9 +48,9 @@ export default {
   created() {
   },
   methods: {
-    handleClick(event) {
-      this.$router.push({path: `/hero/${event.id}`});
-      console.log('Tab click => ', event)
+    rowClick(id) {
+      this.$router.push({path: `/hero/${id}`});
+      console.log('Tab click => ', id)
     },
   }
 }

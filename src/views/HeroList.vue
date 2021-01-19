@@ -73,10 +73,8 @@ export default {
     },
     setItemsDisplay(display) {
       this.itemsDisplay = display;
-      console.log('hero list display => ', this.itemsDisplay)
     },
     isItemsDisplay(display) {
-      console.log(this.itemsDisplay === display)
       return this.itemsDisplay === display;
     }
   }

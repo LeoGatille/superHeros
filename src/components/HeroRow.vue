@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr class="hero-row">
     <td>
       <div class="p-2">
         <v-img width="200px" min-height="200px" :src="setImgURL" :alt="hero.name"
@@ -9,31 +9,52 @@
 
     <td>
       <div class="p-2">
-        <div class="action star">
+        <v-btn
+            class="mx-2"
+            fab
+            light
+            small
+            depressed
+            style="cursor: pointer;"
+            :color="hero.edited ? '#81C784': 'lightgrey'"
+            @click="onStarClick()"
+        >
           <font-awesome-icon
               :icon="['fas', 'star']"
               :style="{'color': isHeroRegistered ? '#ffbd00': 'grey'}"
-              @click="onStarClick()"
           >
           </font-awesome-icon>
-        </div>
-        <div
-            class="action edition"
-            :style="{border: 'solid ' + (hero.edited ? '#81C784': 'grey')}"
+        </v-btn>
+
+<!--        <div-->
+<!--            class="action edition"-->
+<!--            :style="{border: 'solid ' + (hero.edited ? '#81C784': 'grey')}"-->
+<!--        >-->
+        <v-btn
+        class="mx-2"
+        fab
+        light
+        small
+        depressed
+        style="cursor: pointer;"
+        :color="hero.edited ? '#81C784': 'lightgrey'"
         >
           <font-awesome-icon
               :icon="['fas', 'pen']"
-              :style="{'color': hero.edited ? '#81C784': 'grey'}">
+              :style="{'color': hero.edited ? 'white': 'grey'}">
           </font-awesome-icon>
+        </v-btn>
+<!--      </div>-->
         </div>
-      </div>
     </td>
 
     <td>
       <div class="p-2">
-        <h2>
-          {{ hero.name }}
-        </h2>
+        <router-link :to="{path: `/hero/${this.hero.id}`}">
+          <h2>
+            {{ hero.name }}
+          </h2>
+        </router-link>
       </div>
     </td>
 
@@ -114,13 +135,14 @@ export default {
               // this.registeredHero = true;
             });
       }
-    }
+    },
   }
 
 }
 </script>
 
 <style lang="scss" scoped>
+
 .action {
   width: 30px;
   height: 30px;
@@ -150,5 +172,24 @@ export default {
   border-radius: 100%;
   color: white;
   text-align: center;
+}
+
+a {
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  &:hover {
+    color: black;
+    text-decoration: underline;
+  }
+}
+
+h2 {
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 </style>
