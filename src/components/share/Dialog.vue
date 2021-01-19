@@ -1,30 +1,55 @@
 <template>
-  <div class="dialog-container">
-    <header>
-      <div class="overlay-soft">
+
+  <v-dialog
+      v-model="dialogValue"
+      transition="dialog-bottom-transition"
+      max-width="90%"
+  >
+    <template v-slot:activator="{on, attrs}">
+      <v-btn
+          width="100%"
+          :class="{'big-btn' : bigBtn, 'small-btn' : ! bigBtn }"
+          color="primary"
+          v-bind="attrs"
+          v-on="on"
+          @click="openDialog()"
+      >
+        <slot name="button"></slot>
+      </v-btn>
+    </template>
+    <template v-slot:default>
+      <div class="dialog-container">
+        <header>
+          <div class="overlay-soft">
+            <v-container fluid>
+              <slot name="title"></slot>
+            </v-container>
+          </div>
+        </header>
         <v-container fluid>
-          <slot name="title"></slot>
+          <slot name="content"></slot>
         </v-container>
       </div>
-    </header>
-    <v-container fluid>
-      <slot name="content"></slot>
-    </v-container>
-  </div>
+    </template>
+  </v-dialog>
 </template>
 
 <script>
 export default {
   name: "Dialog.vue",
   props: {
-    dialog: {
-      type: Object,
+    dialogValue: {
+      type: Boolean,
       required: true
+    },
+    bigBtn: {
+      type: Boolean,
+      default: false,
     }
   },
   methods: {
-    close() {
-      this.dialog.value = false;
+    openDialog() {
+      this.$emit('open')
     }
   }
 }
@@ -48,5 +73,6 @@ export default {
       color: white;
     }
   }
+
 }
 </style>

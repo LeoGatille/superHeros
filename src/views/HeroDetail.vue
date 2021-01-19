@@ -5,37 +5,28 @@
         <v-row>
           <v-col lg="4" sm="12">
             <v-img :src="setImgURL"></v-img>
-            <v-dialog v-model="heroDialog"
-                transition="dialog-bottom-transition"
-                max-width="90%"
+
+            <Dialog
+                :dialogValue="heroDialog"
+                :bigBtn="true"
+                @open="heroDialog = true"
             >
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    width="100%"
-                    color="primary"
-                    v-bind="attrs"
-                    v-on="on"
-                >
-                  Edition
-                </v-btn>
+              <template v-slot:button>
+                Edition
               </template>
 
-              <template v-slot:default="dialog">
-                <Dialog :dialog="dialog">
-                  <template v-slot:title>
-                    <h2>{{ $t('dialog.edition.title') }}</h2>
-                  </template>
-                  <template v-slot:content>
-                    <HeroEditionForm
-                        v-if="heroDialog"
-                        :hero="hero"
-                        @done="closeDialog(dialog)"
-                        @refresh="fetchHero()"/>
-                  </template>
-                </Dialog>
+              <template v-slot:title>
+                <h2>{{ $t('dialog.edition.title') }}</h2>
               </template>
-            </v-dialog>
+              <template v-slot:content>
+                <HeroEditionForm
+                    :hero="hero"
+                    @done="heroDialog = false"
+                />
+              </template>
+            </Dialog>
           </v-col>
+
           <v-col lg="7" sm="12">
             <v-container fluid>
               <v-row>
@@ -138,7 +129,7 @@ export default {
   },
   computed: {
     ...mapState(['favoriteHeroList']),
-    ...mapGetters(['getHeroBydId']),
+    ...mapGetters(['getHeroById']),
     parseIntId() {
       return parseInt(this.heroId)
     },
@@ -171,8 +162,8 @@ export default {
       }
     },
     fetchHero() {
-      if (this.getHeroBydId(this.parseIntId, true) || this.getHeroBydId(this.parseIntId)) {
-        this.hero = this.getHeroBydId(this.parseIntId, true) ? this.getHeroBydId(this.parseIntId, true) : this.getHeroBydId(this.parseIntId);
+      if (this.getHeroById(this.parseIntId, true) || this.getHeroById(this.parseIntId)) {
+        this.hero = this.getHeroById(this.parseIntId, true) ? this.getHeroById(this.parseIntId, true) : this.getHeroById(this.parseIntId);
         this.registeredHero = !!this.hero.savedDate;
         this.loading = false;
       } else {

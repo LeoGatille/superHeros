@@ -181,7 +181,7 @@ export default {
               this.description = hero.description;
               this.imgURL = hero.thumbnail.path + '.' + hero.thumbnail.extension;
               this.endEdition();
-              this.$emit('refresh');
+              this.$emit('done');
 
             });
       }

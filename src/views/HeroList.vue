@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      itemsDisplay: 'card',
+      itemsDisplay: 'row',
     }
   },
   computed: {
@@ -53,7 +53,14 @@ export default {
     },
   },
   created() {
-    this.fetchHeroes();
+    if(!this.favoriteHeroList.length) {
+      this.fetchDashboardHeroes()
+          .then(() => {
+            this.fetchHeroes();
+          })
+    } else {
+      this.fetchHeroes();
+    }
   },
   methods: {
     ...mapActions(['changePageIndex', 'setDisplayedList', 'fetchAllHeroes', 'fetchDashboardHeroes']),

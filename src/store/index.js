@@ -126,7 +126,7 @@ export default new Vuex.Store({
         setDisplayedList({commit}, listType) {
             commit('SET_DISPLAYED_LIST', listType);
         },
-        fetchAllHeroes({commit, dispatch, state}) {
+        fetchAllHeroes({commit, dispatch, state, getters}) {
             commit('SET_LOADING_LIST', true);
             marvelService.getAllHeroes({
                 limit: state.limit,
@@ -137,7 +137,13 @@ export default new Vuex.Store({
                 .then(response => {
                     commit('SET_TOTAL_ITEMS', response.data.data.total); //? Might do the dot notation in the 'commit'...
                     commit('SET_MAX_PAGE', response.data.data.total);
-                    commit('SET_HEROES_LIST', response.data.data.results);
+                    const syncListWithLocalStorage = response.data.data.results;
+                    syncListWithLocalStorage.forEach((hero, i) => {
+                        if(getters.getHeroById(hero.id, true)) {
+                           syncListWithLocalStorage.splice(i, 1, getters.getHeroById(hero.id, true))
+                        }
+                    })
+                    commit('SET_HEROES_LIST', syncListWithLocalStorage);
                     commit('SET_LOADING_LIST', false);
                 })
                 .catch(() => {
@@ -265,7 +271,14 @@ export default new Vuex.Store({
         getheroListByName: state => name => {
             return state[name];
         },
-        getHeroBydId: state => (id, localStorage = false) => {
+        getHeroIndex: state => (id, localStorage = false) => {
+            return state[localStorage ? 'favoriteHeroList' : 'heroList']
+                .map(hero => {
+                    return hero.id
+                })
+                .indexOf(id);
+        },
+        getHeroById: state => (id, localStorage = false) => {
             return state[localStorage ? 'favoriteHeroList' : 'heroList'].find(hero => {
                 return (hero ? hero.id : -1) === id;
             })
