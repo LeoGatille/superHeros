@@ -9,7 +9,7 @@
             <Dialog
                 :dialogValue="heroDialog"
                 :bigBtn="true"
-                @open="heroDialog = true"
+                @open="openDialog()"
             >
               <template v-slot:button>
                 Edition
@@ -200,6 +200,9 @@ export default {
             console.log('Start fetch')
             this.fetchHero();
           });
+    },
+    openDialog() {
+      this.heroDialog = true;
     },
     endEdition() {
       this.heroDialog = false;

@@ -26,7 +26,7 @@
             </v-container>
           </div>
         </header>
-        <v-container fluid>
+        <v-container fluid v-if="dialogValue">
           <slot name="content"></slot>
         </v-container>
       </div>

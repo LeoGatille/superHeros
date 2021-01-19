@@ -91,7 +91,6 @@ export default new Vuex.Store({
             state.favoriteHeroList = state.favoriteHeroList.filter(hero => {
                 return hero.id !== idHero
             })
-            console.log('REMOVED')
         },
         EDIT_HERO(state, hero) {
             const heroToUpdate = state.favoriteHeroList.find(favHero => {
@@ -247,7 +246,7 @@ export default new Vuex.Store({
                     })
             }
         },
-        resetHero({commit, dispatch}, editedHero) {
+        resetHero({commit, dispatch, getters}, editedHero) {
             return marvelService.getHeroById(editedHero.id)
                 .then(response => {
                     const standardHero = response.data.data.results[0];
@@ -259,7 +258,10 @@ export default new Vuex.Store({
                                 type: 'success',
                                 message: hero.name + ' ' + i18n.t('notifications.reset.success')
                             }
+                            console.log('MY hero => ', hero)
                             commit('RESET_HERO', hero);
+                            console.log('WTF hero => ', hero)
+                            commit('EDIT_ONE_HERO_REFERENCE', {hero, index:getters.getHeroIndex(hero.id)})
                             dispatch('notifications/add', notification, {root: true});
                             return hero;
                         })

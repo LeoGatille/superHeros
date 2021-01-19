@@ -2,21 +2,33 @@
   <tr class="hero-row">
     <td>
       <div class="p-2">
-        <v-img width="200px" min-height="200px" :src="setImgURL" :alt="hero.name"
-               height="100px"></v-img>
+        <v-img
+            width="200px"
+            min-height="200px"
+            :src="setImgURL"
+            :alt="hero.name"
+            height="100px"
+        >
+        </v-img>
       </div>
     </td>
 
     <td>
       <div class="p-2">
+
+        <!--        <div-->
+        <!--            class="action edition"-->
+        <!--            :style="{border: 'solid ' + (hero.edited ? '#81C784': 'grey')}"-->
+        <!--        >-->
+
+
         <v-btn
-            class="mx-2"
+            class="mx-2 action"
             fab
             light
             small
             depressed
             style="cursor: pointer;"
-            :color="hero.edited ? '#81C784': 'lightgrey'"
             @click="onStarClick()"
         >
           <font-awesome-icon
@@ -26,24 +38,37 @@
           </font-awesome-icon>
         </v-btn>
 
-        <!--        <div-->
-        <!--            class="action edition"-->
-        <!--            :style="{border: 'solid ' + (hero.edited ? '#81C784': 'grey')}"-->
-        <!--        >-->
-        <v-btn
-            class="mx-2"
-            fab
-            light
-            small
-            depressed
-            style="cursor: pointer;"
-            :color="hero.edited ? '#81C784': 'lightgrey'"
-        >
-          <font-awesome-icon
-              :icon="['fas', 'pen']"
-              :style="{'color': hero.edited ? 'white': 'grey'}">
-          </font-awesome-icon>
-        </v-btn>
+
+        <Dialog :dialogValue="editionDialog">
+          <template v-slot:button>
+            <font-awesome-icon
+                :icon="['fas', 'pen']"
+                :style="{'color': hero.edited ? 'white': 'grey'}">
+            </font-awesome-icon>
+          </template>
+
+          <template v-slot:title>
+            <h2>{{ $t('dialog.edition.title') }}</h2>
+          </template>
+          <template v-slot:content>
+            <HeroEditionForm
+                :hero="hero"
+                @done="endEdition()"
+            />
+          </template>
+        </Dialog>
+
+<!--        <v-btn-->
+<!--            class="mx-2 action"-->
+<!--            fab-->
+<!--            light-->
+<!--            small-->
+<!--            depressed-->
+<!--            style="cursor: pointer;"-->
+<!--            :color="hero.edited ? '#81C784': 'lightgrey'"-->
+<!--        >-->
+
+<!--        </v-btn>-->
         <!--      </div>-->
       </div>
     </td>
@@ -102,16 +127,23 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import Dialog from '@/components/share/Dialog'
+import HeroEditionForm from '@/components/HeroEditionForm'
 
 export default {
   name: "HeroRow",
+  components: {Dialog, HeroEditionForm},
   props: {
     hero: {
       type: Object,
       required: true,
     }
   },
-
+  data() {
+    return {
+      editionDialog: false,
+    }
+  },
   computed: {
     ...mapGetters(['getHeroById', 'getHeroIndex']),
     setImgURL() {
@@ -136,6 +168,9 @@ export default {
             });
       }
     },
+    endEdition() {
+      this.editionDialog = false;
+    }
   }
 
 }
@@ -150,7 +185,7 @@ export default {
   place-items: center;
   padding: 5px;
   text-align: center;
-  margin-bottom: 15px;
+  margin: 20px 0;
 }
 
 .star {

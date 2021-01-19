@@ -162,10 +162,6 @@ export default {
       this.$set(this.hero, 'name', this.name);
       this.$set(this.hero, 'description', this.description);
       this.$set(this.hero, 'thumbnail', this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail);
-      // this.hero.edited = true;
-      // this.hero.name = this.name;
-      // this.hero.description = this.description;
-      // this.hero.thumbnail = this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail;
       this.editHero(this.hero)
           .then(() => {
             this.endEdition();

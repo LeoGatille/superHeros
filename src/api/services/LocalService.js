@@ -70,10 +70,11 @@ export default {
             this.findHeroIndexInLocalStorage(hero.id)
                 .then(({index, localStorageHeroes}) => {
                     if(index > -1) {
-                        console.log(localStorageHeroes[index])
                         localStorageHeroes[index] = hero;
                         localStorage.setItem('savedHeroes', JSON.stringify(localStorageHeroes));
                         resolve(hero);
+                    } else {
+                        console.log('FAILED INDEX')
                     }
                 })
         })
