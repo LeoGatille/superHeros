@@ -214,10 +214,10 @@ export default new Vuex.Store({
                     dispatch('notifications/add', notification, {root: true})
                 });
         },
-        fetchDashboardHeroes({commit}) {
+        fetchDashboardHeroes({commit, state}) {
             console.log('Fetch Dashboard')
             commit('SET_LOADING_LIST', true);
-            return LocalService.fetchHeroes()
+            return LocalService.fetchHeroes(state.searchValue, state.limit, state.orderBy)
                 .then((localStorageHeroes => {
                     commit('SET_FAVORITE_LIST', localStorageHeroes);
                     commit('SET_TOTAL_ITEMS', localStorageHeroes.length);

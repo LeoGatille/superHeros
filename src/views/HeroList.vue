@@ -72,7 +72,6 @@ export default {
       return !this.isFavorite && this.heroList.length < this.limit;
     },
     fetchHeroes() {
-
       this.isFavorite ? this.fetchDashboardHeroes() : this.fetchAllHeroes();
     },
     dispatchChangePage(pageIndex) {
