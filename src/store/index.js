@@ -29,8 +29,8 @@ export default new Vuex.Store({
         maxPage: 0,
         showSettings: false,
         searchValue: '',
-        limit: 20,
-        orderBy: 'name',
+        limit: 30,
+        orderBy: '-name',
     },
     mutations: {
         //* Local storage

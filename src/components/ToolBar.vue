@@ -26,7 +26,8 @@
           :placeholder="$t('searchBar.placeholder')"
           prepend-icon="mdi-magnify"
           single-line
-          v-model="searchValue"
+          v-model="searchValueModel"
+          @input="formatQuery()"
       ></v-text-field>
 
     </div>
@@ -34,13 +35,14 @@
       <v-select
           :label="$t('toolbar.limit')"
           :items="limits"
-          v-model="limit"
+          v-model="limitModel"
+          @input="formatQuery()"
       ></v-select>
 
     </div>
     <div class="input-container">
       <v-select
-          v-model="orderBy"
+          v-model="orderByModel"
           :items="orderByOptions"
           item-text="name"
           item-value="value"
@@ -48,6 +50,7 @@
           persistent-hint
           return-object
           single-line
+          @input="formatQuery()"
       ></v-select>
     </div>
 
@@ -96,7 +99,7 @@
   </v-toolbar>
 </template>
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "ToolBar",
@@ -111,13 +114,19 @@ export default {
       scrollEvent: null,
       top: 208,
       lastPageYOffset: 0,
-      searchValue: '',
-      limit: 20,
+      searchValueModel: '',
+      limitModel: '',
       limits: [10, 20, 30, 50, 100],
-      orderBy: {name: 'A-Z', value: 'name'},
+      orderByModel: {name: 'A-Z', value: 'name'},
     }
   },
   computed: {
+    ...mapState(['searchValue', 'limit', 'orderBy',]),
+    orderByName() {
+      return this.orderByOptions.find(option => {
+        return option.value === this.orderBy;
+      })
+    },
     orderByOptions() {
       return [
         {name: 'A-Z', value: 'name'},
@@ -129,12 +138,16 @@ export default {
   },
   created() {
     this.scrollEvent = window.addEventListener('scroll', this.handleScroll);
-
+    this.orderByModel = this.orderByName;
+    this.searchValueModel = this.searchValue;
+    this.limitModel = this.limit;
   },
   methods: {
     ...mapActions(['setQuery']),
+    formatQuery() {
+      this.setQuery({searchValue: this.searchValueModel, limit: this.limitModel, orderBy: this.orderByModel.value});
+    },
     search() {
-      this.setQuery({searchValue: this.searchValue, limit: this.limit, orderBy: this.orderBy.value});
       this.$emit('setQuery')
     },
     setRequestedName() {
