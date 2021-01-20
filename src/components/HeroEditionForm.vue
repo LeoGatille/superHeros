@@ -139,10 +139,8 @@ export default {
   },
   methods: {
     ...mapActions(['editHero', 'resetHero']),
-
     setDefaultValues() {
-      console.log('WTF hero => ', this.hero)
-      this.name = this.hero.name;
+      this.name = JSON.parse(JSON.stringify(this.hero.name));
       this.description = this.hero.description;
       this.imgURL = this.setImgURL;
       this.formatedURl = this.hero.thumbnail;
@@ -155,11 +153,17 @@ export default {
       return /(https?:\/\/.*\.(?:gif|jpe?g|tiff?|png|webp|bmp))/i.test(url)
     },
     submit() {
-      this.$set(this.hero, 'edited', true);
-      this.$set(this.hero, 'name', this.name);
-      this.$set(this.hero, 'description', this.description);
-      this.$set(this.hero, 'thumbnail', this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail);
-      this.editHero(this.hero)
+      const editedValues = JSON.parse(JSON.stringify(this.hero));
+      editedValues.edited = true
+      editedValues.name = this.name
+      editedValues.description = this.description
+      editedValues.thumbnail = (this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail)
+
+      // this.$set(this.hero, 'edited', true);
+      // this.$set(this.hero, 'name', this.name);
+      // this.$set(this.hero, 'description', this.description);
+      // this.$set(this.hero, 'thumbnail', this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail);
+      this.editHero(editedValues)
           .then(() => {
             this.endEdition();
           });

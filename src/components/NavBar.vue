@@ -29,7 +29,7 @@
       <!--    </v-btn>-->
 
       <template v-slot:extension>
-        <v-tabs v-model="selectedTab">
+        <v-tabs>
            <v-tab  v-for="tab in tabs" :key="tab.id" :to="tab.path">{{tab.name}}</v-tab>
         </v-tabs>
       </template>
@@ -45,16 +45,11 @@ export default {
   components: {
     LangSelector
   },
-  data() {
-    return {
-      selectedTab: 1
-    }
-  },
   computed: {
     tabs() {
       return [
-        {index: 1, name: this.$t('tabs.heroes'), path: '/'},
-        {index: 2, name: this.$t('tabs.dashboard'), path: '/favorites'},
+        {name: this.$t('tabs.dashboard'), path: '/favorites'},
+        {name: this.$t('tabs.heroes'), path: '/'},
       ]
     }
   },

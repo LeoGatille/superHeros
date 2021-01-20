@@ -92,11 +92,9 @@ export default new Vuex.Store({
                 return hero.id !== idHero
             })
         },
-        EDIT_HERO(state, hero) {
-            const heroToUpdate = state.favoriteHeroList.find(favHero => {
-                return favHero.id === hero.id
-            });
-            Object.assign(heroToUpdate, hero);
+        EDIT_HERO(state, {hero, index}) {
+            state.favoriteHeroList.splice(index, 1, hero);
+
         },
         RESET_HERO(state, hero) {
             const heroToReset = state.favoriteHeroList.find(favHero => {
@@ -143,13 +141,21 @@ export default new Vuex.Store({
                     const syncListWithLocalStorage = response.data.data.results;
                     syncListWithLocalStorage.forEach((hero, i) => {
                         if (getters.getHeroById(hero.id, true)) {
-                            syncListWithLocalStorage.splice(i, 1, getters.getHeroById(hero.id, true))
+                            // syncListWithLocalStorage[i] = getters.getHeroIndex(hero.id, true)
+                            // const localStorageHero = getters.getHeroById(hero.id, true)
+                            // for (const key in localStorageHero) {
+                            //     if(Object.prototype.hasOwnProperty.call(localStorageHero, key)) {
+                            //         Vue.set(hero, key, localStorageHero[key])
+                            //     }
+                            // }
+                            syncListWithLocalStorage.splice(i, 1, getters.getHeroById(hero.id, true));
                         }
                     })
                     commit('SET_HEROES_LIST', syncListWithLocalStorage);
                     commit('SET_LOADING_LIST', false);
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.log('ERR => ', err)
                     const notification = {
                         type: 'error',
                         message: i18n.t('notifications.fetch.error'),
@@ -176,7 +182,6 @@ export default new Vuex.Store({
                         message: i18n.t('notifications.add.success'),
                     }
                     if(getters.getHeroById(hero.id)) {
-
                         dispatch('editOneHeroReference', hero)
                     }
                     dispatch('notifications/add', notification, {root: true})
@@ -210,6 +215,7 @@ export default new Vuex.Store({
                 });
         },
         fetchDashboardHeroes({commit}) {
+            console.log('Fetch Dashboard')
             commit('SET_LOADING_LIST', true);
             return LocalService.fetchHeroes()
                 .then((localStorageHeroes => {
@@ -219,7 +225,7 @@ export default new Vuex.Store({
                     commit('SET_LOADING_LIST', false);
                 }))
         },
-        editHero({commit, dispatch}, hero) {
+        editHero({commit, dispatch, getters}, hero) {
             if (hero.savedDate) {
                 return LocalService.editHero(hero)
                     .then(hero => {
@@ -227,12 +233,15 @@ export default new Vuex.Store({
                             type: 'success',
                             message: hero.name + ' ' + i18n.t('notifications.edit.success')
                         };
-                        commit('EDIT_HERO', hero);
+                        commit('EDIT_HERO', {hero, index:getters.getHeroIndex(hero.id, true), });
+                        if(getters.getHeroIndex(hero.id)) {
+                            commit('EDIT_ONE_HERO_REFERENCE', {hero, index: getters.getHeroIndex(hero.id)})
+                        }
                         dispatch('notifications/add', notification, {root: true});
+                        console.log('Wait for me')
                         return hero;
                     });
             } else {
-                //! selection of the mutation should be done in the component
                 hero.savedDate = new Date();
                 return LocalService.addHero(hero)
                     .then(hero => {
@@ -241,7 +250,9 @@ export default new Vuex.Store({
                             message: hero.name + ' ' + i18n.t('notifications.add.success')
                         }
                         commit('ADD_HERO', hero);
+                        commit('EDIT_ONE_HERO_REFERENCE', {hero, index: getters.getHeroIndex(hero.id)})
                         dispatch('notifications/add', notification, {root: true});
+                        console.log('Wait for me')
                         return hero;
                     })
             }
@@ -258,9 +269,7 @@ export default new Vuex.Store({
                                 type: 'success',
                                 message: hero.name + ' ' + i18n.t('notifications.reset.success')
                             }
-                            console.log('MY hero => ', hero)
                             commit('RESET_HERO', hero);
-                            console.log('WTF hero => ', hero)
                             commit('EDIT_ONE_HERO_REFERENCE', {hero, index:getters.getHeroIndex(hero.id)})
                             dispatch('notifications/add', notification, {root: true});
                             return hero;

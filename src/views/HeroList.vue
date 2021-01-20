@@ -40,7 +40,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['loadingList', 'heroList', 'favoriteHeroList', 'pages']),
+    ...mapState(['loadingList', 'heroList', 'favoriteHeroList', 'pages', 'limit']),
     getList() {
       return this.isFavorite ? this.favoriteHeroList : this.heroList;
     },
@@ -56,15 +56,23 @@ export default {
     if(!this.favoriteHeroList.length) {
       this.fetchDashboardHeroes()
           .then(() => {
-            this.fetchHeroes();
+            if(this.doesHeroListNeedAFetch()) {
+              console.log('FETCHING')
+              this.fetchAllHeroes();
+            }
           })
-    } else {
-      this.fetchHeroes();
+    } else if(this.doesHeroListNeedAFetch()){
+      console.log('FETCHING')
+      this.fetchAllHeroes();
     }
   },
   methods: {
     ...mapActions(['changePageIndex', 'setDisplayedList', 'fetchAllHeroes', 'fetchDashboardHeroes']),
+    doesHeroListNeedAFetch() {
+      return !this.isFavorite && this.heroList.length < this.limit;
+    },
     fetchHeroes() {
+
       this.isFavorite ? this.fetchDashboardHeroes() : this.fetchAllHeroes();
     },
     dispatchChangePage(pageIndex) {

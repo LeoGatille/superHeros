@@ -6,7 +6,7 @@
       class="card"
       style="position: relative"
       max-width="300"
-      height="400"
+      height="450"
   >
 
     <div class="actions-container">
@@ -62,67 +62,15 @@
         </Dialog>
       </div>
     </div>
-<!--    <div v-if="registeredHero || hoveringLink" class="card-action-btn-container">-->
-<!--      <v-tooltip bottom>-->
-<!--        <template v-slot:activator="{ on, attrs }">-->
-<!--          <v-btn-->
-<!--              class="mx-2 action"-->
-<!--              fab-->
-<!--              light-->
-<!--              small-->
-<!--              depressed-->
-<!--              style="cursor: pointer;"-->
-<!--              v-bind="attrs"-->
-<!--              v-on="on"-->
-<!--              @click="onStarClick()"-->
-<!--          >-->
-<!--            <font-awesome-icon-->
-<!--                :icon="['fas', 'star']"-->
-<!--                :style="{'color': isHeroRegistered ? '#ffbd00': 'grey'}"-->
-<!--            >-->
-<!--            </font-awesome-icon>-->
-<!--          </v-btn>-->
-
-<!--        </template>-->
-<!--        <span v-if="!registeredHero">{{ $t('tooltip.btn.add') }}</span>-->
-<!--        <span v-else>{{ $t('tooltip.btn.remove') }}</span>-->
-<!--      </v-tooltip>-->
-
-<!--      <div>-->
-<!--      <Dialog-->
-<!--          :btn="{type: 'small', lightUp: hero.edited}"-->
-<!--          :dialogValue="editionDialog">-->
-<!--        <template v-slot:button>-->
-<!--          <font-awesome-icon-->
-<!--              :icon="['fas', 'pen']"-->
-<!--              :style="{'color': hero.edited ? 'white': 'grey'}">-->
-<!--          </font-awesome-icon>-->
-<!--        </template>-->
-
-<!--        <template v-slot:title>-->
-<!--          <h2>{{ $t('dialog.edition.title') }}</h2>-->
-<!--        </template>-->
-<!--        <template v-slot:content>-->
-<!--          <HeroEditionForm-->
-<!--              :hero="hero"-->
-<!--              @done="endEdition()"-->
-<!--          />-->
-<!--        </template>-->
-<!--      </Dialog>-->
-
-<!--      </div>-->
-<!--    </div>-->
-
-
     <router-link
         :to="'/hero/' + hero.id"
 
     >
-      <div class="img-relative-container">
+<!--      <div class="img-relative-container">-->
         <v-img
             class="blur-none transition link"
             :class="{'blur-full': isLinkHovered}"
-            height="150"
+            :height="'40%'"
             :src="setImgURL"
         ></v-img>
         <!--          <font-awesome-icon-->
@@ -130,27 +78,29 @@
         <!--            :class="{'opacity-full': isLinkHovered}"-->
         <!--            :icon="['fas', 'eye']"-->
         <!--          ></font-awesome-icon>-->
-      </div>
-      <v-card-title>
-        {{ hero.name }}
-      </v-card-title>
+<!--      </div>-->
+      <div style="display: flex; flex-direction:column; justify-content: space-between; align-items: center; height: 60%; position: relative">
+        <v-card-title>
+          {{ hero.name }}
+        </v-card-title>
 
-      <v-card-text class="card-text-min-height link">
-        <!-- need a new component -->
-        <div>{{ shrinkText(hero.description, 100) }}</div>
-      </v-card-text>
-      <v-card-text>
-        <v-chip-group column>
-          <v-chip
-              disabled
-              class="shrink-text card-chip"
-              v-for="chip in setHeroChips"
-              :key="chip.name"
-          >
-            {{ $t('heroItems.' + chip.name) + ' : ' + (chip.length ? chip.length : 0) }}
-          </v-chip>
-        </v-chip-group>
-      </v-card-text>
+        <v-card-text class="card-text-min-height link">
+          <!-- need a new component -->
+          <div>{{ shrinkText(hero.description, 100) }}</div>
+        </v-card-text>
+        <v-card-text>
+          <v-chip-group column>
+            <v-chip
+                disabled
+                class="shrink-text card-chip"
+                v-for="chip in setHeroChips"
+                :key="chip.name"
+            >
+              {{ $t('heroItems.' + chip.name) + ' : ' + (chip.length ? chip.length : 0) }}
+            </v-chip>
+          </v-chip-group>
+        </v-card-text>
+      </div>
     </router-link>
   </v-card>
 </template>
