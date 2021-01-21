@@ -30,22 +30,16 @@ function orderHeroes(heroList, orderBy) {
 function filterHeroes(heroList, limit, offset, filter) {
     const filteredList = [];
     console.log('Offset => ', offset)
-    heroList.forEach((hero, i) => {
-        if((i >= offset)) {
-            console.log('OFFFSEEET')
-            if ((i + 1) <= (limit + offset)) {
-                if(filter.length) {
-                    if (hero.name.toLowerCase().startsWith(filter.toLowerCase())) {
-                        filteredList.push(hero);
-                    }
-                } else {
-                    filteredList.push(hero);
-                }
+    heroList.forEach((hero) => {
+        if (filter.length) {
+            if (hero.name.toLowerCase().startsWith(filter.toLowerCase())) {
+                filteredList.push(hero);
             }
+        } else {
+            filteredList.push(hero);
         }
     });
-    console.log('filteredList => ', filteredList)
-    return filteredList;
+    return filteredList.slice(offset, (limit + offset));
 }
 
 function getLocalStorage() {
@@ -56,7 +50,7 @@ function getLocalStorage() {
 
 export default {
     filterList(list, limit, offset, name, orderBy) {
-        return orderHeroes(filterHeroes(list, limit, offset, name), orderBy)
+        return filterHeroes(orderHeroes(list, orderBy), limit, offset, name)
     },
     fetchHeroes() {
         return new Promise(resolve => {
@@ -71,7 +65,7 @@ export default {
                 .then(localStorageHeroes => {
                     console.log('WTF LOCAL', localStorageHeroes)
                     localStorageHeroes.push(hero);
-                    console.log('pushed => ', localStorageHeroes[localStorageHeroes.length -1])
+                    console.log('pushed => ', localStorageHeroes[localStorageHeroes.length - 1])
                     localStorage.setItem('savedHeroes', JSON.stringify(localStorageHeroes));
                     resolve(hero);
                 });
