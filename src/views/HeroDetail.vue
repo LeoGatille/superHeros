@@ -170,17 +170,9 @@ export default {
       } else {
         this.fetchOneHero(this.parseIntId)
             .then(() => {
-              console.log('fetch one heroe => ',this.getHeroById(this.parseIntId))
               this.hero = this.getHeroById(this.parseIntId);
               this.loading = false;
             })
-        // this.fetchHeroById()
-        //     .then(hero => {
-        //       console.log('HERO NAME => ', hero.name,)
-        //       console.log('THIS HERO NAME => ', this.hero.name,)
-        //       this.hero = hero;
-        //       this.loading = false;
-        //     });
       }
     },
     fetchHeroById() {

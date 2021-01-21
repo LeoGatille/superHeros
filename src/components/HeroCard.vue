@@ -88,18 +88,19 @@
           <!-- need a new component -->
           <div>{{ shrinkText(hero.description, 100) }}</div>
         </v-card-text>
-        <v-card-text>
-          <v-chip-group column>
+
+        <v-card-actions class="justify-center" style="display: flex; flex-wrap: wrap">
             <v-chip
-                disabled
+                style="margin: 10px"
+                outlined
+                :color="chip.color"
                 class="shrink-text card-chip"
                 v-for="chip in setHeroChips"
                 :key="chip.name"
             >
               {{ $t('heroItems.' + chip.name) + ' : ' + (chip.length ? chip.length : 0) }}
             </v-chip>
-          </v-chip-group>
-        </v-card-text>
+        </v-card-actions>
       </div>
     </router-link>
   </v-card>
@@ -139,18 +140,22 @@ export default {
     setHeroChips() {
       return [
         {
-          name: 'series',
-          length: this.hero.series.available,
-        },
-        {
+          color:'red accent-4',
           name: 'comics',
           length: this.hero.comics.available,
         },
         {
+          color:'blue darken-1',
+          name: 'series',
+          length: this.hero.series.available,
+        },
+        {
+          color:'orange lighten-1',
           name: 'stories',
           length: this.hero.stories.available,
         },
         {
+          color:'teal lighten-2',
           name: 'events',
           length: this.hero.events.available,
         }
@@ -232,7 +237,7 @@ export default {
 
 .card-chip {
   white-space: nowrap;
-  max-width: 100px;
+  min-width: 100px;
 }
 
 .card-text-min-height {
@@ -316,5 +321,6 @@ a {
 .v-application a {
   color: black;
 }
+
 
 </style>

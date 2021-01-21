@@ -19,8 +19,13 @@
       </template>
 
 
-      <v-app-bar-title>I need a hero</v-app-bar-title>
+<!--      <v-app-bar-title v-slot:default-->
+<!--          :collapse="false"-->
+<!--      >I need a hero</v-app-bar-title>-->
+      <template v-slot:default>
+        <h1>I need a hero</h1>
 
+      </template>
       <v-spacer></v-spacer>
 
       <LangSelector/>
