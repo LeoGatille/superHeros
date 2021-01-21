@@ -64,6 +64,7 @@ export default new Vuex.Store({
             state.totalItems = nbItems;
         },
         SET_MAX_PAGE(state, nbItems) {
+            console.log('maxPAge =>', nbItems, state.limit)
             state.maxPage = Math.floor(nbItems / state.limit);
         },
         //* Favorites Heroes
@@ -71,8 +72,9 @@ export default new Vuex.Store({
             state.favoriteHeroList = heroes;
         },
         SET_FILTERED_FAVORITE_LIST(state, list) {
-            state.filteredFavoriteHeroList = LocalService.filterList(list,state.limit, state.searchValue, state.orderBy)
-                // LocalService.orderHeroes(LocalService.filterHeroes(list, state.limit, state.name), state.orderBy)
+            console.log('List => ', list)
+            state.filteredFavoriteHeroList = list
+            // LocalService.orderHeroes(LocalService.filterHeroes(list, state.limit, state.name), state.orderBy)
         },
         SET_CURRENT_PAGE(state, {shiftValue, targetPage}) {
             state[targetPage] += shiftValue;
@@ -188,7 +190,7 @@ export default new Vuex.Store({
                         type: 'success',
                         message: i18n.t('notifications.add.success'),
                     }
-                    if(getters.getHeroById(hero.id)) {
+                    if (getters.getHeroById(hero.id)) {
                         dispatch('editOneHeroReference', hero)
                     }
                     dispatch('notifications/add', notification, {root: true})
@@ -208,7 +210,7 @@ export default new Vuex.Store({
                     dispatch('notifications/add', notification, {root: true})
                     return marvelService.getHeroById(idHero)
                         .then(response => {
-                            dispatch('editOneHeroReference', response.data.data.results[0] )
+                            dispatch('editOneHeroReference', response.data.data.results[0])
                             console.log('Reset hero in heroList')
                         })
                 })
@@ -221,17 +223,22 @@ export default new Vuex.Store({
                     dispatch('notifications/add', notification, {root: true})
                 });
         },
-        fetchDashboardHeroes({commit, state}) {
+        fetchDashboardHeroes({commit, state, dispatch}) {
             console.log('Fetch Dashboard')
             commit('SET_LOADING_LIST', true);
             return LocalService.fetchHeroes(state.searchValue, state.limit, state.orderBy)
                 .then((localStorageHeroes => {
                     commit('SET_FAVORITE_LIST', localStorageHeroes);
-                    // commit('SET_FILTERED_FAVORITE_LIST', localStorageHeroes)
                     commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
-                    commit('SET_MAX_PAGE', localStorageHeroes.length);
-                    commit('SET_LOADING_LIST', false);
+                    dispatch('filterFavoriteHeroList')
                 }))
+        },
+        filterFavoriteHeroList({commit, state}) {
+            const filteredList = LocalService.filterList(state.favoriteHeroList, state.limit, (state.limit * state.pages.favorites), state.searchValue, state.orderBy);
+            commit('SET_FILTERED_FAVORITE_LIST', filteredList);
+            commit('SET_MAX_PAGE', state.favoriteHeroList.length);
+
+            commit('SET_LOADING_LIST', false);
         },
         editHero({commit, dispatch, getters}, hero) {
             if (hero.savedDate) {
@@ -241,8 +248,8 @@ export default new Vuex.Store({
                             type: 'success',
                             message: hero.name + ' ' + i18n.t('notifications.edit.success')
                         };
-                        commit('EDIT_HERO', {hero, index:getters.getHeroIndex(hero.id, true), });
-                        if(getters.getHeroIndex(hero.id)) {
+                        commit('EDIT_HERO', {hero, index: getters.getHeroIndex(hero.id, true),});
+                        if (getters.getHeroIndex(hero.id)) {
                             commit('EDIT_ONE_HERO_REFERENCE', {hero, index: getters.getHeroIndex(hero.id)})
                         }
                         dispatch('notifications/add', notification, {root: true});
@@ -278,7 +285,7 @@ export default new Vuex.Store({
                                 message: hero.name + ' ' + i18n.t('notifications.reset.success')
                             }
                             commit('RESET_HERO', hero);
-                            commit('EDIT_ONE_HERO_REFERENCE', {hero, index:getters.getHeroIndex(hero.id)})
+                            commit('EDIT_ONE_HERO_REFERENCE', {hero, index: getters.getHeroIndex(hero.id)})
                             dispatch('notifications/add', notification, {root: true});
                             return hero;
                         })

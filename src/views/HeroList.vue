@@ -22,7 +22,7 @@ import HeroCard from "@/components/HeroCard";
 import Pagination from "@/components/Pagination";
 import ToolBar from "@/components/ToolBar";
 import HeroRowList from "@/components/HeroRowList";
-import LocalService from "@/api/services/LocalService";
+// import LocalService from "@/api/services/LocalService";
 
 export default {
   name: "HeroList",
@@ -38,13 +38,12 @@ export default {
   computed: {
     ...mapState(['heroesDisplay','loadingList', 'heroList', 'favoriteHeroList', 'filteredFavoriteHeroList', 'pages', 'limit', 'searchValue', 'orderBy']),
     getList() {
-      return this.isFavorite ? LocalService.filterList(this.favoriteHeroList, this.limit, this.searchValue, this.orderBy) : this.heroList;
+      return this.isFavorite ? this.filteredFavoriteHeroList : this.heroList;
     },
     currentPage() {
       return this.pages[this.paginationKey];
     },
     paginationKey() {
-    //! Obsolete must be removed without breaking pagination
       return this.isFavorite ? 'favorites' : 'allHeroes';
     },
   },
@@ -63,12 +62,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['changePageIndex', 'setDisplayedList', 'fetchAllHeroes', 'fetchDashboardHeroes', 'setHeroesDisplay']),
+    ...mapActions(['changePageIndex', 'setDisplayedList', 'fetchAllHeroes', 'fetchDashboardHeroes', 'setHeroesDisplay', 'filterFavoriteHeroList']),
     doesHeroListNeedAFetch() {
       return !this.isFavorite && this.heroList.length < this.limit;
     },
     fetchHeroes() {
-      this.isFavorite ? this.fetchDashboardHeroes() : this.fetchAllHeroes();
+      //LocalService.filterList(this.favoriteHeroList, this.limit, (this.limit * this.pages.favorites),  this.searchValue, this.orderBy)
+      this.isFavorite ? this.filterFavoriteHeroList() : this.fetchAllHeroes();
     },
     dispatchChangePage(pageIndex) {
       this.changePageIndex({pageIndex, pageName: this.paginationKey});

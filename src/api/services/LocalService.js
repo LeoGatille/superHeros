@@ -27,15 +27,24 @@ function orderHeroes(heroList, orderBy) {
     }
 }
 
-function filterHeroes(heroList, limit, filter) {
+function filterHeroes(heroList, limit, offset, filter) {
     const filteredList = [];
+    console.log('Offset => ', offset)
     heroList.forEach((hero, i) => {
-        if ((i + 1) <= limit) {
-            if (hero.name.toLowerCase().startsWith(filter.toLowerCase())) {
-                filteredList.push(hero);
+        if((i >= offset)) {
+            console.log('OFFFSEEET')
+            if ((i + 1) <= (limit + offset)) {
+                if(filter.length) {
+                    if (hero.name.toLowerCase().startsWith(filter.toLowerCase())) {
+                        filteredList.push(hero);
+                    }
+                } else {
+                    filteredList.push(hero);
+                }
             }
         }
     });
+    console.log('filteredList => ', filteredList)
     return filteredList;
 }
 
@@ -46,8 +55,8 @@ function getLocalStorage() {
 }
 
 export default {
-    filterList(list, limit, name, orderBy) {
-        return orderHeroes(filterHeroes(list, limit, name), orderBy)
+    filterList(list, limit, offset, name, orderBy) {
+        return orderHeroes(filterHeroes(list, limit, offset, name), orderBy)
     },
     fetchHeroes() {
         return new Promise(resolve => {

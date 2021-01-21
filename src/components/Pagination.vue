@@ -1,6 +1,6 @@
 <template>
   <div class="pagination-container">
-    <v-btn disabled icon v-if="currentPage > 3">...</v-btn>
+    <v-btn disabled icon v-if="((currentPage + 1) > 3)">...</v-btn>
     <span v-for="index in pagesBeforeCurrentPage" :key="'beforeCurrentPage' + index">
           <v-btn icon @click="changePage(index)">{{ index + 1 }}</v-btn>
     </span>
@@ -16,7 +16,7 @@
     <span v-for="index in pagesAfterCurrentPage" :key="'afterCurrentPage' + index">
           <v-btn icon @click="changePage(index )">{{ index + 1 }}</v-btn>
     </span>
-    <v-btn disabled icon v-if="maxPage > currentPage + 3">...</v-btn>
+    <v-btn disabled icon v-if="maxPage > (currentPage + 3)">...</v-btn>
   </div>
 </template>
 
