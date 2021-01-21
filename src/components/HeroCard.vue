@@ -11,10 +11,10 @@
         class="actions-container"
         :class="{'stealth' : !isHeroRegistered}"
     >
-      <div class="action-btn">
+      <div class="action-btn bounce">
 
         <v-btn
-            class="mx-2 action"
+            class="mx-2 action "
             fab
             light
             small
@@ -75,6 +75,7 @@
           :to="'/hero/' + hero.id"
       >
         <v-card-title
+            class="title"
             @mouseenter="setLinkHovered(true)"
             @mouseleave="setLinkHovered(false)"
         >
@@ -108,7 +109,6 @@
 import {mapActions, mapGetters} from "vuex";
 import Dialog from '@/components/share/Dialog'
 import HeroEditionForm from "@/components/HeroEditionForm";
-
 export default {
   name: "HeroCard",
   components: {HeroEditionForm, Dialog},
@@ -218,6 +218,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "src/SCSS/HeroTags";
+
 .card {
   margin: 10px;
   transition: transform ease-in-out 0.2s;
@@ -233,6 +235,11 @@ export default {
     }
   }
 }
+  .title {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
 .shrink-text {
   overflow: hidden;
@@ -328,6 +335,17 @@ a {
 
 .v-application a {
   color: black;
+}
+.bounce {
+
+  &:hover {
+    .action {
+
+      animation-name: boing-boing;
+      animation-duration: 0.6s;
+      animation-iteration-count: 1;
+    }
+  }
 }
 
 

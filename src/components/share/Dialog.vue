@@ -19,17 +19,17 @@
       </v-btn>
 
       <v-btn
-        v-else
-        class="mx-2"
-        fab
-        light
-        small
-        depressed
-        style="cursor: pointer;"
-        :color="btn.lightUp ? '#81C784': 'lightgrey'"
-        v-bind="attrs"
-        v-on="on"
-        @click="openDialog()"
+          v-else
+          class="mx-2 bounce"
+          fab
+          light
+          small
+          depressed
+          style="cursor: pointer;"
+          :color="btn.lightUp ? '#81C784': 'lightgrey'"
+          v-bind="attrs"
+          v-on="on"
+          @click="openDialog()"
       >
         <slot name="button"></slot>
       </v-btn>
@@ -73,6 +73,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "src/SCSS/HeroTags";
+
+.bounce {
+  &:hover {
+    animation-name: boing-boing;
+    animation-duration: 0.6s;
+    animation-iteration-count: 1;
+  }
+}
+
 .dialog-container {
   background-color: white;
 

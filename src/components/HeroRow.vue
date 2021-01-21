@@ -15,7 +15,7 @@
 
     <td>
       <div class="p-2">
-
+      <div class="bounce">
         <v-btn
             class="mx-2 action"
             fab
@@ -31,29 +31,32 @@
           >
           </font-awesome-icon>
         </v-btn>
+      </div>
+        <div>
+          <Dialog
+              :btn="{type: 'small', lightUp: hero.edited}"
+              :dialogValue="editionDialog"
+              @open="openDialog()"
+          >
+            <template v-slot:button>
+              <font-awesome-icon
+                  :icon="['fas', 'pen']"
+                  :style="{'color': hero.edited ? 'white': 'grey'}">
+              </font-awesome-icon>
+            </template>
 
-        <Dialog
-            :btn="{type: 'small', lightUp: hero.edited}"
-            :dialogValue="editionDialog"
-            @open="openDialog()"
-        >
-          <template v-slot:button>
-            <font-awesome-icon
-                :icon="['fas', 'pen']"
-                :style="{'color': hero.edited ? 'white': 'grey'}">
-            </font-awesome-icon>
-          </template>
+            <template v-slot:title>
+              <h2>{{ $t('dialog.edition.title') }}</h2>
+            </template>
+            <template v-slot:content>
+              <HeroEditionForm
+                  :hero="hero"
+                  @done="endEdition()"
+              />
+            </template>
+          </Dialog>
+        </div>
 
-          <template v-slot:title>
-            <h2>{{ $t('dialog.edition.title') }}</h2>
-          </template>
-          <template v-slot:content>
-            <HeroEditionForm
-                :hero="hero"
-                @done="endEdition()"
-            />
-          </template>
-        </Dialog>
 
       </div>
     </td>
@@ -165,6 +168,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "src/SCSS/HeroTags";
 
 .action {
   //width: 30px;
@@ -215,6 +219,17 @@ h2 {
 
   &:hover {
     text-decoration: underline;
+  }
+}
+.bounce {
+
+  &:hover {
+    .action {
+
+      animation-name: boing-boing;
+      animation-duration: 0.6s;
+      animation-iteration-count: 1;
+    }
   }
 }
 </style>
