@@ -150,13 +150,9 @@ export default {
     search() {
       this.$emit('setQuery')
     },
-    setRequestedName() {
-      this.$store.dispatch('fetchIn' + this.$route.query.listType)
-    },
     handleScroll() {
       if ((window.pageYOffset <= 100)) {
         this.top -= 5;
-        // this.top =  this.lastPageYOffset < window.pageYOffset ?  this.top - (this.top - window.pageYOffset) : this.top + (this.top + window.pageYOffset);
         if (window.pageYOffset === 0) {
           this.top = 208;
         }

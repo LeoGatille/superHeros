@@ -15,20 +15,15 @@ export default new Vuex.Store({
     state: {
         isLocalStorageReady: false,
         loadingList: false,
-        displayedList: 'dashboard',
         heroList: [],
         favoriteHeroList: [],
         filteredFavoriteHeroList: [],
-        allHeroesPage: 0,
         pages: {
             favorites: 0,
             allHeroes: 0,
         },
-        dashboardPage: 0,
         totalItems: 0,
-        requestedName: '',
         maxPage: 0,
-        showSettings: false,
         searchValue: '',
         limit: 20,
         orderBy: 'name',
@@ -44,41 +39,29 @@ export default new Vuex.Store({
         SET_LOCAL_STORAGE_STATE(state, localeStorageState) {
             state.isLocalStorageReady = localeStorageState;
         },
+
         //*Loading
         SET_LOADING_LIST(state, isLoading) {
             state.loadingList = isLoading;
         },
-        //*State items
+
+        //* HeroList
         SET_HEROES_LIST(state, heroList) {
             state.heroList = [];
             heroList.forEach(hero => {
                 state.heroList.push(Object.assign({}, hero))
             });
         },
-        SET_TOTAL_ITEMS(state, nbItems) {
-            state.totalItems = nbItems;
+        EDIT_ONE_HERO_REFERENCE(state, {hero, index}) {
+            state.heroList.splice(index, 1, hero);
         },
-        SET_MAX_PAGE(state, nbItems) {
-            state.maxPage = Math.ceil(nbItems / state.limit);
-        },
-        //* Favorites Heroes
+
+        //* LocalStorage
         SET_FAVORITE_LIST(state, heroes) {
             state.favoriteHeroList = heroes;
         },
         SET_FILTERED_FAVORITE_LIST(state, list) {
             state.filteredFavoriteHeroList = list
-        },
-        SET_CURRENT_PAGE(state, {shiftValue, targetPage}) {
-            state[targetPage] += shiftValue;
-        },
-        SET_REQUESTED_NAME(state, name) {
-            state.requestedName = name;
-        },
-        SET_SETTINGS_DISPLAY(state) {
-            state.showSettings = !state.showSettings
-        },
-        CHANGE_PAGE(state, {pageIndex, pageName}) {
-            state.pages[pageName] = pageIndex;
         },
         ADD_HERO(state, hero) {
             state.favoriteHeroList.push(hero);
@@ -97,9 +80,22 @@ export default new Vuex.Store({
             });
             Object.assign(heroToReset, hero);
         },
-        EDIT_ONE_HERO_REFERENCE(state, {hero, index}) {
-            state.heroList.splice(index, 1, hero);
+
+        //* Pagination
+        SET_TOTAL_ITEMS(state, nbItems) {
+            state.totalItems = nbItems;
         },
+        SET_MAX_PAGE(state, nbItems) {
+            state.maxPage = Math.ceil(nbItems / state.limit);
+        },
+        SET_CURRENT_PAGE(state, {shiftValue, targetPage}) {
+            state[targetPage] += shiftValue;
+        },
+        CHANGE_PAGE(state, {pageIndex, pageName}) {
+            state.pages[pageName] = pageIndex;
+        },
+
+        //* Query
         SET_LIMIT(state, limit) {
             state.limit = limit;
         },
@@ -114,14 +110,7 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        createHeroesLocalStorage({commit}) {
-            if (!("savedHeroes" in localStorage)) {
-                commit('CREATE_HEROES_LOCAL_STORAGE',);
-                commit('SET_LOCAL_STORAGE_STATE', true)
-            } else {
-                commit('SET_LOCAL_STORAGE_STATE', true)
-            }
-        },
+        //* Fetch Marvel's API
         fetchAllHeroes({commit, dispatch, state, getters}) {
             commit('SET_LOADING_LIST', true);
             marvelService.getAllHeroes({
@@ -157,6 +146,35 @@ export default new Vuex.Store({
                     commit('SET_HEROES_LIST', [response.data.data.results[0]])
                 })
         },
+
+        //* LocalStorage
+        createHeroesLocalStorage({commit}) {
+            if (!("savedHeroes" in localStorage)) {
+                commit('CREATE_HEROES_LOCAL_STORAGE',);
+                commit('SET_LOCAL_STORAGE_STATE', true)
+            } else {
+                commit('SET_LOCAL_STORAGE_STATE', true)
+            }
+        },
+        fetchDashboardHeroes({commit, state, dispatch}) {
+            commit('SET_LOADING_LIST', true);
+            return LocalService.fetchHeroes(state.searchValue, state.limit, state.orderBy)
+                .then((localStorageHeroes => {
+                    commit('SET_FAVORITE_LIST', localStorageHeroes);
+                    // commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
+                    commit('SET_MAX_PAGE', localStorageHeroes.length)
+                    dispatch('filterFavoriteHeroList')
+                }))
+        },
+        filterFavoriteHeroList({commit, state}) {
+            const filteredList = LocalService.filterList(state.favoriteHeroList, state.limit, (state.limit * state.pages.favorites), state.searchValue, state.orderBy);
+            commit('SET_FILTERED_FAVORITE_LIST', filteredList);
+            commit('SET_MAX_PAGE', state.favoriteHeroList.length);
+
+            commit('SET_LOADING_LIST', false);
+        },
+
+        //* Modification Hero
         addOneHero({commit, dispatch, getters}, hero) {
             Vue.set(hero, 'edited', false);
             Vue.set(hero, 'savedDate', new Date());
@@ -200,23 +218,6 @@ export default new Vuex.Store({
                     dispatch('filterFavoriteHeroList');
                     dispatch('notifications/add', notification, {root: true})
                 });
-        },
-        fetchDashboardHeroes({commit, state, dispatch}) {
-            commit('SET_LOADING_LIST', true);
-            return LocalService.fetchHeroes(state.searchValue, state.limit, state.orderBy)
-                .then((localStorageHeroes => {
-                    commit('SET_FAVORITE_LIST', localStorageHeroes);
-                    // commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
-                    commit('SET_MAX_PAGE', localStorageHeroes.length)
-                    dispatch('filterFavoriteHeroList')
-                }))
-        },
-        filterFavoriteHeroList({commit, state}) {
-            const filteredList = LocalService.filterList(state.favoriteHeroList, state.limit, (state.limit * state.pages.favorites), state.searchValue, state.orderBy);
-            commit('SET_FILTERED_FAVORITE_LIST', filteredList);
-            commit('SET_MAX_PAGE', state.favoriteHeroList.length);
-
-            commit('SET_LOADING_LIST', false);
         },
         editHero({commit, dispatch, getters}, hero) {
             if (hero.savedDate) {
@@ -280,31 +281,29 @@ export default new Vuex.Store({
         editOneHeroReference({commit, getters}, hero) {
             commit('EDIT_ONE_HERO_REFERENCE', {hero, index: getters.getHeroIndex(hero.id)});
         },
+
+        //* Pagination
         changePageIndex({commit}, {pageIndex, pageName}) {
             commit('CHANGE_PAGE', {pageIndex, pageName});
         },
-        setRequestedName({commit}, name) {
-            commit('SET_REQUESTED_NAME', name);
+        setMaxPage({commit}, nbItems) {
+            commit('SET_MAX_PAGE', nbItems);
         },
-        setSettingsDisplay({commit}) {
-            commit('SET_SETTINGS_DISPLAY');
-        },
+
+        //* Query
         setQuery({commit}, {searchValue, limit, orderBy}) {
             commit('SET_LIMIT', limit);
             commit('SET_SEARCH_VALUE', searchValue);
             commit('SET_ORDER_BY', orderBy)
         },
+        setRequestedName({commit}, name) {
+            commit('SET_REQUESTED_NAME', name);
+        },
         setHeroesDisplay({commit}, display) {
             commit('SET_HEROES_DISPLAY', display)
         },
-        setMaxPage({commit}, nbItems) {
-                commit('SET_MAX_PAGE', nbItems);
-        }
     },
     getters: {
-        getheroListByName: state => name => {
-            return state[name];
-        },
         getHeroIndex: state => (id, localStorage = false) => {
             return state[localStorage ? 'favoriteHeroList' : 'heroList']
                 .map(hero => {
@@ -317,8 +316,5 @@ export default new Vuex.Store({
                 return (hero ? hero.id : -1) === id;
             })
         },
-        getRandomHero: state => {
-            return state.heroList[1];
-        }
     },
 })

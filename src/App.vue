@@ -19,7 +19,7 @@
 </template>
 <script>
 import NavBar from "@/components/NavBar";
-import {mapState, mapActions} from "vuex";
+import { mapActions} from "vuex";
 import NotificationContainer from "@/components/Notifications/NotificationContainer";
 
 export default {
@@ -27,9 +27,6 @@ export default {
   components: {
     NotificationContainer,
     NavBar,
-  },
-  computed: {
-    ...mapState(['showSettings']),
   },
   created() {
     this.createHeroesLocalStorage();
@@ -46,7 +43,7 @@ export default {
   opacity: 0.3;
 }
 .top {
-  top: 10px;
+  top: 25px;
   left: 50px;
 }
 .bottom {

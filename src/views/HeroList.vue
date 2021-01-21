@@ -11,7 +11,46 @@
       <Pagination :current-page="currentPage" @changePage="dispatchChangePage"/>
     </template>
     <template v-else>
-      <div>LOADING</div>
+      <div
+          style="display: flex; flex-wrap: wrap"
+          v-if="isItemsDisplay('card')">
+        <v-skeleton-loader
+            style="margin: 10px"
+            v-for="index in 12"
+            :key="index"
+            class="mx-auto"
+            width="300"
+            type="card"
+        ></v-skeleton-loader>
+      </div>
+      <div v-else>
+
+        <v-skeleton-loader
+            style="margin: 10px"
+            class="mx-auto"
+            :width="'100%'"
+            type="table-thead"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+            style="margin: 10px"
+            class="mx-auto"
+            :width="'100%'"
+            type="table-tbody"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+            style="margin: 10px"
+            class="mx-auto"
+            :width="'100%'"
+            type="table-tbody"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+            style="margin: 10px"
+            class="mx-auto"
+            :width="'100%'"
+            type="table-tfoot"
+        ></v-skeleton-loader>
+      </div>
+
     </template>
   </div>
 </template>
@@ -35,7 +74,7 @@ export default {
     ToolBar
   },
   computed: {
-    ...mapState(['heroesDisplay','loadingList', 'heroList', 'favoriteHeroList', 'filteredFavoriteHeroList', 'pages', 'limit', 'searchValue', 'orderBy', "totalItems"]),
+    ...mapState(['heroesDisplay', 'loadingList', 'heroList', 'favoriteHeroList', 'filteredFavoriteHeroList', 'pages', 'limit', 'searchValue', 'orderBy', "totalItems"]),
     getList() {
       return this.isFavorite ? this.filteredFavoriteHeroList : this.heroList;
     },
@@ -47,14 +86,14 @@ export default {
     },
   },
   created() {
-    if(!this.favoriteHeroList.length) {
+    if (!this.favoriteHeroList.length) {
       this.fetchDashboardHeroes()
           .then(() => {
-            if(this.doesHeroListNeedAFetch()) {
+            if (this.doesHeroListNeedAFetch()) {
               this.fetchAllHeroes();
             }
           })
-    } else if(this.doesHeroListNeedAFetch()){
+    } else if (this.doesHeroListNeedAFetch()) {
       this.fetchAllHeroes();
     }
     this.setMaxPage(this.isFavorite ? this.favoriteHeroList.length : this.totalItems)
@@ -87,6 +126,7 @@ export default {
   flex-wrap: wrap;
   justify-content: space-around;
 }
+
 .list {
   padding-top: 50px;
 
