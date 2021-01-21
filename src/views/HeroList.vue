@@ -10,8 +10,30 @@
         <div v-if="isItemsDisplay('row')" class="list row-list">
           <HeroRowList :hero-list="getList"/>
         </div>
-        <Pagination :current-page="currentPage" @changePage="dispatchChangePage"/>
+        <Pagination v-if="getList.length" :current-page="currentPage" @changePage="dispatchChangePage"/>
+        <template v-if="!getList.length">
+          <v-card
+              class="mx-auto"
+              max-width="400"
+              outlined
+          >
+            <v-list-item three-line >
+              <v-list-item-avatar>
+                <font-awesome-icon :icon="['fas', 'heart-broken']" style="color: darkgrey; font-size: 2em"></font-awesome-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title class="headline mb-1">
+                  {{$t('notFound.title')}}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{$t('notFound.message')}}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-card>
+        </template>
       </template>
+
       <template v-else>
         <div
             style="display: flex; flex-wrap: wrap"

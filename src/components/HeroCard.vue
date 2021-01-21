@@ -79,7 +79,7 @@
             @mouseenter="setLinkHovered(true)"
             @mouseleave="setLinkHovered(false)"
         >
-          {{ hero.name }}
+          {{ shrinkText(hero.name, 30) }}
         </v-card-title>
       </router-link>
 

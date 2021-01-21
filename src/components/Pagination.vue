@@ -21,7 +21,7 @@
     >
           <v-btn
               class="other-pages pagination-btn"
-              v- v-if="((i - 3) + (currentPage + 1)) > 0"
+               v-if="((i - 3) + (currentPage + 1)) > 0"
               icon
               @click="changePage((i - 3) + (currentPage))"
           >

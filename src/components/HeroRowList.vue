@@ -34,14 +34,14 @@ export default {
   computed: {
     setHeaders() {
       return [
-        {text: 'Picture', value: 'image'},
+        {text: this.$t('table.header.picture'), value: 'image'},
         {text: 'Actions', value: 'actions'},
-        {text: 'Name', value: 'name'},
+        {text: this.$t('table.header.name'), value: 'name'},
         {text: 'Description', value: 'description'},
         {text: 'Comics', value: 'comics'},
-        {text: 'Stories', value: 'stories'},
+        {text: this.$t('table.header.stories'), value: 'stories'},
         {text: 'Series', value: 'series'},
-        {text: 'Events', value: 'events'},
+        {text: this.$t('table.header.events'), value: 'events'},
       ];
     },
   },

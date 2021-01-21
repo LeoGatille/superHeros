@@ -64,6 +64,7 @@
   "toolbar": {
     "limit": "limit",
     "orderBy": {
+      "label": "order",
       "dateIncreasing": "date increasing",
       "dateDecreasing": "date decreasing"
     }
@@ -89,7 +90,19 @@
       "error": "An error occurred while resetting"
     }
   },
+  "table": {
+    "header": {
+      "picture": "Picture",
+      "name": "Name",
+      "stories": "Stories",
+      "events": "Events"
+    }
+  },
   "fatalError": {
     "message": "An error happened please reload the page"
+  },
+  "notFound": {
+    "title": "Sorry",
+    "message": "we couldn't find your hero"
   }
 }

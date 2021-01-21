@@ -64,6 +64,7 @@
   "toolbar": {
     "limit": "limite",
     "orderBy": {
+      "label": "ordre",
       "dateIncreasing": "date croissante",
       "dateDecreasing": "date décroissante"
     }
@@ -89,7 +90,19 @@
       "error": "Une erreur est survenue lors de la réinitialisation de"
     }
   },
+  "table": {
+    "header": {
+      "picture": "Image",
+      "name": "Nom",
+      "stories": "Histoires",
+      "events": "Evenements"
+    }
+  },
   "fatalError": {
     "message": "Une erreur est survenue veuillez recharger la page"
+  },
+  "notFound": {
+    "title": "Désolé",
+    "message": "nous n'avons pas pu trouver votre héro"
   }
 }

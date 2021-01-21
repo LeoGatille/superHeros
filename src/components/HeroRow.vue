@@ -15,7 +15,7 @@
 
     <td>
       <div class="p-2">
-      <div class="bounce">
+      <div class="bounce ">
         <v-btn
             class="mx-2 action"
             fab
@@ -222,7 +222,7 @@ h2 {
   }
 }
 .bounce {
-
+  width: 100px;
   &:hover {
     .action {
 
