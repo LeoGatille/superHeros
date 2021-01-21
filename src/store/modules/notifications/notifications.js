@@ -10,13 +10,11 @@ export const mutations = {
           ...notification,
           id: nextId++,
       });
-    console.log('ADD NOTIF => ' + notification.type, state.notifications);
     },
     DELETE(state, notificationToRemove) {
       state.notifications = state.notifications.filter(notification => {
           return notification.id !== notificationToRemove.id;
       });
-        console.log('REMOVE NOTIF => ', state.notifications);
     },
 }
 export const actions = {

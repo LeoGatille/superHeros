@@ -78,7 +78,6 @@ export default {
   },
   methods: {
     changePage(index) {
-      console.log(index)
       this.$emit('changePage', index)
     }
   }

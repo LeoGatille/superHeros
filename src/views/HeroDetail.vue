@@ -160,11 +160,6 @@ export default {
     fetchHero() {
       if (this.getHeroById(this.parseIntId, true) || this.getHeroById(this.parseIntId)) {
         this.hero = this.getHeroById(this.parseIntId, true) ? this.getHeroById(this.parseIntId, true) : this.getHeroById(this.parseIntId);
-        if(this.getHeroById(this.parseIntId, true)) {
-          console.log('local')
-        } else if(this.getHeroById(this.parseIntId)) {
-          console.log('heroList')
-        }
         this.registeredHero = !!this.hero.savedDate;
         this.loading = false;
       } else {
@@ -188,7 +183,6 @@ export default {
       func(this.hero)
           .then(() => {
             this.registeredHero = !this.registeredHero;
-            console.log('Start fetch')
             this.fetchHero();
           });
     },
@@ -198,7 +192,6 @@ export default {
     endEdition() {
       this.heroDialog = false;
       this.fetchHero()
-      console.log(this.hero)
     }
   }
 }

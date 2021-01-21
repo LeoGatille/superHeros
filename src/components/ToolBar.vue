@@ -169,7 +169,6 @@ export default {
     },
     setItemDisplay(display) {
       this.$emit('changeItemDisplay', display);
-      console.log('display => ', this.itemsDisplay)
     }
   }
 }

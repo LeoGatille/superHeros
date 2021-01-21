@@ -12,9 +12,7 @@
         :class="{'stealth' : !isHeroRegistered}"
     >
       <div class="action-btn">
-        <!--!    Tooltip creates a ton of errors...    -->
-        <!--        <v-tooltip bottom>-->
-        <!--          <template v-slot:activator="{ on, attrs }">-->
+
         <v-btn
             class="mx-2 action"
             fab
@@ -31,11 +29,6 @@
           >
           </font-awesome-icon>
         </v-btn>
-        <!--          </template>-->
-
-        <!--          <span v-if="!isHeroRegistered">{{ $t('tooltip.btn.add') }}</span>-->
-        <!--          <span v-else>{{ $t('tooltip.btn.remove') }}</span>-->
-        <!--        </v-tooltip>-->
       </div>
 
       <div class="action-btn">

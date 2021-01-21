@@ -1,7 +1,6 @@
 function orderHeroes(heroList, orderBy) {
     switch (orderBy) {
         case 'name' :
-            console.log('Case name')
             return heroList.sort((a, b) => {
                 let textA = a.name.toUpperCase();
                 let textB = b.name.toUpperCase();
@@ -14,12 +13,10 @@ function orderHeroes(heroList, orderBy) {
                 return (textA > textB) ? -1 : (textA < textB) ? 1 : 0;
             });
         case 'modified' :
-            console.log('Case date')
             return heroList.sort((a, b) => {
                 return new Date(a.savedDate).getTime() - new Date(b.savedDate).getTime()
             });
         case '-modified' :
-            console.log('Case reversed date')
             return heroList.sort((a, b) => {
                 return new Date(b.savedDate).getTime() - new Date(a.savedDate).getTime()
             });
@@ -29,7 +26,6 @@ function orderHeroes(heroList, orderBy) {
 
 function filterHeroes(heroList, limit, offset, filter) {
     const filteredList = [];
-    console.log('Offset => ', offset)
     heroList.forEach((hero) => {
         if (filter.length) {
             if (hero.name.toLowerCase().startsWith(filter.toLowerCase())) {
@@ -63,9 +59,7 @@ export default {
         return new Promise((resolve) => {
             getLocalStorage()
                 .then(localStorageHeroes => {
-                    console.log('WTF LOCAL', localStorageHeroes)
                     localStorageHeroes.push(hero);
-                    console.log('pushed => ', localStorageHeroes[localStorageHeroes.length - 1])
                     localStorage.setItem('savedHeroes', JSON.stringify(localStorageHeroes));
                     resolve(hero);
                 });

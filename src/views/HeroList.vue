@@ -22,7 +22,6 @@ import HeroCard from "@/components/HeroCard";
 import Pagination from "@/components/Pagination";
 import ToolBar from "@/components/ToolBar";
 import HeroRowList from "@/components/HeroRowList";
-// import LocalService from "@/api/services/LocalService";
 
 export default {
   name: "HeroList",
@@ -52,23 +51,20 @@ export default {
       this.fetchDashboardHeroes()
           .then(() => {
             if(this.doesHeroListNeedAFetch()) {
-              console.log('FETCHING')
               this.fetchAllHeroes();
             }
           })
     } else if(this.doesHeroListNeedAFetch()){
-      console.log('FETCHING')
       this.fetchAllHeroes();
     }
     this.setMaxPage(this.isFavorite ? this.favoriteHeroList.length : this.totalItems)
   },
   methods: {
-    ...mapActions(['changePageIndex', 'setDisplayedList', 'fetchAllHeroes', 'fetchDashboardHeroes', 'setHeroesDisplay', 'filterFavoriteHeroList', "setMaxPage"]),
+    ...mapActions(['changePageIndex', 'fetchAllHeroes', 'fetchDashboardHeroes', 'setHeroesDisplay', 'filterFavoriteHeroList', "setMaxPage"]),
     doesHeroListNeedAFetch() {
       return !this.isFavorite && this.heroList.length < this.limit;
     },
     fetchHeroes() {
-      //LocalService.filterList(this.favoriteHeroList, this.limit, (this.limit * this.pages.favorites),  this.searchValue, this.orderBy)
       this.isFavorite ? this.filterFavoriteHeroList() : this.fetchAllHeroes();
     },
     dispatchChangePage(pageIndex) {
@@ -94,15 +90,6 @@ export default {
 .list {
   padding-top: 50px;
 
-}
-
-.pagination {
-  color: grey;
-}
-
-.current-page {
-  font-weight: bold;
-  color: black;
 }
 
 </style>

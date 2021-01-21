@@ -50,7 +50,6 @@ export default {
   methods: {
     rowClick(id) {
       this.$router.push({path: `/hero/${id}`});
-      console.log('Tab click => ', id)
     },
   }
 }
