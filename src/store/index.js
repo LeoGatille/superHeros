@@ -64,8 +64,7 @@ export default new Vuex.Store({
             state.totalItems = nbItems;
         },
         SET_MAX_PAGE(state, nbItems) {
-            console.log('maxPAge =>', nbItems, state.limit)
-            state.maxPage = Math.floor(nbItems / state.limit);
+            state.maxPage = Math.ceil(nbItems / state.limit);
         },
         //* Favorites Heroes
         SET_FAVORITE_LIST(state, heroes) {
@@ -98,7 +97,8 @@ export default new Vuex.Store({
         REMOVE_HERO(state, idHero) {
             state.favoriteHeroList = state.favoriteHeroList.filter(hero => {
                 return hero.id !== idHero
-            })
+            });
+
         },
         EDIT_HERO(state, {hero, index}) {
             state.favoriteHeroList.splice(index, 1, hero);
@@ -195,6 +195,7 @@ export default new Vuex.Store({
                     }
                     dispatch('notifications/add', notification, {root: true})
                     commit('ADD_HERO', hero);
+                    dispatch('filterFavoriteHeroList')
                     return true;
                 })
         },
@@ -207,6 +208,7 @@ export default new Vuex.Store({
                         message: i18n.t('notifications.remove.success')
                     }
                     commit('REMOVE_HERO', idHero);
+                    dispatch('filterFavoriteHeroList');
                     dispatch('notifications/add', notification, {root: true})
                     return marvelService.getHeroById(idHero)
                         .then(response => {
@@ -220,6 +222,7 @@ export default new Vuex.Store({
                         type: 'error',
                         message: i18n.t('notifications.remove.error')
                     }
+                    dispatch('filterFavoriteHeroList');
                     dispatch('notifications/add', notification, {root: true})
                 });
         },
@@ -229,7 +232,8 @@ export default new Vuex.Store({
             return LocalService.fetchHeroes(state.searchValue, state.limit, state.orderBy)
                 .then((localStorageHeroes => {
                     commit('SET_FAVORITE_LIST', localStorageHeroes);
-                    commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
+                    // commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
+                    commit('SET_MAX_PAGE', localStorageHeroes.length)
                     dispatch('filterFavoriteHeroList')
                 }))
         },
@@ -249,6 +253,7 @@ export default new Vuex.Store({
                             message: hero.name + ' ' + i18n.t('notifications.edit.success')
                         };
                         commit('EDIT_HERO', {hero, index: getters.getHeroIndex(hero.id, true),});
+                        dispatch('filterFavoriteHeroList')
                         if (getters.getHeroIndex(hero.id)) {
                             commit('EDIT_ONE_HERO_REFERENCE', {hero, index: getters.getHeroIndex(hero.id)})
                         }
@@ -265,6 +270,7 @@ export default new Vuex.Store({
                             message: hero.name + ' ' + i18n.t('notifications.add.success')
                         }
                         commit('ADD_HERO', hero);
+                        dispatch('filterFavoriteHeroList')
                         commit('EDIT_ONE_HERO_REFERENCE', {hero, index: getters.getHeroIndex(hero.id)})
                         dispatch('notifications/add', notification, {root: true});
                         console.log('Wait for me')
@@ -318,6 +324,9 @@ export default new Vuex.Store({
         },
         setHeroesDisplay({commit}, display) {
             commit('SET_HEROES_DISPLAY', display)
+        },
+        setMaxPage({commit}, nbItems) {
+                commit('SET_MAX_PAGE', nbItems);
         }
     },
     getters: {

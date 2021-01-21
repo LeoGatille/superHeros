@@ -36,7 +36,7 @@ export default {
     ToolBar
   },
   computed: {
-    ...mapState(['heroesDisplay','loadingList', 'heroList', 'favoriteHeroList', 'filteredFavoriteHeroList', 'pages', 'limit', 'searchValue', 'orderBy']),
+    ...mapState(['heroesDisplay','loadingList', 'heroList', 'favoriteHeroList', 'filteredFavoriteHeroList', 'pages', 'limit', 'searchValue', 'orderBy', "totalItems"]),
     getList() {
       return this.isFavorite ? this.filteredFavoriteHeroList : this.heroList;
     },
@@ -60,9 +60,10 @@ export default {
       console.log('FETCHING')
       this.fetchAllHeroes();
     }
+    this.setMaxPage(this.isFavorite ? this.favoriteHeroList.length : this.totalItems)
   },
   methods: {
-    ...mapActions(['changePageIndex', 'setDisplayedList', 'fetchAllHeroes', 'fetchDashboardHeroes', 'setHeroesDisplay', 'filterFavoriteHeroList']),
+    ...mapActions(['changePageIndex', 'setDisplayedList', 'fetchAllHeroes', 'fetchDashboardHeroes', 'setHeroesDisplay', 'filterFavoriteHeroList', "setMaxPage"]),
     doesHeroListNeedAFetch() {
       return !this.isFavorite && this.heroList.length < this.limit;
     },
