@@ -1,40 +1,41 @@
 <template>
 
   <v-card
-      @mouseenter="setLinkHovered(true)"
-      @mouseleave="setLinkHovered(false)"
       class="card"
       style="position: relative"
       max-width="300"
       height="450"
   >
 
-    <div class="actions-container">
+    <div
+        class="actions-container"
+        :class="{'stealth' : !isHeroRegistered}"
+    >
       <div class="action-btn">
-<!--!    Tooltip creates a ton of errors...    -->
-<!--        <v-tooltip bottom>-->
-<!--          <template v-slot:activator="{ on, attrs }">-->
-            <v-btn
-                class="mx-2 action"
-                fab
-                light
-                small
-                depressed
-                style="cursor: pointer;"
+        <!--!    Tooltip creates a ton of errors...    -->
+        <!--        <v-tooltip bottom>-->
+        <!--          <template v-slot:activator="{ on, attrs }">-->
+        <v-btn
+            class="mx-2 action"
+            fab
+            light
+            small
+            depressed
+            style="cursor: pointer;"
 
-                @click="onStarClick()"
-            >
-              <font-awesome-icon
-                  :icon="['fas', 'star']"
-                  :style="{'color': isHeroRegistered ? '#ffbd00': 'grey'}"
-              >
-              </font-awesome-icon>
-            </v-btn>
-<!--          </template>-->
+            @click="onStarClick()"
+        >
+          <font-awesome-icon
+              :icon="['fas', 'star']"
+              :style="{'color': isHeroRegistered ? '#ffbd00': 'grey'}"
+          >
+          </font-awesome-icon>
+        </v-btn>
+        <!--          </template>-->
 
-<!--          <span v-if="!isHeroRegistered">{{ $t('tooltip.btn.add') }}</span>-->
-<!--          <span v-else>{{ $t('tooltip.btn.remove') }}</span>-->
-<!--        </v-tooltip>-->
+        <!--          <span v-if="!isHeroRegistered">{{ $t('tooltip.btn.add') }}</span>-->
+        <!--          <span v-else>{{ $t('tooltip.btn.remove') }}</span>-->
+        <!--        </v-tooltip>-->
       </div>
 
       <div class="action-btn">
@@ -62,47 +63,50 @@
         </Dialog>
       </div>
     </div>
-    <router-link
-        :to="'/hero/' + hero.id"
-
-    >
-<!--      <div class="img-relative-container">-->
-        <v-img
-            class="blur-none transition link"
-            :class="{'blur-full': isLinkHovered}"
-            :height="'40%'"
-            :src="setImgURL"
-        ></v-img>
-        <!--          <font-awesome-icon-->
-        <!--            class="icon-big opacity-none transition"-->
-        <!--            :class="{'opacity-full': isLinkHovered}"-->
-        <!--            :icon="['fas', 'eye']"-->
-        <!--          ></font-awesome-icon>-->
-<!--      </div>-->
-      <div style="display: flex; flex-direction:column; justify-content: space-between; align-items: center; height: 60%; position: relative">
-        <v-card-title>
+          <div class="img-relative-container">
+    <v-img
+        class="blur-none transition link"
+        :class="{'blur-full': isLinkHovered}"
+        :height="'100%'"
+        :src="setImgURL"
+    ></v-img>
+              <font-awesome-icon
+                class="icon-big opacity-none transition"
+                :class="{'opacity-full': isLinkHovered}"
+                :icon="['fas', 'eye']"
+              ></font-awesome-icon>
+          </div>
+    <div
+        style="display: flex; flex-direction:column; justify-content: space-between; align-items: center; height: 60%; position: relative">
+      <router-link
+          :to="'/hero/' + hero.id"
+      >
+        <v-card-title
+            @mouseenter="setLinkHovered(true)"
+            @mouseleave="setLinkHovered(false)"
+        >
           {{ hero.name }}
         </v-card-title>
+      </router-link>
 
-        <v-card-text class="card-text-min-height link">
-          <!-- need a new component -->
-          <div>{{ shrinkText(hero.description, 100) }}</div>
-        </v-card-text>
+      <v-card-text class="card-text-min-height link">
+        <!-- need a new component -->
+        <div>{{ shrinkText(hero.description, 100) }}</div>
+      </v-card-text>
 
-        <v-card-actions class="justify-center" style="display: flex; flex-wrap: wrap">
-            <v-chip
-                style="margin: 10px"
-                outlined
-                :color="chip.color"
-                class="shrink-text card-chip"
-                v-for="chip in setHeroChips"
-                :key="chip.name"
-            >
-              {{ $t('heroItems.' + chip.name) + ' : ' + (chip.length ? chip.length : 0) }}
-            </v-chip>
-        </v-card-actions>
-      </div>
-    </router-link>
+      <v-card-actions class="justify-center" style="display: flex; flex-wrap: wrap">
+        <v-chip
+            style="margin: 10px"
+            outlined
+            :color="chip.color"
+            class="shrink-text card-chip"
+            v-for="chip in setHeroChips"
+            :key="chip.name"
+        >
+          {{ $t('heroItems.' + chip.name) + ' : ' + (chip.length ? chip.length : 0) }}
+        </v-chip>
+      </v-card-actions>
+    </div>
   </v-card>
 </template>
 
@@ -140,22 +144,22 @@ export default {
     setHeroChips() {
       return [
         {
-          color:'red accent-4',
+          color: 'red accent-4',
           name: 'comics',
           length: this.hero.comics.available,
         },
         {
-          color:'blue darken-1',
+          color: 'blue darken-1',
           name: 'series',
           length: this.hero.series.available,
         },
         {
-          color:'orange lighten-1',
+          color: 'orange lighten-1',
           name: 'stories',
           length: this.hero.stories.available,
         },
         {
-          color:'teal lighten-2',
+          color: 'teal lighten-2',
           name: 'events',
           length: this.hero.events.available,
         }
@@ -224,9 +228,16 @@ export default {
 .card {
   margin: 10px;
   transition: transform ease-in-out 0.2s;
+  .stealth {
+    opacity: 0;
+    transition: opacity ease-in-out 0.2s;
+  }
 
   &:hover {
     transform: scale(1.05);
+    .stealth {
+      opacity: 1;
+    }
   }
 }
 
@@ -243,6 +254,7 @@ export default {
 .card-text-min-height {
   height: 70px;
 }
+
 .actions-container {
   width: 100px;
   display: flex;
@@ -263,7 +275,7 @@ export default {
 
 .card-action-btn-container {
   display: flex;
-  justify-content: space-between ;
+  justify-content: space-between;
   align-items: center;
   position: absolute;
   z-index: 100;
@@ -286,6 +298,8 @@ a {
 }
 
 .img-relative-container {
+  height: 40%;
+  overflow: hidden;
   position: relative;
   display: grid;
   place-items: center;
@@ -304,12 +318,13 @@ a {
 }
 
 //* too kitch
-//.blur-none {
-//  filter: blur(0);
-//}
-//.blur-full {
-//  filter: blur(2px);
-//}
+.blur-none {
+  filter: blur(0);
+}
+.blur-full {
+  transform: scale(1.3);
+  //filter: blur(1px);
+}
 .opacity-none {
   opacity: 0;
 }
