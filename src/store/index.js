@@ -27,7 +27,8 @@ export default new Vuex.Store({
         searchValue: '',
         limit: 20,
         orderBy: 'name',
-        heroesDisplay: 'card'
+        heroesDisplay: 'card',
+        fatalError: false,
     },
     mutations: {
         //* Local storage
@@ -54,6 +55,9 @@ export default new Vuex.Store({
         },
         EDIT_ONE_HERO_REFERENCE(state, {hero, index}) {
             state.heroList.splice(index, 1, hero);
+        },
+        SET_FATAL_ERROR(state) {
+            state.fatalError = true
         },
 
         //* LocalStorage
@@ -138,6 +142,7 @@ export default new Vuex.Store({
                         message: i18n.t('notifications.fetch.error'),
                     }
                     dispatch('notifications/add', notification, {root: true})
+                    commit('SET_FATAL_ERROR')
                 })
         },
         fetchOneHero({commit}, id) {
@@ -169,6 +174,7 @@ export default new Vuex.Store({
         filterFavoriteHeroList({commit, state}) {
             const filteredList = LocalService.filterList(state.favoriteHeroList, state.limit, (state.limit * state.pages.favorites), state.searchValue, state.orderBy);
             commit('SET_FILTERED_FAVORITE_LIST', filteredList);
+            console.log('filteredLIst => ', state.favoriteHeroList)
             commit('SET_MAX_PAGE', state.favoriteHeroList.length);
 
             commit('SET_LOADING_LIST', false);

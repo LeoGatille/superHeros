@@ -1,7 +1,7 @@
 {
   "tabs": {
-  "dashboard": "dashboard",
-  "heroes": "heroes"
+    "dashboard": "dashboard",
+    "heroes": "heroes"
   },
   "heroItems": {
     "series": "series",
@@ -20,20 +20,20 @@
         "tooltip": "customize you hero"
       },
       "apply": {
-        "text":"apply",
+        "text": "apply",
         "tooltip": "save edition"
       },
       "cancel": {
-        "text":"cancel",
+        "text": "cancel",
         "tooltip": "close without saving"
       }
     }
   },
   "form": {
     "label": {
-    "name": "name",
-    "description": "description",
-    "imgURL": "picture's URL"
+      "name": "name",
+      "description": "description",
+      "imgURL": "picture's URL"
     },
     "error": {
       "name": "Name must have one character minimum",
@@ -88,5 +88,8 @@
       "success": "has been reset",
       "error": "An error occurred while resetting"
     }
+  },
+  "fatalError": {
+    "message": "An error happened please reload the page"
   }
 }

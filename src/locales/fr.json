@@ -20,11 +20,11 @@
         "tooltip": "personalisez votre héro"
       },
       "apply": {
-        "text":"appliquer",
+        "text": "appliquer",
         "tooltip": "sauvegarder les modifications"
       },
       "cancel": {
-        "text":"annuler",
+        "text": "annuler",
         "tooltip": "fermer sans sauvegarder"
       }
     }
@@ -70,7 +70,7 @@
   },
   "notification": {
     "fetch": {
-        "error": "Une erreur est surevenue lors de la récupération des héros"
+      "error": "Une erreur est surevenue lors de la récupération des héros"
     },
     "add": {
       "success": "à été ajouté dans les favoris",
@@ -88,5 +88,8 @@
       "success": "à été reinitialisé",
       "error": "Une erreur est survenue lors de la réinitialisation de"
     }
+  },
+  "fatalError": {
+    "message": "Une erreur est survenue veuillez recharger la page"
   }
 }

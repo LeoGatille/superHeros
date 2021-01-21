@@ -20,10 +20,10 @@
 
       <template v-slot:default>
         <h1>I need a hero</h1>
-      </template>
       <v-spacer></v-spacer>
 
-      <LangSelector/>
+      <LangSelector class="TEST "/>
+      </template>
 
       <template v-slot:extension>
         <v-tabs>
