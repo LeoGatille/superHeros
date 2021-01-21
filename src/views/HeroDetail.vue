@@ -165,7 +165,6 @@ export default {
         } else if(this.getHeroById(this.parseIntId)) {
           console.log('heroList')
         }
-        console.log('Fetch with  => ', (this.getHeroById(this.parseIntId, true) ? 'local' : 'heroList'), this.hero.name)
         this.registeredHero = !!this.hero.savedDate;
         this.loading = false;
       } else {

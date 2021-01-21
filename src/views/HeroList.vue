@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ToolBar @setQuery="dispatchChangePage(0)" @changeItemDisplay="setItemsDisplay" :itemsDisplay="itemsDisplay"/>
+    <ToolBar @setQuery="dispatchChangePage(0)" @changeItemDisplay="changeHeroDisplay" :itemsDisplay="heroesDisplay"/>
     <template v-if="!loadingList">
       <div v-if="isItemsDisplay('card')" class="list card-list">
         <HeroCard v-for="hero in getList" :key="hero.name" :hero="hero"/>
@@ -22,6 +22,7 @@ import HeroCard from "@/components/HeroCard";
 import Pagination from "@/components/Pagination";
 import ToolBar from "@/components/ToolBar";
 import HeroRowList from "@/components/HeroRowList";
+import LocalService from "@/api/services/LocalService";
 
 export default {
   name: "HeroList",
@@ -34,15 +35,10 @@ export default {
     HeroCard,
     ToolBar
   },
-  data() {
-    return {
-      itemsDisplay: 'card',
-    }
-  },
   computed: {
-    ...mapState(['loadingList', 'heroList', 'favoriteHeroList', 'pages', 'limit']),
+    ...mapState(['heroesDisplay','loadingList', 'heroList', 'favoriteHeroList', 'filteredFavoriteHeroList', 'pages', 'limit', 'searchValue', 'orderBy']),
     getList() {
-      return this.isFavorite ? this.favoriteHeroList : this.heroList;
+      return this.isFavorite ? LocalService.filterList(this.favoriteHeroList, this.limit, this.searchValue, this.orderBy) : this.heroList;
     },
     currentPage() {
       return this.pages[this.paginationKey];
@@ -67,7 +63,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['changePageIndex', 'setDisplayedList', 'fetchAllHeroes', 'fetchDashboardHeroes']),
+    ...mapActions(['changePageIndex', 'setDisplayedList', 'fetchAllHeroes', 'fetchDashboardHeroes', 'setHeroesDisplay']),
     doesHeroListNeedAFetch() {
       return !this.isFavorite && this.heroList.length < this.limit;
     },
@@ -78,11 +74,11 @@ export default {
       this.changePageIndex({pageIndex, pageName: this.paginationKey});
       this.fetchHeroes();
     },
-    setItemsDisplay(display) {
-      this.itemsDisplay = display;
-    },
     isItemsDisplay(display) {
-      return this.itemsDisplay === display;
+      return this.heroesDisplay === display;
+    },
+    changeHeroDisplay(display) {
+      this.setHeroesDisplay(display)
     }
   }
 }

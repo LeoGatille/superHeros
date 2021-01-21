@@ -46,10 +46,14 @@ function getLocalStorage() {
 }
 
 export default {
-    fetchHeroes(name, limit, orderBy) {
+    filterList(list, limit, name, orderBy) {
+        return orderHeroes(filterHeroes(list, limit, name), orderBy)
+    },
+    fetchHeroes() {
         return new Promise(resolve => {
             const localHeroes = JSON.parse(localStorage.getItem('savedHeroes'));
-            resolve(orderHeroes(filterHeroes(localHeroes, limit, name), orderBy))
+            resolve(localHeroes);
+            // resolve(orderHeroes(filterHeroes(localHeroes, limit, name), orderBy))
         })
     },
     addHero(hero) {
@@ -58,6 +62,7 @@ export default {
                 .then(localStorageHeroes => {
                     console.log('WTF LOCAL', localStorageHeroes)
                     localStorageHeroes.push(hero);
+                    console.log('pushed => ', localStorageHeroes[localStorageHeroes.length -1])
                     localStorage.setItem('savedHeroes', JSON.stringify(localStorageHeroes));
                     resolve(hero);
                 });

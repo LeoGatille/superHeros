@@ -18,6 +18,7 @@ export default new Vuex.Store({
         displayedList: 'dashboard',
         heroList: [],
         favoriteHeroList: [],
+        filteredFavoriteHeroList: [],
         allHeroesPage: 0,
         pages: {
             favorites: 0,
@@ -31,6 +32,7 @@ export default new Vuex.Store({
         searchValue: '',
         limit: 20,
         orderBy: 'name',
+        heroesDisplay: 'card'
     },
     mutations: {
         //* Local storage
@@ -67,6 +69,10 @@ export default new Vuex.Store({
         //* Favorites Heroes
         SET_FAVORITE_LIST(state, heroes) {
             state.favoriteHeroList = heroes;
+        },
+        SET_FILTERED_FAVORITE_LIST(state, list) {
+            state.filteredFavoriteHeroList = LocalService.filterList(list,state.limit, state.searchValue, state.orderBy)
+                // LocalService.orderHeroes(LocalService.filterHeroes(list, state.limit, state.name), state.orderBy)
         },
         SET_CURRENT_PAGE(state, {shiftValue, targetPage}) {
             state[targetPage] += shiftValue;
@@ -113,6 +119,9 @@ export default new Vuex.Store({
         },
         SET_ORDER_BY(state, orderBy) {
             state.orderBy = orderBy;
+        },
+        SET_HEROES_DISPLAY(state, display) {
+            state.heroesDisplay = display
         }
     },
     actions: {
@@ -172,8 +181,6 @@ export default new Vuex.Store({
         addOneHero({commit, dispatch, getters}, hero) {
             Vue.set(hero, 'edited', false);
             Vue.set(hero, 'savedDate', new Date());
-            // hero.edited = false;
-            // hero.savedDate = new Date();
             const toSend = Object.assign({}, hero);
             return LocalService.addHero(toSend)
                 .then(() => {
@@ -220,6 +227,7 @@ export default new Vuex.Store({
             return LocalService.fetchHeroes(state.searchValue, state.limit, state.orderBy)
                 .then((localStorageHeroes => {
                     commit('SET_FAVORITE_LIST', localStorageHeroes);
+                    // commit('SET_FILTERED_FAVORITE_LIST', localStorageHeroes)
                     commit('SET_TOTAL_ITEMS', localStorageHeroes.length);
                     commit('SET_MAX_PAGE', localStorageHeroes.length);
                     commit('SET_LOADING_LIST', false);
@@ -300,6 +308,9 @@ export default new Vuex.Store({
             commit('SET_LIMIT', limit);
             commit('SET_SEARCH_VALUE', searchValue);
             commit('SET_ORDER_BY', orderBy)
+        },
+        setHeroesDisplay({commit}, display) {
+            commit('SET_HEROES_DISPLAY', display)
         }
     },
     getters: {
