@@ -22,7 +22,7 @@
         <h1>I need a hero</h1>
       <v-spacer></v-spacer>
 
-      <LangSelector class="TEST "/>
+      <LangSelector/>
       </template>
 
       <template v-slot:extension>

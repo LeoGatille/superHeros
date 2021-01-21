@@ -40,7 +40,7 @@
       ></v-select>
 
     </div>
-    <div class="input-container">
+    <div class="input-container select-big">
       <v-select
           v-model="orderByModel"
           :items="orderByOptions"
@@ -180,7 +180,7 @@ export default {
   padding-top: 5px;
   height: 60px;
   position: fixed;
-  width: 1000px;
+  width: 800px;
   z-index: 200;
   left: 3px;
 
@@ -191,6 +191,9 @@ export default {
 
   .select {
     width: 60px;
+  }
+  .select-big {
+    width: 200px;
   }
 }
 
