@@ -24,6 +24,7 @@ export default new Vuex.Store({
         },
         totalItems: 0,
         maxPage: 0,
+        filteredListMaxPages: 0,
         searchValue: '',
         limit: 20,
         orderBy: 'name',
@@ -91,6 +92,9 @@ export default new Vuex.Store({
         },
         SET_MAX_PAGE(state, nbItems) {
             state.maxPage = Math.ceil(nbItems / state.limit);
+        },
+        SET_FILTERED_LIST_LENGTH(state, nbItems) {
+            state.filteredListMaxPages = nbItems ;
         },
         SET_CURRENT_PAGE(state, {shiftValue, targetPage}) {
             state[targetPage] += shiftValue;
@@ -173,7 +177,8 @@ export default new Vuex.Store({
         },
         filterFavoriteHeroList({commit, state}) {
             const filteredList = LocalService.filterList(state.favoriteHeroList, state.limit, (state.limit * state.pages.favorites), state.searchValue, state.orderBy);
-            commit('SET_FILTERED_FAVORITE_LIST', filteredList);
+            commit('SET_FILTERED_FAVORITE_LIST', filteredList.list);
+            commit('SET_FILTERED_LIST_LENGTH', filteredList.length);
             // commit('SET_MAX_PAGE', state.searchValue.length ? filteredList : state.favoriteHeroList.length);
 
             commit('SET_LOADING_LIST', false);

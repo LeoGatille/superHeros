@@ -121,7 +121,7 @@ export default {
     ToolBar
   },
   computed: {
-    ...mapState(['fatalError','heroesDisplay', 'loadingList', 'heroList', 'favoriteHeroList', 'filteredFavoriteHeroList', 'pages', 'limit', 'searchValue', 'orderBy', "totalItems"]),
+    ...mapState(['fatalError','heroesDisplay', 'loadingList', 'heroList', 'favoriteHeroList', 'filteredFavoriteHeroList', 'pages', 'limit', 'searchValue', 'orderBy', "totalItems", "filteredListMaxPages"]),
     getList() {
       return this.isFavorite ? this.filteredFavoriteHeroList : this.heroList;
     },
@@ -143,7 +143,7 @@ export default {
     } else if (this.doesHeroListNeedAFetch()) {
       this.fetchAllHeroes();
     }
-    this.setMaxPage(this.isFavorite ? (this.searchValue.length ? this.favoriteHeroList.length : this.favoriteHeroList.length) : this.totalItems)
+    this.setMaxPage(this.isFavorite ? (this.searchValue.length ? this.filteredListMaxPages : this.favoriteHeroList.length) : this.totalItems)
   },
   methods: {
     ...mapActions(['changePageIndex', 'fetchAllHeroes', 'fetchDashboardHeroes', 'setHeroesDisplay', 'filterFavoriteHeroList', "setMaxPage"]),
@@ -152,7 +152,8 @@ export default {
     },
     fetchHeroes() {
       this.isFavorite ? this.filterFavoriteHeroList() : this.fetchAllHeroes();
-      this.setMaxPage(this.isFavorite ? (this.searchValue.length ? this.filterFavoriteHeroList().length : this.favoriteHeroList.length) : this.totalItems)
+      console.log('DAAAMN => ', this.isFavorite ? (this.searchValue.length ? this.filteredListMaxPages : this.favoriteHeroList.length) : this.totalItems)
+      this.setMaxPage(this.isFavorite ? (this.searchValue.length ? this.filteredListMaxPages : this.favoriteHeroList.length) : this.totalItems)
 
     },
     dispatchChangePage(pageIndex) {

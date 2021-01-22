@@ -35,7 +35,7 @@ function filterHeroes(heroList, limit, offset, filter) {
             filteredList.push(hero);
         }
     });
-    return filteredList.slice(offset, (limit + offset));
+    return {list: filteredList.slice(offset, (limit + offset)), length: filteredList.length};
 }
 
 function getLocalStorage() {
