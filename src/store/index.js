@@ -124,7 +124,7 @@ export default new Vuex.Store({
                 orderBy: state.orderBy
             })
                 .then(response => {
-                    commit('SET_TOTAL_ITEMS', response.data.data.total); //? Might do the dot notation in the 'commit'...
+                    commit('SET_TOTAL_ITEMS', response.data.data.total);
                     commit('SET_MAX_PAGE', response.data.data.total);
                     const syncListWithLocalStorage = response.data.data.results;
                     syncListWithLocalStorage.forEach((hero, i) => {
@@ -136,7 +136,7 @@ export default new Vuex.Store({
                     commit('SET_LOADING_LIST', false);
                 })
                 .catch((err) => {
-                    console.log('ERR => ', err)
+                    console.error('ERR => ', err)
                     const notification = {
                         type: 'error',
                         message: i18n.t('notifications.fetch.error'),
@@ -179,7 +179,7 @@ export default new Vuex.Store({
             commit('SET_LOADING_LIST', false);
         },
 
-        //* Modification Hero
+        //* User actions on Hero
         addOneHero({commit, dispatch, getters}, hero) {
             Vue.set(hero, 'edited', false);
             Vue.set(hero, 'savedDate', new Date());
@@ -215,7 +215,7 @@ export default new Vuex.Store({
                         })
                 })
                 .catch((err) => {
-                    console.log('WHY CATCH => ', err)
+                    console.error(err)
                     const notification = {
                         type: 'error',
                         message: i18n.t('notifications.remove.error')
@@ -234,7 +234,7 @@ export default new Vuex.Store({
                         };
                         commit('EDIT_HERO', {hero, index: getters.getHeroIndex(hero.id, true),});
                         dispatch('filterFavoriteHeroList')
-                        if (getters.getHeroIndex(hero.id)) {
+                        if (getters.getHeroIndex(hero.id) >= 0) {
                             commit('EDIT_ONE_HERO_REFERENCE', {hero, index: getters.getHeroIndex(hero.id)})
                         }
                         dispatch('notifications/add', notification, {root: true});

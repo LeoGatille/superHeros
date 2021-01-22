@@ -158,11 +158,6 @@ export default {
       editedValues.name = this.name
       editedValues.description = this.description
       editedValues.thumbnail = (this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail)
-
-      // this.$set(this.hero, 'edited', true);
-      // this.$set(this.hero, 'name', this.name);
-      // this.$set(this.hero, 'description', this.description);
-      // this.$set(this.hero, 'thumbnail', this.imgURL.length ? {...this.formatURL()} : this.hero.thumbnail);
       this.editHero(editedValues)
           .then(() => {
             this.endEdition();
@@ -172,14 +167,11 @@ export default {
       if (this.hero.edited) {
         this.resetHero(this.hero)
             .then((hero) => {
-              // this.setDefaultValues();
-              //! NOT the good way
               this.name = hero.name;
               this.description = hero.description;
               this.imgURL = hero.thumbnail.path + '.' + hero.thumbnail.extension;
               this.endEdition();
               this.$emit('done');
-
             });
       }
     },

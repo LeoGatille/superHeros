@@ -106,7 +106,6 @@
 
 <script>
 import {mapActions, mapGetters, mapState} from "vuex";
-import marvelService from "@/api/services/marvelAPI/marvelService";
 import Dialog from '@/components/share/Dialog';
 import HeroEditionForm from '@/components/HeroEditionForm';
 import TimelineLinkList from "@/components/share/TimelineLinkList";
@@ -152,11 +151,6 @@ export default {
   },
   methods: {
     ...mapActions(['addOneHero', 'removeOneHero', 'fetchDashboardHeroes', 'fetchOneHero']),
-    updateDialogData(currentDialogValue) {
-      if (!currentDialogValue) {
-        console.log('Dialog closed')
-      }
-    },
     fetchHero() {
       if (this.getHeroById(this.parseIntId, true) || this.getHeroById(this.parseIntId)) {
         this.hero = this.getHeroById(this.parseIntId, true) ? this.getHeroById(this.parseIntId, true) : this.getHeroById(this.parseIntId);
@@ -169,12 +163,6 @@ export default {
               this.loading = false;
             })
       }
-    },
-    fetchHeroById() {
-      return marvelService.getHeroById(this.parseIntId)
-          .then(res => {
-            return res.data.data.results[0];
-          });
     },
     onStarClick() {
       let func = () => {

@@ -139,22 +139,22 @@ export default {
         {
           color: 'red accent-4',
           name: 'comics',
-          length: this.hero.comics.available,
+          length: this.hero.comics.items.length,
         },
         {
           color: 'blue darken-1',
           name: 'series',
-          length: this.hero.series.available,
+          length: this.hero.series.items.length,
         },
         {
           color: 'orange lighten-1',
           name: 'stories',
-          length: this.hero.stories.available,
+          length: this.hero.stories.items.length,
         },
         {
           color: 'teal lighten-2',
           name: 'events',
-          length: this.hero.events.available,
+          length: this.hero.events.items.length,
         }
       ]
     },
@@ -198,12 +198,12 @@ export default {
       if (this.isHeroRegistered) {
         this.removeOneHero(this.hero.id)
             .then(() => {
-              this.registeredHero = false;
+              // this.registeredHero = false;
             })
       } else {
         this.$store.dispatch('addOneHero', this.hero)
             .then(() => {
-              this.registeredHero = true;
+              // this.registeredHero = true;
             });
       }
     },
@@ -236,6 +236,10 @@ export default {
   }
 }
   .title {
+    word-break: break-word;
+    text-align: center;
+    margin-bottom: 5px;
+    padding-bottom: 0;
     &:hover {
       text-decoration: underline;
     }
@@ -253,6 +257,7 @@ export default {
 
 .card-text-min-height {
   height: 70px;
+  padding: 0 15px;
 }
 
 .actions-container {
@@ -327,10 +332,12 @@ a {
 }
 .opacity-none {
   opacity: 0;
+  filter: blur(20px);
 }
 
 .opacity-full {
   opacity: 1;
+  filter: blur(0px);
 }
 
 .v-application a {

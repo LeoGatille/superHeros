@@ -97,7 +97,7 @@ export default {
                         localStorage.setItem('savedHeroes', JSON.stringify(localStorageHeroes));
                         resolve(hero);
                     } else {
-                        console.log('FAILED INDEX')
+                        console.error('FAILED INDEX')
                     }
                 })
         })
