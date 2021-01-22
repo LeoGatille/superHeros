@@ -143,7 +143,7 @@ export default {
     } else if (this.doesHeroListNeedAFetch()) {
       this.fetchAllHeroes();
     }
-    this.setMaxPage(this.isFavorite ? this.favoriteHeroList.length : this.totalItems)
+    this.setMaxPage(this.isFavorite ? (this.searchValue.length ? this.favoriteHeroList.length : this.favoriteHeroList.length) : this.totalItems)
   },
   methods: {
     ...mapActions(['changePageIndex', 'fetchAllHeroes', 'fetchDashboardHeroes', 'setHeroesDisplay', 'filterFavoriteHeroList', "setMaxPage"]),
@@ -152,6 +152,8 @@ export default {
     },
     fetchHeroes() {
       this.isFavorite ? this.filterFavoriteHeroList() : this.fetchAllHeroes();
+      this.setMaxPage(this.isFavorite ? (this.searchValue.length ? this.filterFavoriteHeroList().length : this.favoriteHeroList.length) : this.totalItems)
+
     },
     dispatchChangePage(pageIndex) {
       this.changePageIndex({pageIndex, pageName: this.paginationKey});

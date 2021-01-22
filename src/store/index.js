@@ -174,7 +174,7 @@ export default new Vuex.Store({
         filterFavoriteHeroList({commit, state}) {
             const filteredList = LocalService.filterList(state.favoriteHeroList, state.limit, (state.limit * state.pages.favorites), state.searchValue, state.orderBy);
             commit('SET_FILTERED_FAVORITE_LIST', filteredList);
-            commit('SET_MAX_PAGE', state.searchValue.length ? filteredList : state.favoriteHeroList.length);
+            // commit('SET_MAX_PAGE', state.searchValue.length ? filteredList : state.favoriteHeroList.length);
 
             commit('SET_LOADING_LIST', false);
         },

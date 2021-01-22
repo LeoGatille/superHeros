@@ -20,14 +20,13 @@
 
       <template v-slot:default>
         <h1>I need a hero</h1>
-      <v-spacer></v-spacer>
-
-      <LangSelector/>
+        <v-spacer></v-spacer>
+        <LangSelector/>
       </template>
 
       <template v-slot:extension>
         <v-tabs>
-           <v-tab  v-for="tab in tabs" :key="tab.id" :to="tab.path">{{tab.name}}</v-tab>
+          <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.path">{{ tab.name }}</v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
@@ -50,12 +49,6 @@ export default {
       ]
     }
   },
-  methods: {
-
-    setSettingsDisplay() {
-      this.$store.dispatch('setSettingsDisplay')
-    }
-  }
 }
 </script>
 
