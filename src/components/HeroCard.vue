@@ -21,6 +21,20 @@
             depressed
             style="cursor: pointer;"
 
+        >
+          <font-awesome-icon
+              :icon="['fa', 'trash']"
+          >
+          </font-awesome-icon>
+        </v-btn>
+        <!-- <v-btn
+            class="mx-2 action "
+            fab
+            light
+            small
+            depressed
+            style="cursor: pointer;"
+
             @click="onStarClick()"
         >
           <font-awesome-icon
@@ -28,7 +42,7 @@
               :style="{'color': isHeroRegistered ? '#ffbd00': 'grey'}"
           >
           </font-awesome-icon>
-        </v-btn>
+        </v-btn> -->
       </div>
 
       <div class="action-btn">
@@ -183,7 +197,9 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['addOneHero', 'removeOneHero']),
+    ...mapActions(['addOneHero', 'removeOneHero', 'delete']),
+
+
     // isHeroRegistered() {
     //   LocalService.isHeroInLocalStorage(this.hero.id)
     //       .then(isRegistered => {

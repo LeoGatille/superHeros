@@ -1,5 +1,12 @@
 <template>
   <v-app>
+    <!-- <div style="display: flex; flex-wrap-wrap">
+      <div v-for="hero in heroList"></div>
+    </div> -->
+
+
+
+
     <NavBar/>
     <v-main>
       <NotificationContainer/>
@@ -19,7 +26,7 @@
 </template>
 <script>
 import NavBar from "@/components/NavBar";
-import { mapActions} from "vuex";
+import { mapActions, mapState} from "vuex";
 import NotificationContainer from "@/components/Notifications/NotificationContainer";
 
 export default {
@@ -33,6 +40,7 @@ export default {
     this.fetchDashboardHeroes();
   },
   methods: {
+    ...mapState(['heroList']),
     ...mapActions(['createHeroesLocalStorage', "fetchDashboardHeroes"])
   },
 };

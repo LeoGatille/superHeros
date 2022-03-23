@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HeroList from "@/views/HeroList";
 import HeroDetail from "@/views/HeroDetail";
+import Test from "@/views/Test";
 
 Vue.use(VueRouter)
 
@@ -11,6 +12,12 @@ const routes = [
     name: 'home',
     component: HeroList,
   },
+  {
+    path: '/test',
+    name: 'test',
+    component: Test,
+  },
+  
   {
     path: '/favorites',
     name: 'favorites',

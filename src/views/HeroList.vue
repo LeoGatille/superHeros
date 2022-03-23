@@ -147,6 +147,13 @@ export default {
   },
   methods: {
     ...mapActions(['changePageIndex', 'fetchAllHeroes', 'fetchDashboardHeroes', 'setHeroesDisplay', 'filterFavoriteHeroList', "setMaxPage"]),
+
+    
+
+
+
+
+
     doesHeroListNeedAFetch() {
       return !this.isFavorite && this.heroList.length < this.limit;
     },
