@@ -7,6 +7,13 @@
                 v-for="hero in displayedList"
                 :key="hero.id"
             > 
+            <div
+                    style="cursor: pointer; color: white; text-align: center" 
+                    :style="hero.isFav ? 'background: green; ' : 'background: grey' "
+                    @click="addHero(hero.id)"
+                >
+                    FAV
+                </div>
             <h6>{{hero.name}}</h6>                
                 <div
                     style="background: blue; cursor: pointer; color: white; text-align: center" 
@@ -31,9 +38,11 @@
      
       
     <div style="display: flex">
-        <div @click="setPage(-1)">---</div>
-        {{currentPage}}
-        <div @click="setPage(1)">+++</div>
+        <v-btn @click="setPage(-1)">-</v-btn>
+        <b>
+            {{currentPage}}
+        </b>
+        <v-btn @click="setPage(1)">+</v-btn>
     </div>
     <div style="display: flex">
         <v-select :valule="limit" :items="[1, 5, 10, 20, 50]" @input="setLimit($event)"></v-select>
@@ -41,6 +50,9 @@
 
     <input style="border: solid black" type="text" v-model="creation">
             <v-btn :color="'primary'" @click="createHero">CREATE</v-btn>
+<br>
+    <input style="border: solid black" type="text" v-model="search">
+            <v-btn :color="'primary'" @click="getHeroes(true)">Search</v-btn>
 
     <div style="display: flex; flex-wrap: wrap; margin-top: 100px; ">
         <div 
@@ -83,6 +95,8 @@ export default {
             limit: 10, 
             offsetModifier: 0,
             currentPage: 1,
+            lockDeltion: false,
+            search: ''
         }
     },
     computed: {
@@ -93,19 +107,16 @@ export default {
                 if (normal.find(({id, name}) => name === hero.name && id === hero.id)) notNormal.push(hero.name)
                 normal.push(hero)
                 })
-                if (notNormal.length) console.log('REDUNDANCY')
                 return notNormal
         },
 
         displayedList() {
-            console.log('displayedList')
-            return this.validHeroList.slice((this.currentPage - 1) * this.limit, this.limit * this.currentPage );
+            return this.validHeroList.filter(({name}) => name.toUpperCase().includes(this.search.toUpperCase())).slice((this.currentPage - 1) * this.limit, this.limit * this.currentPage );
         },
         validHeroList() {
-            console.log('COUCOUCOUCO')
             return this.heroList.filter(({isDisabled}) => {
-                            return !isDisabled
-                        }).sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1)
+                return !isDisabled
+            }).sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1)
         },
         deletedHeroes() {
             return this.heroList.filter(({isDisabled}) => isDisabled)
@@ -118,14 +129,17 @@ export default {
         if(this.isLimitReached()) this.getHeroes();
     },
     methods: {
+        // SYSTEM BRAIN
+        isLimitReached() {
+        return this.validHeroList.length / this.limit <= this.currentPage;
+        },
         createHero() {
-            console.log('CREATE', this.creation)
-            this.heroList.push({id: Math.random() + '' + Math.random(), name: this.creation, thumbnail:{path:'', extention: ''} })
+            this.heroList.push({id: Math.random() + '' + Math.random(), isCreated: true, name: this.creation, thumbnail:{path:'', extention: ''} })
             this.cration = '';
         },
-        isLimitReached() {
-            console.log('isLimitReached => ', {val : this.validHeroList.length / this.limit <= this.currentPage -1, calcul: this.validHeroList.length / this.limit, length: this.validHeroList.length, limit: this.limit, page: this.currentPage, pageValue: this.currentPage -1 })
-            return this.validHeroList.length / this.limit <= this.currentPage;
+        addHero(myId) {
+            const index = this.heroList.findIndex(({id}) => myId === id);
+            this.heroList.splice(index, 1, {...this.heroList[index], isFav: true}) 
         },
         editHero(myId) {
             const index = this.heroList.findIndex(({id}) => myId === id);
@@ -143,41 +157,45 @@ export default {
         },
      
         deleteHero(myId) {
+            if (this.lockDeltion) return // Prevent spamming that might be too fast  & duplicate heros
             const index = this.heroList.findIndex(({id}) => myId === id);
-            console.log('myId => ', {myId, hero: this.heroList[index]})
             this.heroList.splice(index, 1, {...this.heroList[index], isDisabled: true}) 
-            if (this.isLimitReached()) this.getHeroes();
+            if (this.isLimitReached()) {
+                this.lockDeltion = true;
+                this.getHeroes();
+            }
+        },
+        debounceDeletion() { 
+            this.lockDeltion = true;
         },
         setPage(move) {
             const newPage = this.currentPage + move;
             this.currentPage = newPage > 0 ? newPage : this.currentPage;
             if (this.isLimitReached()) this.getHeroes();
         },
-        getHeroes(counter = null, itteration = 0) {
-            console.log('------------- LIMIT REACHED -----------')
-            // console.log('limit => ', {page: this.currentPage, length: this.validHeroList.length, limit: this.limit})
-            const limit = this.heroList.length
+        getHeroes(reset = false, counter = null, itteration = 0) {
+            console.debug('HALLO')
+            const limit = this.heroList.length && !reset
             ?  +(this.currentPage - (this.validHeroList.length / this.limit)).toFixed(1) * this.limit
             : this.limit
-
-            console.log('QUERYS => ', {limit: counter || limit, offset: this.heroList.length + this.offsetModifier} )
-            marvelService.getAllHeroes({limit: counter || limit, offset: this.heroList.length + this.offsetModifier,})
+            console.log('limit query => ', limit)
+            if (limit === 0) return; 
+            if (reset) this.heroList = this.heroList.filter(({isDisabled, isFav, isCreated}) => isDisabled || isFav || isCreated)
+            marvelService.getAllHeroes({nameStartsWith: this.search, limit: counter || limit, offset: this.heroList.filter(({isCreated}) => !isCreated ).length -  + this.offsetModifier,})
             .then(res => {
                 const data = res.data.data.results
-                // console.log('RES => ', data)
-                let counter = 0;
                 data.forEach(({id}, i) => {
                     const foundHero = this.deletedHeroes.find(hero => hero.id === id)
                     if (foundHero) {
                         if (foundHero.isDisabled) {
-                            counter++;
+                            this.offsetModifier++;
                         }
                     } else {
                         this.heroList.push(data[i])
                     }
+                    if (this.lockDeltion) this.lockDeltion = false;
                 });
-                this.offsetModifier += counter
-                if (counter) {
+                if (counter) { // MEME PAS BESOIN !
                     if (itteration === 10) console.log('NOOOOOOPE')
                     // else this.getHeroes(counter, itteration + 1);
                     console.log('Recursive')
